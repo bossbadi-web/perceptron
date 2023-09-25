@@ -1,32 +1,26 @@
 import { fail } from "@sveltejs/kit";
-import { writeFileSync } from "fs";
+import fs from "fs";
+import { ocr } from "$lib/ocr";
 
 export const actions = {
-  upload: async ({ request, cookies, url }) => {
-    // get fileToUpload from request
+  default: async ({ request }) => {
     const data = await request.formData();
-    console.log(data);
     const { fileToUpload } = Object.fromEntries(data);
-    console.log(fileToUpload);
     const path = `static/uploads/${fileToUpload.name}`;
-    console.log(path);
 
-    // write file to disk
-    // try {
-    
-    // write file to /static/uploads
-    writeFileSync(path, fileToUpload.data);
+    try {
+      const buffer = await fileToUpload.arrayBuffer();
+      fs.writeFileSync(path, Buffer.from(buffer));
 
+      const text = await ocr(path);
 
-    // } catch (error) {
-      // return fail(400, error.message);
-    // }
+      fs.unlinkSync(path);
 
-    // return file path
-    return {
-      body: {
-        hi: "hi",
-      },
-    };
+      return {
+        message: text,
+      };
+    } catch (e) {
+      return fail(e);
+    }
   },
 };
