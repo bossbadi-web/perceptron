@@ -1,19 +1,20 @@
-// read fmt.json from lib/
-
 import fs from "fs";
-import { base } from "$app/paths";
+import path from "path";
 
-text = fs.readFileSync(`${base}/lib/fmt.json`, "utf8");
-console.log(text);
+const MCQ_JSON_FORMAT = fs.readFileSync(path.join(process.cwd(), "static", "mcqFormat.json"), "utf8");
+const MCQ_QUERY_PRE = `create multiple choice questions and answers
 
-// export const MCQ_QUERY = 'create multiple choice questions and answers based on these notes in this json format:
+use this json format:
+${MCQ_JSON_FORMAT}
 
-export const chatbot = async (text) => {
-  const response = await fetch(`https://api.gopubby.com/chatbot?text=${encodeURIComponent(text)}`);
-  return await response.text();
+NOTES:
+`;
+
+const chatbot = async (query) => {
+  const response = await fetch(`https://api.gopubby.com/chatbot?text=${encodeURIComponent(query)}`);
+  return await response.json();
 };
 
 export const getQuestions = async (text) => {
-  const query = `create multiple choice questions and answers based on these notes:\n\n${text}`;
-  return await chatbot(query);
+  return await chatbot(MCQ_QUERY_PRE + text);
 };
