@@ -1,5 +1,7 @@
 <script>
   export let form;
+
+  import MCQ from "$lib/models/mcq.svelte";
 </script>
 
 <section>
@@ -7,7 +9,20 @@
     <form method="POST" enctype="multipart/form-data">
       
       {#if form?.body}
-        <pre>{JSON.stringify(form.body, null, 2)}</pre>
+        <!-- 
+          sample format
+          [
+  {
+    "question": "The question",
+    "options": ["A", "B", "C", "D"],
+    "answer": "A"
+  }
+]
+ -->
+
+        {#each form.body as question}
+          <MCQ {question} />
+        {/each}
       {/if}
 
       <div class="group">
