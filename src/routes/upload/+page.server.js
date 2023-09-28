@@ -23,6 +23,7 @@ export const actions = {
 
       // create questions from text
       const questions = await getQuestions(text);
+      console.log(questions);
       return { body: questions };
     } catch (e) {
       return fail(e);
