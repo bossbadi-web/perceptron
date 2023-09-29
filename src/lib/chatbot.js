@@ -47,6 +47,8 @@ const toJSON = (text) => {
       answer,
     });
   }
+
+  return output;
 };
 
 const chatbot = async (query) => {
