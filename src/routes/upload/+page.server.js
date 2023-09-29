@@ -1,6 +1,7 @@
 import { fail } from "@sveltejs/kit";
 import fs from "fs";
 
+import { supabase } from "$lib/db";
 import { ocr } from "$lib/ocr";
 import { getQuestions } from "$lib/chatbot";
 
@@ -22,9 +23,12 @@ export const actions = {
       fs.unlinkSync(path);
 
       // create questions from text
-      const questions = await getQuestions(text);
-      console.log(questions);
-      return { body: questions };
+      const data = await getQuestions(text);
+      console.log(data);
+
+      // save questions to database, in table "quizzes" in column "data"
+
+      return { body: data };
     } catch (e) {
       return fail(e);
     }
