@@ -1,7 +1,6 @@
 import { fail } from "@sveltejs/kit";
 import fs from "fs";
 
-import { supabase } from "$lib/db";
 import { ocr } from "$lib/ocr";
 import { getQuestions } from "$lib/chatbot";
 
