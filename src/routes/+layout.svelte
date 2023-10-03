@@ -1,6 +1,5 @@
 <script>
   import Header from "$lib/header.svelte";
-  import Footer from "$lib/footer.svelte";
 
   import { invalidate } from "$app/navigation";
   import { onMount } from "svelte";
@@ -23,6 +22,5 @@
   });
 </script>
 
-<Header />
+<Header {data} />
 <slot />
-<Footer />

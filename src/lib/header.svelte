@@ -1,3 +1,10 @@
+<script>
+  export let data;
+
+  let { supabase, session } = data;
+  $: ({ supabase, session } = data);
+</script>
+
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container container-fluid">
     <a class="navbar-brand" href="/">Perceptron</a>
@@ -13,20 +20,39 @@
       <span class="navbar-toggler-icon" />
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <!-- /upload -->
+      <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/register">Register</a>
+          <a class="nav-link" href="/upload">Upload</a>
         </li>
       </ul>
+      {#if session}
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">{session.user.email}</a>
+          </li>
+          <li class="nav-item">
+            <form action="/logout" method="post">
+              <button class="btn btn-outline-light" type="submit">Logout</button>
+            </form>
+          </li>
+        </ul>
+      {:else}
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Register</a>
+          </li>
+        </ul>
+      {/if}
     </div>
   </div>
 </nav>
 
 <style>
   .navbar {
-    background-color: #264653;
+    background-color: var(--main-color);
   }
 </style>

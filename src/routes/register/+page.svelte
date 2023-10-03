@@ -9,7 +9,7 @@
     <form method="POST" use:enhance>
       <input type="text" name="email" placeholder="Email" value={form?.email ?? ""} />
       <input type="password" name="password" placeholder="Password" />
-      <input type="submit" value="Login" />
+      <input type="submit" value="Register" />
     </form>
   </div>
 </section>

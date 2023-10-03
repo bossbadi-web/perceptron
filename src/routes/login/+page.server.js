@@ -2,7 +2,7 @@
 import { fail } from "@sveltejs/kit";
 
 export const actions = {
-  default: async ({ request, url, locals: { supabase } }) => {
+  default: async ({ request, locals: { supabase } }) => {
     console.log('received login request')
 
     const formData = await request.formData();
@@ -10,7 +10,6 @@ export const actions = {
     const password = formData.get("password");
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    console.log(error);
     if (error) {
       return fail(500, { message: "Server error. Try again later.", success: false, email });
     }
