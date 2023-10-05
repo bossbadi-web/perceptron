@@ -1,4 +1,4 @@
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import fs from "fs";
 
 import { ocr } from "$lib/ocr";
@@ -32,4 +32,12 @@ export const actions = {
       return fail(e);
     }
   },
+};
+
+export const load = async ({ cookies, locals, url }) => {
+  const { error: err } = await locals.supabase.auth.getUser(cookies.get("access_token"));
+
+  if (err) {
+    throw redirect(303, `/login?redirectTo=${url.pathname}`);
+  }
 };

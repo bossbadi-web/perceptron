@@ -1,5 +1,13 @@
 @import url(colors.css);
 
+body {
+  background-color: var(--main-bg);
+}
+
 section {
   margin: 2em;
+}
+
+h1 {
+  margin: 1em auto;
 }
