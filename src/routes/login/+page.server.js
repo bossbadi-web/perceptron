@@ -1,3 +1,4 @@
+import { AuthApiError } from "@supabase/supabase-js";
 import { fail, redirect } from "@sveltejs/kit";
 
 export const actions = {
@@ -7,8 +8,18 @@ export const actions = {
     const password = formData.get("password");
 
     const { data, error: err } = await locals.supabase.auth.signInWithPassword({ email, password });
+
     if (err) {
-      return fail(500, { message: "Server error. Try again later.", success: false, email });
+      if (err instanceof AuthApiError && err.status === 400) {
+        console.log(400);
+        return fail(400, {
+          error: "Invalid credentials",
+        });
+      }
+      console.log(500);
+      return fail(500, {
+        message: "Server error. Try again later.",
+      });
     }
 
     // set cookie

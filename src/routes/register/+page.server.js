@@ -7,7 +7,7 @@ export const actions = {
     const email = formData.get("email");
     const password = formData.get("password");
 
-    const { error } = await supabase.auth.signUp({
+    const { error: err } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -15,7 +15,7 @@ export const actions = {
       },
     });
 
-    if (error) {
+    if (err) {
       return fail(500, { message: "Server error. Try again later.", success: false, email });
     }
 
