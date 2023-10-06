@@ -1,7 +1,7 @@
 <script>
   export let form;
 
-  import MCQ from "$lib/models/mcq.svelte";
+  import MCQ from "$lib/models/Mcq.svelte";
 </script>
 
 <section>

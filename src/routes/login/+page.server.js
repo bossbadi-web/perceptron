@@ -11,14 +11,12 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError && err.status === 400) {
-        console.log(400);
         return fail(400, {
-          error: "Invalid credentials",
+          message: "Invalid username or password.",
         });
       }
-      console.log(500);
       return fail(500, {
-        message: "Server error. Try again later.",
+        message: "Server error. Please try again later.",
       });
     }
 

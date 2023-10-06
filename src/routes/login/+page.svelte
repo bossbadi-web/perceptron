@@ -10,6 +10,11 @@
   <div class="container">
     <h1 class="text-center display-4">Login</h1>
     <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
+      {#if form?.message}
+        <div class="alert alert-danger" role="alert">
+          {form?.message}
+        </div>
+      {/if}
       <div class="mb-3">
         <label for="emailInput" class="form-label">Email address</label>
         <input
@@ -18,7 +23,6 @@
           type="text"
           name="email"
           placeholder="Email"
-          value={form?.email ?? ""}
         />
       </div>
       <div class="mb-3">
