@@ -1,7 +1,12 @@
-import fs from "fs";
-import path from "path";
+const MCQ_FORMAT = `
+1. The question
+A) Option A
+B) Option B
+C) Option C
+D) Option D
+Answer: C
+`
 
-const MCQ_FORMAT = fs.readFileSync(path.join(process.cwd(), "static", "mcqFormat.txt"), "utf8");
 const MCQ_QUERY_PRE = `create multiple choice questions and answers
 
 use this format:
