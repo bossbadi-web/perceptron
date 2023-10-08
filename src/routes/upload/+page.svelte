@@ -1,7 +1,7 @@
 <script>
   export let form;
 
-  import MCQ from "$lib/models/Mcq.svelte";
+  import Mcq from "$lib/models/Mcq.svelte";
 </script>
 
 <section>
@@ -10,7 +10,7 @@
       {#if form?.body}
         {#each form.body as question}
           <div class="question-box">
-            <MCQ {question} />
+            <Mcq {question} />
           </div>
         {/each}
       {/if}
