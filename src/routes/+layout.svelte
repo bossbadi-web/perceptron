@@ -1,5 +1,5 @@
 <script>
-  import Header from "Header.svelte";
+  import Header from "./Header.svelte";
 
   import { invalidate } from "$app/navigation";
   import { onMount } from "svelte";
