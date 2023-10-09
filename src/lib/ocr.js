@@ -1,4 +1,7 @@
 import { createWorker } from "tesseract.js";
+import path from "path";
+
+const vercelFunctionHack = path.resolve('./node_modules/tesseract.js-core/');
 
 export const ocr = async (buffer) => {
   console.log(buffer);
