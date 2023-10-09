@@ -8,16 +8,16 @@ export const actions = {
   default: async ({ request }) => {
     const data = await request.formData();
     const { fileToUpload } = Object.fromEntries(data);
-    const path = `uploads/${fileToUpload.name}`;
+    // const path = `uploads/${fileToUpload.name}`;
 
     try {
       const buffer = Buffer.from(await fileToUpload.arrayBuffer());
-      fs.writeFileSync(path, buffer);
+      // fs.writeFileSync(path, buffer);
 
       // extract text from image
-      const text = await ocr(path);
+      const text = await ocr(buffer);
       console.log(text);
-      fs.unlinkSync(path);
+      // fs.unlinkSync(path);
 
       // create questions from text
       const data = await getQuestions(text);
