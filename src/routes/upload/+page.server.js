@@ -7,17 +7,13 @@ export const actions = {
   default: async ({ request }) => {
     const data = await request.formData();
     const { fileToUpload } = Object.fromEntries(data);
-    const path = `static/uploads/${fileToUpload.name}`;
 
     try {
-      // write file to disk
-      console.log(1);
       const buffer = Buffer.from(await fileToUpload.arrayBuffer());
-      console.log(buffer);
-      console.log(3);
+
       // extract text from image
       const text = await ocr(buffer);
-      console.log(text);
+
       // create questions from text
       const data = await getQuestions(text);
       console.log(data);
