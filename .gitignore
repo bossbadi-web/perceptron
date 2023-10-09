@@ -10,7 +10,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # user uploads
-/static/uploads/*
+/uploads/*
 
 # tesseract.js
 eng.traineddata

@@ -1,4 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
+import fs from "fs";
 
 import { ocr } from "$lib/ocr";
 import { getQuestions } from "$lib/chatbot";
@@ -7,12 +8,16 @@ export const actions = {
   default: async ({ request }) => {
     const data = await request.formData();
     const { fileToUpload } = Object.fromEntries(data);
+    const path = `uploads/${fileToUpload.name}`;
 
     try {
       const buffer = Buffer.from(await fileToUpload.arrayBuffer());
+      fs.writeFileSync(path, buffer);
 
       // extract text from image
-      const text = await ocr(buffer);
+      const text = await ocr(path);
+      console.log(text);
+      fs.unlinkSync(path);
 
       // create questions from text
       const data = await getQuestions(text);
