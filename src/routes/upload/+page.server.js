@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-// import fs from "fs";
+import fs from "fs";
 
 import path from 'path';
 
@@ -9,7 +9,8 @@ import { getQuestions } from "$lib/chatbot";
 export const actions = {
   default: async ({ request }) => {
     const file = path.resolve(process.cwd(), 'node_modules/tesseract.js-core/tesseract-core-simd.wasm');
-    console.log('FILE', file);
+    // print if file exists
+    console.log('WASM EXISTS?', fs.existsSync(file));
 
     const data = await request.formData();
     const { fileToUpload } = Object.fromEntries(data);
