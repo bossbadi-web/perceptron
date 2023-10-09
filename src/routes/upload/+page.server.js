@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-import fs from "fs";
+// import fs from "fs";
 
 import { ocr } from "$lib/ocr";
 import { getQuestions } from "$lib/chatbot";
