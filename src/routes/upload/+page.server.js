@@ -12,15 +12,17 @@ export const actions = {
 
     try {
       // write file to disk
+      console.log(1);
       const buffer = await fileToUpload.arrayBuffer();
+      console.log(2);
       fs.writeFileSync(path, Buffer.from(buffer));
-
+      console.log(3);
       // extract text from image
       const text = await ocr(path);
-
+      console.log(4);
       // delete file
       fs.unlinkSync(path);
-
+      console.log(5);
       // create questions from text
       const data = await getQuestions(text);
       console.log(data);
