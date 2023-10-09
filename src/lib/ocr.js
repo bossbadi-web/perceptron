@@ -1,16 +1,16 @@
-import { createWorker } from "tesseract.js";
+// import { createWorker } from "tesseract.js";
 
-export const ocr = async (buffer) => {
-  console.log(buffer);
-  const worker = await createWorker();
-  const {
-    data: { text },
-  } = await worker.recognize(buffer);
+// export const ocr = async (buffer) => {
+//   console.log(buffer);
+//   const worker = await createWorker();
+//   const {
+//     data: { text },
+//   } = await worker.recognize(buffer);
 
-  await worker.terminate();
+//   await worker.terminate();
 
-  return text;
-};
+//   return text;
+// };
 
 // import Tesseract from "tesseract.js";
 
@@ -21,3 +21,10 @@ export const ocr = async (buffer) => {
 
 //   return text;
 // };
+
+import { getTextFromImage, isSupportedFile } from "@shelf/aws-lambda-tesseract";
+
+export const ocr = async (file) => {
+  const text = await getTextFromImage(file);
+  return text;
+};

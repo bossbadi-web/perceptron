@@ -16,6 +16,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@shelf/aws-lambda-tesseract": "^4.0.3",
 		"@supabase/auth-helpers-sveltekit": "^0.10.3",
 		"@supabase/supabase-js": "^2.36.0",
 		"tesseract.js": "^5.0.2"
