@@ -1,5 +1,4 @@
 import { createWorker } from "tesseract.js";
-import {} from "tesseract.js-core";
 
 export const ocr = async (buffer) => {
   console.log(buffer);
