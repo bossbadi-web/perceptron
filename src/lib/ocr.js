@@ -1,9 +1,9 @@
 import Tesseract from "tesseract.js";
 
-export const ocr = async (path) => {
+export const ocr = async (buffer) => {
   const {
     data: { text },
-  } = await Tesseract.recognize(path, "eng", { logger: (m) => console.log(m) });
+  } = await Tesseract.recognize(buffer, "eng", { logger: (m) => console.log(m) });
 
   return text;
 };
