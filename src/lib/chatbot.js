@@ -5,7 +5,7 @@ B) Option B
 C) Option C
 D) Option D
 Answer: C
-`
+`;
 
 const MCQ_QUERY_PRE = `create multiple choice questions and answers
 

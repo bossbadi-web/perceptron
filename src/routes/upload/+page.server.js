@@ -10,25 +10,25 @@ export const actions = {
     const { fileToUpload } = Object.fromEntries(data);
     // const path = `uploads/${fileToUpload.name}`;
 
-    try {
-      const buffer = Buffer.from(await fileToUpload.arrayBuffer());
-      // fs.writeFileSync(path, buffer);
+    // try {
+    const buffer = Buffer.from(await fileToUpload.arrayBuffer());
+    // fs.writeFileSync(path, buffer);
 
-      // extract text from image
-      const text = await ocr(buffer);
-      console.log(text);
-      // fs.unlinkSync(path);
+    // extract text from image
+    const text = await ocr(buffer);
+    console.log(text);
+    // fs.unlinkSync(path);
 
-      // create questions from text
-      const data = await getQuestions(text);
-      console.log(data);
+    // create questions from text
+    const questions = await getQuestions(text);
+    console.log(questions);
 
-      // save questions to database, in table "quizzes" in column "data"
+    // save questions to database, in table "quizzes" in column "data"
 
-      return { body: data };
-    } catch (e) {
-      return fail(e);
-    }
+    return { body: questions };
+    // } catch (e) {
+    //   return fail(e);
+    // }
   },
 };
 
