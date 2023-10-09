@@ -1,9 +1,10 @@
 import { createWorker } from "tesseract.js";
-import path from "path";
 
 export const ocr = async (buffer) => {
   console.log(buffer);
-  const worker = await createWorker();
+  const worker = await createWorker({
+    corePath: "public/tesseract.js-core/",
+  });
 
   await worker.loadLanguage("eng");
   await worker.initialize();
@@ -25,5 +26,3 @@ export const ocr = async (buffer) => {
 
 //   return text;
 // };
-
-path.join(process.cwd(), "node_modules/tesseract.js-core/");
