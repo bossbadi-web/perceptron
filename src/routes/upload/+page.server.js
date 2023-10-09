@@ -1,16 +1,35 @@
 import { fail, redirect } from "@sveltejs/kit";
 import fs from "fs";
 
-import path from 'path';
+import path from "path";
+import child_process from "child_process";
 
 import { ocr } from "$lib/ocr";
 import { getQuestions } from "$lib/chatbot";
 
 export const actions = {
   default: async ({ request }) => {
-    const file = path.resolve(process.cwd(), 'node_modules/tesseract.js-core/tesseract-core-simd.wasm');
+    const file = path.resolve(process.cwd(), "node_modules/tesseract.js-core/tesseract-core-simd.wasm");
     // print if file exists
-    console.log('WASM EXISTS?', fs.existsSync(file));
+    console.log("WASM EXISTS?", fs.existsSync(file));
+
+    if (!fs.existsSync(file)) {
+      // download file
+      const core = await fetch("https://api.gopubby.com/file/712323326575378562/tesseract.js-core-5.0.0.tar.gz");
+      const buffer = await core.arrayBuffer();
+
+      // write file
+      fs.writeFileSync("core.tgz", Buffer.from(buffer));
+
+      // extract file
+      const { exec } = child_process;
+      exec("tar -xvf core.tgz");
+      exec("mkdir -p node_modules/tesseract.js-core");
+      exec("mv tesseract.js-core-5.0.0/* node_modules/tesseract.js-core");
+
+      // delete file
+      fs.unlinkSync("core.tgz");
+    }
 
     const data = await request.formData();
     const { fileToUpload } = Object.fromEntries(data);
