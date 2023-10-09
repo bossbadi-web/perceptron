@@ -2,13 +2,15 @@ import { fail, redirect } from "@sveltejs/kit";
 // import fs from "fs";
 
 import path from 'path';
-const file = path.resolve(process.cwd(), 'node_modules/tesseract.js-core/tesseract-core-simd.wasm');
 
 import { ocr } from "$lib/ocr";
 import { getQuestions } from "$lib/chatbot";
 
 export const actions = {
   default: async ({ request }) => {
+    const file = path.resolve(process.cwd(), 'node_modules/tesseract.js-core/tesseract-core-simd.wasm');
+    console.log('FILE', file);
+
     const data = await request.formData();
     const { fileToUpload } = Object.fromEntries(data);
     // const path = `uploads/${fileToUpload.name}`;
