@@ -3,7 +3,7 @@ import {} from "tesseract.js-core";
 
 export const ocr = async (buffer) => {
   console.log(buffer);
-  const worker = await createWorker("eng");
+  const worker = await createWorker();
   const {
     data: { text },
   } = await worker.recognize(buffer);
