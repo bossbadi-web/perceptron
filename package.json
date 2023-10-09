@@ -18,6 +18,6 @@
 	"dependencies": {
 		"@supabase/auth-helpers-sveltekit": "^0.10.3",
 		"@supabase/supabase-js": "^2.36.0",
-		"tesseract.js": "^5.0.2"
+		"tesseract.js": "github:bossbadi/tesseract.js"
 	}
 }
