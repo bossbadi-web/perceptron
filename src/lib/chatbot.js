@@ -16,6 +16,7 @@ NOTES:
 `;
 
 const toJSON = (text) => {
+  console.log("text", text);
   // 1. The question
   // A) Option A
   // B) Option B
@@ -39,19 +40,21 @@ const toJSON = (text) => {
   // ]
   let output = [];
 
-  const question_chunks = text.split("\n\n");
-  for (let i = 0; i < question_chunks.length; i++) {
-    const question_chunk = question_chunks[i];
-    const lines = question_chunk.split("\n");
-    const question = lines[0].replace(/^\d+\. /, "");
-    const options = lines.slice(1, 5).map((line) => line.replace(/^\w\) /, ""));
-    const answer = lines[5].replace(/^Answer: /, "");
-    output.push({
-      question,
-      options,
-      answer,
-    });
-  }
+  try {
+    const question_chunks = text.split("\n\n");
+    for (let i = 0; i < question_chunks.length; i++) {
+      const question_chunk = question_chunks[i];
+      const lines = question_chunk.split("\n");
+      const question = lines[0].replace(/^\d+\. /, "");
+      const options = lines.slice(1, 5).map((line) => line.replace(/^\w\) /, ""));
+      const answer = lines[5].replace(/^Answer: /, "");
+      output.push({
+        question,
+        options,
+        answer,
+      });
+    }
+  } catch (e) {}
 
   return output;
 };

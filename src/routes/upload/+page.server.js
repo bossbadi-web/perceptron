@@ -5,27 +5,79 @@ import { ocr } from "$lib/ocr";
 import { getQuestions } from "$lib/chatbot";
 
 export const actions = {
-  default: async ({ request }) => {
-    const data = await request.formData();
-    const { fileToUpload } = Object.fromEntries(data);
-    // const path = `uploads/${fileToUpload.name}`;
+  default: async ({ request, locals }) => {
+    const session = await locals.getSession();
 
-    // try {
-    const buffer = Buffer.from(await fileToUpload.arrayBuffer());
-    // fs.writeFileSync(path, buffer);
+    // const data = await request.formData();
+    // const { fileToUpload } = Object.fromEntries(data);
+    // // const path = `uploads/${fileToUpload.name}`;
 
-    // extract text from image
-    const text = await ocr(buffer);
-    console.log(text);
-    // fs.unlinkSync(path);
+    // // try {
+    // const buffer = Buffer.from(await fileToUpload.arrayBuffer());
+    // // fs.writeFileSync(path, buffer);
 
-    // create questions from text
-    const questions = await getQuestions(text);
-    console.log(questions);
+    // // extract text from image
+    // const text = await ocr(buffer);
+    // console.log(text);
+    // // fs.unlinkSync(path);
 
-    // save questions to database, in table "quizzes" in column "data"
+    // // create questions from text
+    // const questions = await getQuestions(text);
+    // console.log(questions);
+    const questions = [
+      {
+        question: "Who is known for his work in classical conditioning?",
+        options: ["David Myers", "Socrates", "Ivan Pavlov", "William James"],
+        answer: "Ivan Pavlov",
+      },
+      {
+        question: "Who is known for his work in behaviorism and the Little Albert experiment?",
+        options: ["John Locke", "B.F. Skinner", "Carl Rogers", "John Watson"],
+        answer: "John Watson",
+      },
+      {
+        question: "Who is known for his work in humanistic psychology and the concept of self-actualization?",
+        options: ["Abraham Maslow", "Wilhelm Wundt", "Edward Titchener", "Margaret Washburn"],
+        answer: "Abraham Maslow",
+      },
+      {
+        question:
+          "Which perspective in psychology focuses on the biological and neurological processes that underlie behavior?",
+        options: ["Humanistic Perspective", "Behavioral P.", "Biological/Neuroscience P.", "Cognitive P."],
+        answer: "Biological/Neuroscience P.",
+      },
+      {
+        question: "Which perspective in psychology focuses on the unconscious and early childhood experiences?",
+        options: ["Psychodynamic P.", "Social-Cultural P.", "Evolutionary P.", "Counseling Psychology"],
+        answer: "Psychodynamic P.",
+      },
+    ];
 
-    return { body: questions };
+    console.log(session.user);
+
+    // create new row un quizzes table
+    // put questions in 'data' column
+    // foreign key is the user's id under 'owner' column
+    const { data, error } = await locals.supabase.from("quizzes").insert([
+      {
+        owner: session.user.id,
+        data: questions,
+      },
+    ]);
+
+    console.log(data);
+
+    if (error) {
+      console.log(error);
+      return fail(500, {
+        message: "Server error. Please try again later.",
+      });
+    }
+
+    // redirect to quiz page /quiz/:id
+    throw redirect(303, `/quiz/${data[0].id}`);
+
+    // return { body: questions };
     // } catch (e) {
     //   return fail(e);
     // }
