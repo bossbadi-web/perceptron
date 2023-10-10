@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [sveltekit()],
   server: {
     hmr: {
-      host: "perceptron.gopubby.com",
-      protocol: "https",
+      host: "localhost",
+      protocol: "wss",
     },
   },
 });
