@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [sveltekit()],
   server: {
     hmr: {
-      host: "localhost",
+      host: "perceptron.gopubby.com",
       protocol: "ws",
     },
   },
