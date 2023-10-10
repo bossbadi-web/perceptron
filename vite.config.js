@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     hmr: {
       host: "perceptron.gopubby.com",
-      protocol: "wss",
+      protocol: "https",
     },
   },
 });
