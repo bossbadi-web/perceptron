@@ -58,29 +58,27 @@ export const actions = {
     // create new row un quizzes table
     // put questions in 'data' column
     // foreign key is the user's id under 'owner' column
-    const { data, error } = await locals.supabase.from("quizzes").insert([
-      {
-        owner: session.user.id,
-        data: questions,
-      },
-    ]);
+    // get back the id of the new quiz
+    const { data, error: err } = await locals.supabase
+      .from("quizzes")
+      .insert([
+        {
+          owner: session.user.id,
+          data: questions,
+        },
+      ])
+      .select();
 
-    console.log(data);
+    console.log("data", data);
+    console.log("err", err);
 
-    if (error) {
-      console.log(error);
+    if (!data || err) {
       return fail(500, {
         message: "Server error. Please try again later.",
       });
     }
 
-    // redirect to quiz page /quiz/:id
-    throw redirect(303, `/quiz/${data[0].id}`);
-
-    // return { body: questions };
-    // } catch (e) {
-    //   return fail(e);
-    // }
+    throw redirect(303, `/edit/${data[0].id}`);
   },
 };
 

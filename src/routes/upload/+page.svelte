@@ -1,20 +1,16 @@
 <script>
   export let form;
-
-  import Mcq from "$lib/models/Mcq.svelte";
 </script>
 
 <section>
   <div class="container">
-    <form method="POST" enctype="multipart/form-data">
-      {#if form?.body}
-        {#each form.body as question}
-          <div class="question-box">
-            <Mcq {question} />
-          </div>
-        {/each}
-      {/if}
+    {#if form?.message}
+      <div class="alert alert-danger" role="alert">
+        {form?.message}
+      </div>
+    {/if}
 
+    <form method="POST">
       <div class="group">
         <label for="file">Upload your file</label>
         <input type="file" id="file" name="fileToUpload" accept=".jpg, .jpeg, .png, .webp" required />
@@ -26,18 +22,3 @@
     <a href="/">Back</a>
   </div>
 </section>
-
-<style>
-  .question-box {
-    border: 1px solid black;
-    padding: 2rem;
-    margin-bottom: 1rem;
-    border-radius: 1rem;
-  }
-
-  @media (max-width: 768px) {
-    .question-box {
-      padding: 1rem;
-    }
-  }
-</style>
