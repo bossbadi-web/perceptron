@@ -8,7 +8,11 @@ export const actions = {
   default: async ({ request, locals }) => {
     const session = await locals.getSession();
 
-    // const data = await request.formData();
+    const formData = await request.formData();
+
+    const { title, description } = Object.fromEntries(formData);
+    console.log(title, description);
+
     // const { fileToUpload } = Object.fromEntries(data);
     // // const path = `uploads/${fileToUpload.name}`;
 
@@ -65,6 +69,8 @@ export const actions = {
         {
           owner: session.user.id,
           data: questions,
+          title,
+          description,
         },
       ])
       .select();

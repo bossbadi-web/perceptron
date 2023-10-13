@@ -11,3 +11,7 @@ section {
 .display-4 {
   margin: 1em auto;
 }
+
+.required {
+  color: var(--main-color);
+}
