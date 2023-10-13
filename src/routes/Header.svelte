@@ -20,10 +20,12 @@
       <span class="navbar-toggler-icon" />
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- /upload -->
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="/upload">Upload</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/explore">Explore</a>
         </li>
       </ul>
       {#if session}
