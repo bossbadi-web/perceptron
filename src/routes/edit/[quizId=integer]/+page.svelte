@@ -4,6 +4,7 @@
   export let data;
 
   import McqEdit from "$lib/models/McqEdit.svelte";
+  import Divider from "$lib/models/Divider.svelte";
 </script>
 
 <section>
@@ -11,10 +12,12 @@
     <form method="POST">
       <div class="row">
         <div class="col-md-8 offset-md-2">
+          <Divider />
           {#each data?.questions as question}
             <div class="question-box">
               <McqEdit {question} />
             </div>
+            <Divider />
           {/each}
         </div>
       </div>
