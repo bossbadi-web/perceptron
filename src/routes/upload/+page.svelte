@@ -11,14 +11,16 @@
     {/if}
 
     <form method="POST">
+      <h1 class="display-4">Upload a new image</h1>
+
       <div class="group mb-3">
         <label for="title">Title<span class="required">*</span></label>
         <input class="form-control" type="text" id="title" name="title" required />
       </div>
 
       <div class="group mb-3">
-        <label for="description">Description</label>
-        <input class="form-control" type="text" id="description" name="description" />
+        <label for="description">Description<span class="required">*</span></label>
+        <input class="form-control" type="text" id="description" name="description" required />
       </div>
 
       <div class="group mb-3">

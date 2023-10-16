@@ -5,7 +5,7 @@
   $: ({ supabase, session } = data);
 </script>
 
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
   <div class="container container-fluid">
     <a class="navbar-brand" href="/">Perceptron</a>
     <button

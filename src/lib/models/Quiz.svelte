@@ -6,22 +6,21 @@
 
 <div class="card">
   <div class="card-body">
-    <h5 class="card-title">{quiz.title || "Untitled"}</h5>
+    <h5 class="card-title">{quiz.title}</h5>
+    <p class="card-text">{quiz.description}</p>
     <p class="card-text">ID: {quiz.id}</p>
-    <a href={`/quiz/${quiz.id}`} class="btn btn-primary" target="_blank">See more</a>
+    <a href={`/preview/${quiz.id}`} class="btn btn-primary">Preview</a>
+    <a href={`/play/${quiz.id}`} class="btn btn-primary">Play</a>
   </div>
 </div>
 
 <style>
   .card {
-    margin-bottom: 1rem;
+    grid-template-rows: 50% 50%;
+    padding: 10px;
+    border-radius: 10px;
   }
-
-  .card-title {
-    font-size: 1.5rem;
-  }
-
-  .card-text {
-    font-size: 1.25rem;
+  .card:hover {
+    background-color: var(--main-gray);
   }
 </style>
