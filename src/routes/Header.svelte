@@ -41,7 +41,7 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              {session.user.email}
+              {session.user.username}
             </a>
             <ul
               class="dropdown-menu dropdown-menu-dark animate slideIn profile-links"

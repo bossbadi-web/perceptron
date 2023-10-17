@@ -8,7 +8,6 @@
   <div class="card-body">
     <h5 class="card-title">{quiz.title}</h5>
     <p class="card-text">{quiz.description}</p>
-    <p class="card-text">ID: {quiz.id}</p>
     <a href={`/preview/${quiz.id}`} class="btn btn-primary">Preview</a>
     <a href={`/play/${quiz.id}`} class="btn btn-primary">Play</a>
   </div>

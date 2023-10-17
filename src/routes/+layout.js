@@ -1,6 +1,7 @@
 // src/routes/+layout.js
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
 import { createSupabaseLoadClient } from "@supabase/auth-helpers-sveltekit";
+import { completeUser } from "$lib/completeUser.js";
 
 export const load = async ({ fetch, data, depends }) => {
   depends("supabase:auth");
@@ -12,9 +13,13 @@ export const load = async ({ fetch, data, depends }) => {
     serverSession: data.session,
   });
 
-  const {
+  let {
     data: { session },
   } = await supabase.auth.getSession();
+
+  if (session.user) {
+    session.user = completeUser(session.user);
+  }
 
   return { supabase, session };
 };

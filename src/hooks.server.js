@@ -1,6 +1,7 @@
 // src/hooks.server.js
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
 import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit";
+import { completeUser } from "$lib/completeUser.js";
 
 export const handle = async ({ event, resolve }) => {
   event.locals.supabase = createSupabaseServerClient({
@@ -15,9 +16,13 @@ export const handle = async ({ event, resolve }) => {
    * you just call this `await getSession()`
    */
   event.locals.getSession = async () => {
-    const {
+    let {
       data: { session },
     } = await event.locals.supabase.auth.getSession();
+
+    if (session.user) {
+      session.user = completeUser(session.user);
+    }
     return session;
   };
 
