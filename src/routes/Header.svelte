@@ -30,13 +30,29 @@
       </ul>
       {#if session}
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/profile">{session.user.email}</a>
-          </li>
-          <li class="nav-item">
-            <form action="/logout" method="post">
-              <button class="btn btn-outline-light" type="submit">Logout</button>
-            </form>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              id="navbarDropdownMenuLink"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {session.user.email}
+            </a>
+            <ul
+              class="dropdown-menu dropdown-menu-dark animate slideIn profile-links"
+              aria-labelledby="navbarDropdownMenuLink"
+            >
+              <li class="nav-item">
+                <a class="nav-link" href="/profile"><i class="fas fa-user" /> Profile</a>
+              </li>
+              <li class="nav-item">
+                <form action="/logout" method="POST">
+                  <button class="nav-link" type="submit"><i class="fas fa-sign-out-alt" /> Logout</button>
+                </form>
+              </li>
+            </ul>
           </li>
         </ul>
       {:else}
@@ -56,5 +72,16 @@
 <style>
   .navbar {
     background-color: var(--main-color);
+  }
+
+  .profile-links li {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 991px) {
+    .nav-item {
+      text-align: center;
+    }
   }
 </style>
