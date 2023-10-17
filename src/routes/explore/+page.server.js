@@ -2,7 +2,8 @@ import { error } from "@sveltejs/kit";
 
 // get all quizzes
 export const load = async ({ locals }) => {
-  const { data: quizzes } = await locals.supabase.from("quizzes").select("*");
+  const { data: quizzes } = await locals.supabase.from("quizzes").select("*").order("created_at", { ascending: false });
+
   console.log(quizzes);
   if (!quizzes) {
     throw error(500, {
