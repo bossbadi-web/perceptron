@@ -27,9 +27,11 @@
         <li class="nav-item">
           <a class="nav-link" href="/explore">Explore</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/library">My Library</a>
-        </li>
+        {#if session}
+          <li class="nav-item">
+            <a class="nav-link" href="/library">My Library</a>
+          </li>
+        {/if}
       </ul>
       {#if session}
         <ul class="navbar-nav ms-auto">
