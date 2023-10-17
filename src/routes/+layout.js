@@ -17,7 +17,7 @@ export const load = async ({ fetch, data, depends }) => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (session.user) {
+  if (session?.user) {
     session.user = completeUser(session.user);
   }
 
