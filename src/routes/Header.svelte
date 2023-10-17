@@ -22,7 +22,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/upload">Upload</a>
+          <a class="nav-link" href="/create">Create</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/explore">Explore</a>

@@ -11,7 +11,7 @@
     {/if}
 
     <form method="POST">
-      <h1 class="display-4">Upload a new image</h1>
+      <h1 class="display-4">Create a new quiz</h1>
 
       <div class="group mb-3">
         <label for="title">Title<span class="required">*</span></label>

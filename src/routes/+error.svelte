@@ -5,7 +5,9 @@
 <section>
   <div class="container">
     <h1>{$page.error.message}</h1>
-    <p>{$page.error.hint}</p>
+    {#if $page.error?.hint}
+      <p>{$page.error.hint}</p>
+    {/if}
     <a href="/">Go home</a>
   </div>
 </section>
