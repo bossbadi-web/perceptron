@@ -1,7 +1,5 @@
 import { error, redirect } from "@sveltejs/kit";
 
-// make actions that adds a new question between two existing questions
-
 // get quiz id from params, url is /edit/[quizId]/+page
 export const load = async ({ cookies, locals, params, url }) => {
   const { data: sessionData, error: err } = await locals.supabase.auth.getUser(cookies.get("access_token"));

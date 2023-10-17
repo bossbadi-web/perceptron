@@ -4,20 +4,10 @@
   in between the two questions
   -->
 
-<script>
-  function addNewQuestion() {
-    const questionBox = document.querySelector(".question-box");
-    const newQuestionBox = questionBox.cloneNode(true);
-    questionBox.after(newQuestionBox);
-  }
-</script>
-
 <div class="divider">
   <div class="row">
     <div class="col-md-8 offset-md-2 text-center">
-      <button class="add-new">
-        <small class="text-muted">Add new</small>
-      </button>
+        <small class="add-new text-muted">Add new</small>
     </div>
   </div>
 </div>
