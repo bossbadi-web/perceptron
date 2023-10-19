@@ -30,8 +30,9 @@
 
       <div class="row">
         <div class="col-md-8 offset-md-2 text-center">
-          <!-- save button, send list to action -->
-          <button type="submit" class="btn btn-primary btn-lg">Save</button>
+          <!-- send editQuizStore to the server -->
+          <input type="hidden" name="questions" value={$editQuizStore} />
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </form>

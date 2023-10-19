@@ -5,11 +5,9 @@ export const actions = {
     const session = await locals.getSession();
     console.log(session);
 
+    // form data
     const formData = await request.formData();
     console.log(formData);
-
-    const { title, description } = Object.fromEntries(formData);
-    console.log(title, description);
 
     // if (err) {
     //   throw error(403, {
