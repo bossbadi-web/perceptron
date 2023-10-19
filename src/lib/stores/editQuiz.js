@@ -21,5 +21,5 @@ export const createEditQuizStore = (initialValue = []) => {
     });
   }
 
-  return { subscribe, insertQuestion, deleteQuestion };
+  return { subscribe, set, insertQuestion, deleteQuestion };
 };
