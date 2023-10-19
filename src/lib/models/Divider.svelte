@@ -7,7 +7,7 @@
 <div class="divider">
   <div class="row">
     <div class="col-md-8 offset-md-2 text-center">
-        <small class="add-new text-muted">Add new</small>
+      <button class="add-new text-muted">Add new</button>
     </div>
   </div>
 </div>

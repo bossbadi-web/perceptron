@@ -4,10 +4,10 @@
   export let question;
 </script>
 
-<input class="form-control a-title" type="text" value={question.question} />
+<input class="form-control a-title" type="text" value={question.question} placeholder="Question" />
 
-{#each question.options as option}
-    <input class="form-control an-option" type="text" value={option} />
+{#each question.options as option, index}
+  <input class="form-control an-option" type="text" value={option} placeholder="Option {index + 1}" />
 {/each}
 
 <style>

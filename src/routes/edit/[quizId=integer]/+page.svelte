@@ -5,35 +5,56 @@
 
   import McqEdit from "$lib/models/McqEdit.svelte";
   import Divider from "$lib/models/Divider.svelte";
-  import { createEditQuizStore } from "$lib/stores/editQuiz.js";
-  import { onDestroy } from "svelte";
+  // import { createEditQuizStore } from "$lib/stores/editQuiz.js";
+  // import { onDestroy } from "svelte";
 
-  const editQuizStore = createEditQuizStore(data?.questions);
-  const unsubscribe = editQuizStore.subscribe((model) => console.log("subscribe"));
+  // const editQuizStore = createEditQuizStore(data?.questions);
+  // const unsubscribe = editQuizStore.subscribe((model) => console.log("subscribe"));
 
-  onDestroy(() => {
-    unsubscribe();
-  });
+  // onDestroy(() => {
+  //   unsubscribe();
+  // });
+
+  export let questions = data?.questions || [];
+
+  const EMPTY_QUESTION = {
+    question: "",
+    options: ["", "", "", ""],
+    answer: "",
+  };
+
+  function insertQuestion(index) {
+    console.log("insertQuestion", index);
+    questions = [...questions.slice(0, index + 1), EMPTY_QUESTION, ...questions.slice(index + 1)];
+  }
+
+  function deleteQuestion(index) {
+    questions.splice(index, 1);
+    questions = [...questions];
+  }
 </script>
 
 <section>
   <div class="container">
-    <form>
+    <form method="POST">
       <div class="row">
         <div class="col-md-8 offset-md-2">
-          <button on:click={editQuizStore.insertNewQuestion} class="btn btn-primary btn-lg">Add Question</button>
-          {#each $editQuizStore.data as question}
+          {#each questions as question, index}
             <div class="question-box">
               <McqEdit {question} />
+              <button on:click|preventDefault={() => deleteQuestion(index)} class="btn btn-outline-danger"
+                >Delete</button
+              >
             </div>
-            <Divider />
+            <button on:click|preventDefault={() => insertQuestion(index)} class="btn btn-primary">Insert</button>
           {/each}
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-8 offset-md-2 text-center">
-          <button class="btn btn-primary btn-lg">Save</button>
+          <!-- save button, send list to action -->
+          <button type="submit" class="btn btn-primary btn-lg">Save</button>
         </div>
       </div>
     </form>
