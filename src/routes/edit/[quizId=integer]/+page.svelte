@@ -4,34 +4,9 @@
   export let data;
 
   import McqEdit from "$lib/models/McqEdit.svelte";
-  import Divider from "$lib/models/Divider.svelte";
-  // import { createEditQuizStore } from "$lib/stores/editQuiz.js";
-  // import { onDestroy } from "svelte";
+  import { createEditQuizStore } from "$lib/stores/editQuiz.js";
 
-  // const editQuizStore = createEditQuizStore(data?.questions);
-  // const unsubscribe = editQuizStore.subscribe((model) => console.log("subscribe"));
-
-  // onDestroy(() => {
-  //   unsubscribe();
-  // });
-
-  export let questions = data?.questions || [];
-
-  const EMPTY_QUESTION = {
-    question: "",
-    options: ["", "", "", ""],
-    answer: "",
-  };
-
-  function insertQuestion(index) {
-    console.log("insertQuestion", index);
-    questions = [...questions.slice(0, index + 1), EMPTY_QUESTION, ...questions.slice(index + 1)];
-  }
-
-  function deleteQuestion(index) {
-    questions.splice(index, 1);
-    questions = [...questions];
-  }
+  const editQuizStore = createEditQuizStore(data?.questions);
 </script>
 
 <section>
@@ -39,14 +14,16 @@
     <form method="POST">
       <div class="row">
         <div class="col-md-8 offset-md-2">
-          {#each questions as question, index}
+          {#each $editQuizStore as question, index}
             <div class="question-box">
               <McqEdit {question} />
-              <button on:click|preventDefault={() => deleteQuestion(index)} class="btn btn-outline-danger"
+              <button on:click|preventDefault={() => editQuizStore.deleteQuestion(index)} class="btn btn-outline-danger"
                 >Delete</button
               >
             </div>
-            <button on:click|preventDefault={() => insertQuestion(index)} class="btn btn-primary">Insert</button>
+            <button on:click|preventDefault={() => editQuizStore.insertQuestion(index)} class="btn btn-primary"
+              >Insert</button
+            >
           {/each}
         </div>
       </div>

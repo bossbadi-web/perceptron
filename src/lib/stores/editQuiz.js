@@ -1,23 +1,25 @@
 import { writable } from "svelte/store";
 
-export const createEditQuizStore = (data) => {
-  const questions = writable({ data });
+export const createEditQuizStore = (initialValue = []) => {
+  const { subscribe, set, update } = writable(initialValue);
 
-  function insertNewQuestion() {
-    console.log("hereeee");
-    questions.update((qs) => {
-      console.log(qs.data);
-      qs.data.push({
-        question: "Who is known for his work in classical conditioning?",
-        options: ["David Myers", "Socrates", "Ivan Pavlov", "William James"],
-        answer: "Ivan Pavlov",
-      });
+  const EMPTY_QUESTION = {
+    question: "",
+    options: ["", "", "", ""],
+    answer: "",
+  };
 
-      return qs;
+  function insertQuestion(index) {
+    update((prev) => {
+      return [...prev.slice(0, index + 1), EMPTY_QUESTION, ...prev.slice(index + 1)];
     });
-
-    console.log(questions.data);
   }
 
-  return { ...questions, insertNewQuestion };
+  function deleteQuestion(index) {
+    update((prev) => {
+      return [...prev.slice(0, index), ...prev.slice(index + 1)];
+    });
+  }
+
+  return { subscribe, insertQuestion, deleteQuestion };
 };
