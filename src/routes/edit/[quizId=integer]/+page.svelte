@@ -7,6 +7,8 @@
   import { createEditQuizStore } from "$lib/stores/editQuiz.js";
 
   const editQuizStore = createEditQuizStore(data?.questions);
+
+  $: jsonVersion = JSON.stringify($editQuizStore);
 </script>
 
 <section>
@@ -31,7 +33,7 @@
       <div class="row">
         <div class="col-md-8 offset-md-2 text-center">
           <!-- send editQuizStore to the server -->
-          <input type="hidden" name="questions" value={$editQuizStore} />
+          <input type="hidden" name="questions" bind:value={jsonVersion} />
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>

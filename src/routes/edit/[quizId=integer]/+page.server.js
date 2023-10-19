@@ -1,48 +1,26 @@
 import { error, redirect } from "@sveltejs/kit";
 
 export const actions = {
-  default: async ({ request, locals }) => {
-    const session = await locals.getSession();
-    console.log(session);
-
+  default: async ({ request, locals, params }) => {
     // form data
     const formData = await request.formData();
-    console.log(formData);
+    let { questions } = Object.fromEntries(formData);
 
-    // if (err) {
-    //   throw error(403, {
-    //     message: "Unauthorized",
-    //     hint: "You are not the owner of this quiz",
-    //   });
-    // }
+    // convert to json
+    questions = JSON.parse(questions);
+    console.log(questions);
 
-    // const { data } = await locals.supabase.from("quizzes").select("*").eq("id", params.quizId).single();
+    const { error: updateError } = await locals.supabase
+      .from("quizzes")
+      .update({ data: questions })
+      .eq("id", params.quizId);
 
-    // if (!data) {
-    //   throw error(500, {
-    //     message: "No quiz exists on this page",
-    //     hint: "Try a different ID",
-    //   });
-    // }
-
-    // if (data.owner !== sessionData.user.id) {
-    //   throw error(403, {
-    //     message: "Unauthorized",
-    //     hint: "You are not the owner of this quiz",
-    //   });
-    // }
-
-    // const { error: updateError } = await locals.supabase
-    //   .from("quizzes")
-    //   .update({ data: body.questions })
-    //   .eq("id", params.quizId);
-
-    // if (updateError) {
-    //   throw error(500, {
-    //     message: "Internal Server Error",
-    //     hint: "Try again later",
-    //   });
-    // }
+    if (updateError) {
+      throw error(500, {
+        message: "Internal Server Error",
+        hint: "Try again later",
+      });
+    }
 
     return {
       status: 200,
