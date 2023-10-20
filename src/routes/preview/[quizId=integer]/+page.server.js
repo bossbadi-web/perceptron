@@ -11,6 +11,5 @@ export const load = async ({ locals, params }) => {
     });
   }
 
-  const questions = data.data || [];
-  return { questions };
+  return { quiz: data };
 };

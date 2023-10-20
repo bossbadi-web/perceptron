@@ -1,14 +1,21 @@
 <script>
-  export let data;
-
   import McqPreview from "$lib/models/McqPreview.svelte";
+
+  export let data;
+  const { quiz } = data;
 </script>
 
 <section>
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        {#each data?.questions as question}
+        <div class="mb-3">
+          <h1 class="display-4">Preview Perceptron</h1>
+          <h1>{quiz.title}</h1>
+          <p>{quiz.description}</p>
+        </div>
+
+        {#each quiz?.data as question}
           <div class="question-box">
             <McqPreview {question} />
           </div>
