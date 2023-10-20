@@ -36,7 +36,7 @@
             />
           </div>
 
-          <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)} class="btn btn-primary btn-sm">
+          <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)} class="btn btn-secondary btn-sm">
             Insert
           </button>
 
@@ -69,7 +69,7 @@
             </div>
             <button
               on:click|preventDefault={() => editQuizStore.insertQuestion(questionIdx)}
-              class="btn btn-primary btn-sm"
+              class="btn btn-secondary btn-sm"
             >
               Insert
             </button>
@@ -80,7 +80,9 @@
       <div class="row">
         <div class="col-md-8 offset-md-2 text-center">
           <input type="hidden" name="questions" bind:value={jsonVersion} />
-          <button type="submit" class="btn btn-primary btn-lg">Save</button>
+          <button class="btn btn-primary btn-lg" formaction="?/save">Save</button>
+          <button class="btn btn-primary btn-lg" formaction="?/preview">Preview</button>
+          <button class="btn btn-primary btn-lg" formaction="?/play">Play</button>
         </div>
       </div>
     </form>

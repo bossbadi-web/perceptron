@@ -1,26 +1,28 @@
 import { error, redirect } from "@sveltejs/kit";
 
+async function updateQuiz({ request, locals, params }) {
+  const formData = await request.formData();
+  let { title, description, questions } = Object.fromEntries(formData);
+
+  questions = JSON.parse(questions);
+  console.log(questions);
+
+  const { error: updateError } = await locals.supabase
+    .from("quizzes")
+    .update({ data: questions, title, description })
+    .eq("id", params.quizId);
+
+  if (updateError) {
+    throw error(500, {
+      message: "Internal Server Error",
+      hint: "Try again later",
+    });
+  }
+}
+
 export const actions = {
-  default: async ({ request, locals, params }) => {
-    // form data
-    const formData = await request.formData();
-    let { title, description, questions } = Object.fromEntries(formData);
-
-    // convert to json
-    questions = JSON.parse(questions);
-    console.log(questions);
-
-    const { error: updateError } = await locals.supabase
-      .from("quizzes")
-      .update({ data: questions, title, description })
-      .eq("id", params.quizId);
-
-    if (updateError) {
-      throw error(500, {
-        message: "Internal Server Error",
-        hint: "Try again later",
-      });
-    }
+  save: async ({ request, locals, params }) => {
+    await updateQuiz({ request, locals, params });
 
     return {
       status: 200,
@@ -28,6 +30,14 @@ export const actions = {
         message: "Successfully updated quiz",
       },
     };
+  },
+  preview: async ({ request, locals, params }) => {
+    await updateQuiz({ request, locals, params });
+    throw redirect(303, `/preview/${params.quizId}`);
+  },
+  play: async ({ request, locals, params }) => {
+    await updateQuiz({ request, locals, params });
+    throw redirect(303, `/play/${params.quizId}`);
   },
 };
 
