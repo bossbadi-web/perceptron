@@ -13,17 +13,17 @@
     <form method="POST">
       <h1 class="display-4">New Perceptron</h1>
 
-      <div class="group mb-3">
+      <div class="mb-3">
         <label for="title">Title<span class="required">*</span></label>
         <input class="form-control" type="text" id="title" name="title" required />
       </div>
 
-      <div class="group mb-3">
+      <div class="mb-3">
         <label for="description">Description<span class="required">*</span></label>
         <input class="form-control" type="text" id="description" name="description" required />
       </div>
 
-      <div class="group mb-3">
+      <div class="mb-3">
         <label for="file">Upload your file<span class="required">*</span></label>
         <input
           class="form-control"

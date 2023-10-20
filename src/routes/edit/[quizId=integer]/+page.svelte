@@ -16,14 +16,39 @@
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <div class="mb-3">
-            <h1 class="text-center display-4">Edit Perceptron</h1>
-            <input class="form-control" type="text" name="title" placeholder="Title" bind:value={quiz.title} />
-            <input class="form-control" type="text" name="description" placeholder="Description" bind:value={quiz.description} />
+            <h1 class="display-4">Edit Perceptron</h1>
           </div>
+
+          <div class="mb-3">
+            <label for="title">Title<span class="required">*</span></label>
+            <input class="form-control" type="text" id="title" name="title" bind:value={quiz.title} required />
+          </div>
+
+          <div class="mb-3">
+            <label for="description">Description<span class="required">*</span></label>
+            <input
+              class="form-control"
+              type="text"
+              id="description"
+              name="description"
+              bind:value={quiz.description}
+              required
+            />
+          </div>
+
+          <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)} class="btn btn-primary btn-sm">
+            Insert
+          </button>
 
           {#each $editQuizStore as question, questionIdx}
             <div class="question-box">
-              <input class="form-control a-title" type="text" placeholder="Question" bind:value={question.question} />
+              <input
+                class="form-control a-title"
+                type="text"
+                placeholder="Question"
+                bind:value={question.question}
+                required
+              />
 
               {#each question.options as _, optionIdx}
                 <input
@@ -31,6 +56,7 @@
                   type="text"
                   placeholder="Option {optionIdx + 1}"
                   bind:value={question.options[optionIdx]}
+                  required
                 />
               {/each}
 
@@ -41,7 +67,10 @@
                 Delete
               </button>
             </div>
-            <button on:click|preventDefault={() => editQuizStore.insertQuestion(questionIdx)} class="btn btn-primary">
+            <button
+              on:click|preventDefault={() => editQuizStore.insertQuestion(questionIdx)}
+              class="btn btn-primary btn-sm"
+            >
               Insert
             </button>
           {/each}
@@ -51,7 +80,7 @@
       <div class="row">
         <div class="col-md-8 offset-md-2 text-center">
           <input type="hidden" name="questions" bind:value={jsonVersion} />
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary btn-lg">Save</button>
         </div>
       </div>
     </form>
