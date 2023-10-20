@@ -83,6 +83,7 @@
           <button class="btn btn-primary btn-lg" formaction="?/save">Save</button>
           <button class="btn btn-primary btn-lg" formaction="?/preview">Preview</button>
           <button class="btn btn-primary btn-lg" formaction="?/play">Play</button>
+          <button class="btn btn-danger btn-lg" formaction="?/delete">Delete</button>
         </div>
       </div>
     </form>

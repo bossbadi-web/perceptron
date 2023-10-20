@@ -39,6 +39,21 @@ export const actions = {
     await updateQuiz({ request, locals, params });
     throw redirect(303, `/play/${params.quizId}`);
   },
+  delete: async ({ request, locals, params }) => {
+    const { error: deleteError } = await locals.supabase
+      .from("quizzes")
+      .delete()
+      .eq("id", params.quizId);
+
+    if (deleteError) {
+      throw error(500, {
+        message: "Internal Server Error",
+        hint: "Try again later",
+      });
+    }
+
+    throw redirect(303, "/library");
+  },
 };
 
 // get quiz id from params, url is /edit/[quizId]/+page
