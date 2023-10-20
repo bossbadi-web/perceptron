@@ -4,7 +4,8 @@
   import { createEditQuizStore } from "$lib/stores/editQuiz.js";
   export let data;
 
-  const editQuizStore = createEditQuizStore(data?.questions);
+  const { quiz } = data;
+  const editQuizStore = createEditQuizStore(quiz?.data);
 
   $: jsonVersion = JSON.stringify($editQuizStore);
 </script>
@@ -14,6 +15,12 @@
     <form method="POST">
       <div class="row">
         <div class="col-md-8 offset-md-2">
+          <div class="mb-3">
+            <h1 class="text-center display-4">Edit Perceptron</h1>
+            <input class="form-control" type="text" name="title" placeholder="Title" bind:value={quiz.title} />
+            <input class="form-control" type="text" name="description" placeholder="Description" bind:value={quiz.description} />
+          </div>
+
           {#each $editQuizStore as question, questionIdx}
             <div class="question-box">
               <input class="form-control a-title" type="text" placeholder="Question" bind:value={question.question} />

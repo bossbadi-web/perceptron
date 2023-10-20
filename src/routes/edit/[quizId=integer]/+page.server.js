@@ -4,7 +4,7 @@ export const actions = {
   default: async ({ request, locals, params }) => {
     // form data
     const formData = await request.formData();
-    let { questions } = Object.fromEntries(formData);
+    let { title, description, questions } = Object.fromEntries(formData);
 
     // convert to json
     questions = JSON.parse(questions);
@@ -12,7 +12,7 @@ export const actions = {
 
     const { error: updateError } = await locals.supabase
       .from("quizzes")
-      .update({ data: questions })
+      .update({ data: questions, title, description })
       .eq("id", params.quizId);
 
     if (updateError) {
@@ -55,6 +55,5 @@ export const load = async ({ cookies, locals, params, url }) => {
     });
   }
 
-  const questions = data.data || [];
-  return { questions };
+  return { quiz: data };
 };

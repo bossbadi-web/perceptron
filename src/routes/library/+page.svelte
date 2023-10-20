@@ -1,5 +1,5 @@
 <script>
-  import Quiz from "$lib/models/Quiz.svelte";
+  import QuizE from "$lib/models/QuizE.svelte";
   import { createSearchStore, searchHandler } from "$lib/stores/search.js";
   import { onDestroy } from "svelte";
 
@@ -27,7 +27,7 @@
       <div class="all-cards">
         {#each $searchStore.filtered as quiz}
           <div class="quiz-box">
-            <Quiz {quiz} />
+            <QuizE {quiz} />
           </div>
         {/each}
       </div>
