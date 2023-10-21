@@ -1,62 +1,57 @@
 import { fail, redirect } from "@sveltejs/kit";
-import fs from "fs";
+import { ocrSpace } from "ocr-space-api-wrapper";
 
-import { ocr } from "$lib/ocr";
-import { getQuestions } from "$lib/chatbot";
+import { getQuestions } from "$lib/chatbot.js";
+import { OCR_API_KEY } from "$env/static/private";
 
 const createQuiz = async ({ request, locals }) => {
   const session = await locals.getSession();
-
   const formData = await request.formData();
 
-  const { title, description } = Object.fromEntries(formData);
-  console.log(title, description);
+  const { title, description, fileToUpload } = Object.fromEntries(formData);
 
-  // const { fileToUpload } = Object.fromEntries(data);
-  // // const path = `uploads/${fileToUpload.name}`;
+  const base64 = new Buffer.from(await fileToUpload.arrayBuffer()).toString("base64");
+  const ocrData = await ocrSpace(`data:image/png;base64,${base64}`, { apiKey: OCR_API_KEY, language: "ita" });
 
-  // // try {
-  // const buffer = Buffer.from(await fileToUpload.arrayBuffer());
-  // // fs.writeFileSync(path, buffer);
+  const text = ocrData?.ParsedResults[0]?.ParsedText;
+  console.log(text);
+  if (!text) {
+    return fail(400, {
+      message: "No text found in the image.",
+    });
+  }
 
-  // // extract text from image
-  // const text = await ocr(buffer);
-  // console.log(text);
-  // // fs.unlinkSync(path);
+  const questions = await getQuestions(text);
+  console.log(questions);
 
-  // // create questions from text
-  // const questions = await getQuestions(text);
-  // console.log(questions);
-  const questions = [
-    {
-      question: "Who is known for his work in classical conditioning?",
-      options: ["David Myers", "Socrates", "Ivan Pavlov", "William James"],
-      answer: "Ivan Pavlov",
-    },
-    {
-      question: "Who is known for his work in behaviorism and the Little Albert experiment?",
-      options: ["John Locke", "B.F. Skinner", "Carl Rogers", "John Watson"],
-      answer: "John Watson",
-    },
-    {
-      question: "Who is known for his work in humanistic psychology and the concept of self-actualization?",
-      options: ["Abraham Maslow", "Wilhelm Wundt", "Edward Titchener", "Margaret Washburn"],
-      answer: "Abraham Maslow",
-    },
-    {
-      question:
-        "Which perspective in psychology focuses on the biological and neurological processes that underlie behavior?",
-      options: ["Humanistic Perspective", "Behavioral P.", "Biological/Neuroscience P.", "Cognitive P."],
-      answer: "Biological/Neuroscience P.",
-    },
-    {
-      question: "Which perspective in psychology focuses on the unconscious and early childhood experiences?",
-      options: ["Psychodynamic P.", "Social-Cultural P.", "Evolutionary P.", "Counseling Psychology"],
-      answer: "Psychodynamic P.",
-    },
-  ];
-
-  console.log(session.user);
+  // const questions = [
+  //   {
+  //     question: "Who is known for his work in classical conditioning?",
+  //     options: ["David Myers", "Socrates", "Ivan Pavlov", "William James"],
+  //     answer: "Ivan Pavlov",
+  //   },
+  //   {
+  //     question: "Who is known for his work in behaviorism and the Little Albert experiment?",
+  //     options: ["John Locke", "B.F. Skinner", "Carl Rogers", "John Watson"],
+  //     answer: "John Watson",
+  //   },
+  //   {
+  //     question: "Who is known for his work in humanistic psychology and the concept of self-actualization?",
+  //     options: ["Abraham Maslow", "Wilhelm Wundt", "Edward Titchener", "Margaret Washburn"],
+  //     answer: "Abraham Maslow",
+  //   },
+  //   {
+  //     question:
+  //       "Which perspective in psychology focuses on the biological and neurological processes that underlie behavior?",
+  //     options: ["Humanistic Perspective", "Behavioral P.", "Biological/Neuroscience P.", "Cognitive P."],
+  //     answer: "Biological/Neuroscience P.",
+  //   },
+  //   {
+  //     question: "Which perspective in psychology focuses on the unconscious and early childhood experiences?",
+  //     options: ["Psychodynamic P.", "Social-Cultural P.", "Evolutionary P.", "Counseling Psychology"],
+  //     answer: "Psychodynamic P.",
+  //   },
+  // ];
 
   // create new row un quizzes table
   // put questions in 'data' column

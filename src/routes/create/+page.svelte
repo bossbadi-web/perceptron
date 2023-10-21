@@ -12,7 +12,7 @@
           </div>
         {/if}
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
           <h1 class="display-4 text-center">New Perceptron</h1>
 
           <div class="mb-3">
