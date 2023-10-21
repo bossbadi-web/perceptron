@@ -2,28 +2,26 @@
   export let question;
 
   function checkAnswer(idx) {
-    return () => {
-      if (question.options[idx] === question.answer) {
-        document.querySelectorAll(".an-option").forEach((el, i) => {
-          if (i !== idx) {
-            el.classList.remove("btn-main");
-            el.classList.add("btn-secondary");
-            el.disabled = true;
-          }
-        });
-      } else {
-        // color the clicked button red and disable it
-        document.querySelectorAll(".an-option").forEach((el, i) => {
+    if (question.options[idx] === question.answer) {
+      document.querySelectorAll(".an-option").forEach((el, i) => {
+        if (i !== idx) {
           el.classList.remove("btn-main");
-          if (i === idx) {
-            el.classList.add("btn-danger");
-          } else {
-            el.classList.add("btn-secondary");
-            el.disabled = true;
-          }
-        });
-      }
-    };
+          el.classList.add("btn-secondary");
+          el.disabled = true;
+        }
+      });
+    } else {
+      // color the clicked button red and disable it
+      document.querySelectorAll(".an-option").forEach((el, i) => {
+        el.classList.remove("btn-main");
+        if (i === idx) {
+          el.classList.add("btn-danger");
+        } else {
+          el.classList.add("btn-secondary");
+          el.disabled = true;
+        }
+      });
+    }
   }
 </script>
 
@@ -31,7 +29,7 @@
 
 <div class="options-box">
   {#each question.options as option, idx}
-    <button class="an-option btn btn-main btn-lg btn-block" on:click={checkAnswer(idx)}>
+    <button class="an-option btn btn-main btn-lg btn-block" on:click={() => checkAnswer(idx)}>
       {option}
     </button>
   {/each}
