@@ -3,7 +3,6 @@
   import Mcq from "$lib/components/mcq/Play.svelte";
   import McqSummary from "$lib/components/mcq/Summary.svelte";
   import QuizDescription from "$lib/components/quiz/Description.svelte";
-  import { secondsToHMS } from "$lib/utils";
 
   export let data;
   const { quiz } = data;
@@ -28,15 +27,6 @@
     currentQuestionIdx++;
     currentQuestion = quiz.data[currentQuestionIdx];
   };
-
-  // time to complete based total length of questions and options
-  let seconds = 0;
-  quiz.data.forEach((question) => {
-    seconds += question.options.length * 5;
-  });
-
-  // convert to hours, minutes, seconds
-  let time = secondsToHMS(seconds);
 </script>
 
 <section>
@@ -48,7 +38,7 @@
           <div class="question-box">
             <div class="quiz-metadata">
               <h1 class="quiz-title display-4">{quiz.title}</h1>
-              <QuizDescription {quiz} {time} />
+              <QuizDescription {quiz} />
               <br />
               <button class="start-btn btn btn-main btn-lg" on:click={nextQuestion}>Start</button>
             </div>

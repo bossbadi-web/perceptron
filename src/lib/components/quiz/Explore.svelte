@@ -1,6 +1,7 @@
 <!-- a card for a quiz on the explore page -->
 
 <script>
+  import QuizDescription from "$lib/components/quiz/Description.svelte";
   import { formatDate } from "$lib/utils";
   export let quiz;
 
@@ -10,11 +11,8 @@
 <div class="card">
   <div class="card-body">
     <h1 class="card-title">{quiz.title}</h1>
-    <p>
-      {quiz.description}
-      <br />
-      <small class="text-muted">Created {quiz.created_at}</small>
-    </p>
+    <QuizDescription {quiz} />
+    <br />
     <a href={`/play/${quiz.id}`} class="btn btn-main">Play</a>
     <a href={`/preview/${quiz.id}`} class="btn btn-secondary">Preview</a>
     <slot />

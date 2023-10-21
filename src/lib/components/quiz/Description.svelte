@@ -1,21 +1,30 @@
 <script>
-  import { formatDate } from "$lib/utils";
-  export let quiz, time;
+  import { formatDate, secondsToHMS } from "$lib/utils";
+  export let quiz;
 
   quiz.created_at = formatDate(quiz.created_at);
+
+  // time to complete based total length of questions and options
+  let seconds = 0;
+  quiz.data.forEach((question) => {
+    seconds += question.options.length * 5;
+  });
+
+  // convert to hours, minutes, seconds
+  let time = secondsToHMS(seconds);
 </script>
 
 <div class="description lead">
   {quiz.description}
 </div>
 
-<div class="stats">
-  <div class="a-stat">
+<div class="stats text-muted">
+  <div>
     <b>Length:</b>
     {quiz.data.length} question{#if quiz.data.length !== 1}s{/if}
   </div>
 
-  <div class="a-stat">
+  <div>
     <b>Time to complete:</b>
     {#if time.h === 0 && time.m === 0 && time.s === 0}
       0 seconds
@@ -34,7 +43,7 @@
     {/if}
   </div>
 
-  <div class="a-stat">
+  <div>
     <b>Created:</b>
     {quiz.created_at}
   </div>
