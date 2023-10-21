@@ -16,7 +16,7 @@
       <div class="row">
         <div class="col-md-8 offset-md-2">
           <div class="mb-3">
-            <h1 class="display-4">Edit Perceptron</h1>
+            <h1 class="display-4 text-center">Edit Perceptron</h1>
           </div>
 
           <div class="mb-3">
@@ -106,12 +106,10 @@
             </div>
           {/each}
         </div>
-      </div>
 
-      <br />
+        <br />
 
-      <div class="row">
-        <div class="col-md-8 offset-md-2 text-center">
+        <div class="row-of-buttons">
           <input type="hidden" name="questions" bind:value={jsonVersion} />
           <button class="btn btn-main btn-lg" formaction="?/save">Save</button>
           <button class="btn btn-main btn-lg" formaction="?/play">Play</button>

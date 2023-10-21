@@ -37,3 +37,10 @@ section {
   background-color: var(--primary-color) !important;
   color: white !important;
 }
+
+.row-of-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
