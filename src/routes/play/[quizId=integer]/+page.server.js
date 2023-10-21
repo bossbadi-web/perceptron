@@ -11,5 +11,8 @@ export const load = async ({ locals, params }) => {
     });
   }
 
+  // randomize the order of the questions
+  data.data = data.data.sort(() => Math.random() - 0.5);
+
   return { quiz: data };
 };
