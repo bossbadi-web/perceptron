@@ -19,5 +19,6 @@
     </p>
     <a href={`/play/${quiz.id}`} class="btn btn-main">Play</a>
     <a href={`/preview/${quiz.id}`} class="btn btn-secondary">Preview</a>
+    <slot />
   </div>
 </div>
