@@ -21,7 +21,7 @@
       el.classList.remove("btn-main");
       if (i === idx) {
         el.classList.add("btn-danger");
-      } else if (question.answer === question.options[i]) {
+      } else if (i === question.answer) {
         el.classList.add("btn-main");
         el.disabled = true;
       } else {
@@ -46,7 +46,7 @@
   };
 
   const checkAnswer = (idx) => {
-    if (question.options[idx] === question.answer) {
+    if (idx === question.answer) {
       // answer is correct
       answerRight(idx);
     } else {

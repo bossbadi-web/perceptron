@@ -4,7 +4,7 @@
 </script>
 
 <h2>
-  {#if question.answer === question.options[playerAnswerIdx]}
+  {#if playerAnswerIdx === question.answer}
     <span class="badge bg-main">Correct</span>
   {:else}
     <span class="badge bg-danger">Wrong</span>
@@ -15,7 +15,7 @@
 
 <div class="options-box">
   {#each question.options as option, idx}
-    {#if option === question.answer}
+    {#if idx === question.answer}
       <button class="an-option btn btn-main btn-lg" disabled>
         {option}
       </button>

@@ -1,10 +1,17 @@
 const MCQ_FORMAT = `
 1. The question
-A) Option A
-B) Option B
-C) Option C
-D) Option D
-Answer: C
+0) Option
+1) Option
+2) Option
+3) Option
+Answer: 3
+
+2. The question
+0) Option
+1) Option
+2) Option
+3) Option
+Answer: 2
 `;
 
 const MCQ_QUERY_PRE = `create multiple choice questions and answers
@@ -17,25 +24,13 @@ NOTES:
 
 const toJSON = (text) => {
   console.log("text", text);
-  // 1. The question
-  // A) Option A
-  // B) Option B
-  // C) Option C
-  // D) Option D
-  // Answer: C
-  //
-  // 2. The question
-  // A) Option A
-  // B) Option B
-  // ...
-
   // to
 
   // [
   //   {
   //     "question": "The question",
   //     "options": ["A", "B", "C", "D"],
-  //     "answer": "A"
+  //     "answer": 2  // index of the correct option
   //   }
   // ]
   let output = [];
@@ -47,7 +42,7 @@ const toJSON = (text) => {
       const lines = question_chunk.split("\n");
       const question = lines[0].replace(/^\d+\. /, "");
       const options = lines.slice(1, 5).map((line) => line.replace(/^\w\) /, ""));
-      const answer = lines[5].replace(/^Answer: /, "");
+      const answer = Number(lines[5].replace(/^Answer: /, ""));
       output.push({
         question,
         options,

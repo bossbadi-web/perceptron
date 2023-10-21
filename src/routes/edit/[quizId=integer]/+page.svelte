@@ -50,10 +50,10 @@
                 required
               />
 
-              {#each question.options as option, optionIdx}
+              {#each question.options as _, optionIdx}
                 <div class="input-group mb-1">
                   <span class="input-group-text">
-                    {#if question.answer && option === question.answer}
+                    {#if question.answer !== undefined && optionIdx === question.answer}
                       <input
                         type="radio"
                         class="btn-check"
@@ -62,7 +62,7 @@
                         autocomplete="off"
                         checked
                         required
-                        on:change={() => (question.answer = option)}
+                        on:change={() => (question.answer = optionIdx)}
                       />
                     {:else}
                       <input
@@ -72,7 +72,7 @@
                         id="option-{questionIdx}-{optionIdx}"
                         autocomplete="off"
                         required
-                        on:change={() => (question.answer = option)}
+                        on:change={() => (question.answer = optionIdx)}
                       />
                     {/if}
 
