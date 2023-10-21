@@ -30,5 +30,5 @@ section {
   transition: 0.5s;
 }
 .btn-main:hover {
-  filter: brightness(80%);
+  background-color: var(--secondary-color) !important;
 }

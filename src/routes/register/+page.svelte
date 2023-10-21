@@ -45,7 +45,7 @@
           placeholder="Password"
         />
       </div>
-      <button type="submit" class="btn btn-primary">Register</button>
+      <button type="submit" class="btn btn-main">Register</button>
     </form>
     <br />
     <small class="text-muted">
