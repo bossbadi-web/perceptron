@@ -56,7 +56,7 @@
         {:else if currentQuestionIdx < quiz.data.length}
           <!-- if quiz not over -->
           <div class="question-box">
-            <Mcq question={currentQuestion} {score} {nextQuestion} />
+            <Mcq question={currentQuestion} {nextQuestion} />
           </div>
         {:else}
           <!-- if quiz over -->
