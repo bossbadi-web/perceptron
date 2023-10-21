@@ -14,10 +14,10 @@
       <div class="col-md-8 offset-md-2">
         <div class="text-center alert alert-info" role="alert">
           <p>This is a preview of the quiz. You can't submit your answers here.</p>
+          <a href="/play/{quiz.id}" class="btn btn-main">Play</a>
           {#if session}
             <a href="/edit/{quiz.id}" class="btn btn-secondary">Edit</a>
           {/if}
-          <a href="/play/{quiz.id}" class="btn btn-main">Play</a>
         </div>
 
         <div class="quiz-metadata">

@@ -6,7 +6,12 @@
 
 <div class="options-box">
   {#each question.options as option}
-    <button class="an-option btn btn-secondary btn-lg" disabled>
+    <button
+      class="an-option btn btn-main btn-lg"
+      class:btn-secondary={question.answer !== option}
+      class:btn-main={question.answer === option}
+      disabled
+    >
       {option}
     </button>
   {/each}
