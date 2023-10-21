@@ -1,4 +1,5 @@
 <script>
+  import "$lib/components/mcq/styles.css";
   import Mcq from "$lib/components/mcq/Preview.svelte";
 
   export let data;
@@ -34,34 +35,3 @@
     </div>
   </div>
 </section>
-
-<style>
-  .quiz-metadata {
-    text-align: center;
-    margin-top: 4rem;
-    margin-bottom: 4rem;
-  }
-
-  .quiz-title {
-    margin-bottom: 1rem;
-  }
-
-  .quiz-description {
-    font-size: 1.2rem;
-    margin-bottom: 3rem;
-  }
-
-  .question-box {
-    border: 1px solid gray;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    border-radius: 1rem;
-  }
-
-  @media (max-width: 768px) {
-    .question-box {
-      padding: 1rem;
-    }
-  }
-</style>

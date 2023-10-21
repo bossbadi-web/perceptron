@@ -1,4 +1,5 @@
 <script>
+  import "$lib/components/mcq/styles.css";
   import Mcq from "$lib/components/mcq/Play.svelte";
   import McqSummary from "$lib/components/mcq/Summary.svelte";
 
@@ -70,42 +71,3 @@
     </div>
   </div>
 </section>
-
-<style>
-  .quiz-metadata {
-    text-align: center;
-    margin-top: 4rem;
-    margin-bottom: 4rem;
-  }
-
-  .quiz-title {
-    margin-bottom: 1rem;
-  }
-
-  .quiz-description {
-    font-size: 1.2rem;
-    margin-bottom: 3rem;
-  }
-
-  .question-box {
-    border: 1px solid gray;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
-    padding: 4rem;
-    margin-bottom: 2rem;
-    border-radius: 1rem;
-  }
-
-  .start-btn {
-    font-size: 1.5rem;
-  }
-
-  .score {
-    font-size: 2rem;
-  }
-
-  @media (max-width: 768px) {
-    .question-box {
-      padding: 2rem;
-    }
-  }
-</style>
