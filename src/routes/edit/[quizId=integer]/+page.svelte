@@ -50,15 +50,48 @@
                 required
               />
 
-              {#each question.options as _, optionIdx}
-                <input
-                  class="form-control an-option"
-                  type="text"
-                  placeholder="Option {optionIdx + 1}"
-                  bind:value={question.options[optionIdx]}
-                  required
-                />
+              {#each question.options as option, optionIdx}
+                <div class="input-group mb-1">
+                  <span class="input-group-text">
+                    {#if question.answer && option === question.answer}
+                      <input
+                        type="radio"
+                        class="btn-check"
+                        name="options-{questionIdx}"
+                        id="option-{questionIdx}-{optionIdx}"
+                        autocomplete="off"
+                        checked
+                        required
+                        on:change={() => (question.answer = option)}
+                      />
+                    {:else}
+                      <input
+                        type="radio"
+                        class="btn-check"
+                        name="options-{questionIdx}"
+                        id="option-{questionIdx}-{optionIdx}"
+                        autocomplete="off"
+                        required
+                        on:change={() => (question.answer = option)}
+                      />
+                    {/if}
+
+                    <label class="btn btn-outline-success" for="option-{questionIdx}-{optionIdx}">
+                      <span style="width: 1rem; display: inline-block;" />
+                    </label>
+                  </span>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Option {optionIdx + 1}"
+                    bind:value={question.options[optionIdx]}
+                    required
+                  />
+                </div>
               {/each}
+
+              <br />
 
               <button
                 on:click|preventDefault={() => editQuizStore.deleteQuestion(questionIdx)}
@@ -67,6 +100,7 @@
                 Delete
               </button>
             </div>
+
             <button
               on:click|preventDefault={() => editQuizStore.insertQuestion(questionIdx)}
               class="btn btn-secondary btn-sm"
@@ -92,7 +126,8 @@
 
 <style>
   .question-box {
-    border: 1px solid black;
+    border: 1px solid gray;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
     padding: 2rem;
     margin-bottom: 1rem;
     border-radius: 1rem;
@@ -104,8 +139,8 @@
     margin-bottom: 1rem;
   }
 
-  .an-option {
-    margin-bottom: 0.5rem;
+  .input-group-text {
+    background-color: white;
   }
 
   @media (max-width: 768px) {

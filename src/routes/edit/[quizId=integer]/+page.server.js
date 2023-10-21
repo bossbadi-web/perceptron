@@ -5,7 +5,6 @@ async function updateQuiz({ request, locals, params }) {
   let { title, description, questions } = Object.fromEntries(formData);
 
   questions = JSON.parse(questions);
-  console.log(questions);
 
   const { error: updateError } = await locals.supabase
     .from("quizzes")
@@ -40,10 +39,7 @@ export const actions = {
     throw redirect(303, `/play/${params.quizId}`);
   },
   delete: async ({ request, locals, params }) => {
-    const { error: deleteError } = await locals.supabase
-      .from("quizzes")
-      .delete()
-      .eq("id", params.quizId);
+    const { error: deleteError } = await locals.supabase.from("quizzes").delete().eq("id", params.quizId);
 
     if (deleteError) {
       throw error(500, {
