@@ -8,10 +8,10 @@
   let currentQuestion = null;
   let score = 0;
 
-  function nextQuestion() {
+  const nextQuestion = () => {
     currentQuestionIdx++;
     currentQuestion = quiz.data[currentQuestionIdx];
-  }
+  };
 </script>
 
 <section>

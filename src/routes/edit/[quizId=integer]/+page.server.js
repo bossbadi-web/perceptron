@@ -1,6 +1,6 @@
 import { error, redirect } from "@sveltejs/kit";
 
-async function updateQuiz({ request, locals, params }) {
+const updateQuiz = async ({ request, locals, params }) => {
   const formData = await request.formData();
   let { title, description, questions } = Object.fromEntries(formData);
 
@@ -17,7 +17,7 @@ async function updateQuiz({ request, locals, params }) {
       hint: "Try again later",
     });
   }
-}
+};
 
 export const actions = {
   save: async ({ request, locals, params }) => {
@@ -38,7 +38,7 @@ export const actions = {
     await updateQuiz({ request, locals, params });
     throw redirect(303, `/play/${params.quizId}`);
   },
-  delete: async ({ request, locals, params }) => {
+  delete: async ({ locals, params }) => {
     const { error: deleteError } = await locals.supabase.from("quizzes").delete().eq("id", params.quizId);
 
     if (deleteError) {

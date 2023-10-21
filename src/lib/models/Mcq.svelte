@@ -1,7 +1,7 @@
 <script>
   export let question;
 
-  function checkAnswer(idx) {
+  const checkAnswer = (idx) => {
     if (question.options[idx] === question.answer) {
       document.querySelectorAll(".an-option").forEach((el, i) => {
         if (i !== idx) {
@@ -22,7 +22,7 @@
         }
       });
     }
-  }
+  };
 </script>
 
 <h1 class="the-title display-6">{question.question}</h1>

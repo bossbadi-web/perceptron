@@ -9,17 +9,17 @@ export const createEditQuizStore = (initialValue = []) => {
     answer: "",
   };
 
-  function insertQuestion(index) {
+  const insertQuestion = (index) => {
     update((prev) => {
       return [...prev.slice(0, index + 1), EMPTY_QUESTION, ...prev.slice(index + 1)];
     });
-  }
+  };
 
-  function deleteQuestion(index) {
+  const deleteQuestion = (index) => {
     update((prev) => {
       return [...prev.slice(0, index), ...prev.slice(index + 1)];
     });
-  }
+  };
 
   return { subscribe, set, insertQuestion, deleteQuestion };
 };

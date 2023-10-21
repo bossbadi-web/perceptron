@@ -1,3 +1,3 @@
-export function match(param) {
+export const match = (param) => {
   return /^\d+$/.test(param);
-}
+};
