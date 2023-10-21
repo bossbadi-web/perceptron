@@ -1,26 +1,57 @@
 <script>
-  export let question;
+  export let question, nextQuestion;
+
+  const answerRight = (idx) => {
+    document.querySelectorAll(".an-option").forEach((el, i) => {
+      if (i !== idx) {
+        el.classList.remove("btn-main");
+        el.classList.add("btn-secondary");
+        el.disabled = true;
+      }
+    });
+
+    setTimeout(() => {
+      resetOptions();
+      nextQuestion(true);
+    }, 2000);
+  };
+
+  const answerWrong = (idx) => {
+    document.querySelectorAll(".an-option").forEach((el, i) => {
+      el.classList.remove("btn-main");
+      if (i === idx) {
+        el.classList.add("btn-danger");
+      } else if (question.answer === question.options[i]) {
+        el.classList.add("btn-main");
+        el.disabled = true;
+      } else {
+        el.classList.add("btn-secondary");
+        el.disabled = true;
+      }
+    });
+
+    setTimeout(() => {
+      resetOptions();
+      nextQuestion(false);
+    }, 2000);
+  };
+
+  const resetOptions = () => {
+    document.querySelectorAll(".an-option").forEach((el) => {
+      el.classList.remove("btn-danger");
+      el.classList.remove("btn-secondary");
+      el.classList.add("btn-main");
+      el.disabled = false;
+    });
+  };
 
   const checkAnswer = (idx) => {
     if (question.options[idx] === question.answer) {
-      document.querySelectorAll(".an-option").forEach((el, i) => {
-        if (i !== idx) {
-          el.classList.remove("btn-main");
-          el.classList.add("btn-secondary");
-          el.disabled = true;
-        }
-      });
+      // answer is correct
+      answerRight(idx);
     } else {
-      // color the clicked button red and disable it
-      document.querySelectorAll(".an-option").forEach((el, i) => {
-        el.classList.remove("btn-main");
-        if (i === idx) {
-          el.classList.add("btn-danger");
-        } else {
-          el.classList.add("btn-secondary");
-          el.disabled = true;
-        }
-      });
+      // answer is wrong
+      answerWrong(idx);
     }
   };
 </script>
