@@ -16,8 +16,14 @@
 
 .options-box {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 50% 50%;
   grid-gap: 0.5rem;
+}
+
+@media (max-width: 991px) {
+  .options-box {
+    grid-template-columns: 100%;
+  }
 }
 
 /* for routes */

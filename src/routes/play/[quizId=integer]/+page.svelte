@@ -32,7 +32,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-md-8 offset-md-2">
+      <div class="col-md-10 offset-md-1">
         {#if currentQuestionIdx === -1}
           <!-- if quiz not started -->
           <div class="question-box">

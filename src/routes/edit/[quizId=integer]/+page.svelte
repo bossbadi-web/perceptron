@@ -15,7 +15,7 @@
   <div class="container">
     <form method="POST">
       <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-10 offset-md-1">
           {#if form?.message}
             <div class="alert alert-danger" role="alert">
               {form?.message}

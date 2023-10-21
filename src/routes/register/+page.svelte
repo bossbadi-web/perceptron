@@ -9,7 +9,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-md-8 offset-md-2">
+      <div class="col-md-10 offset-md-1">
         <h1 class="text-center display-4">Register</h1>
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
           {#if form?.message}
