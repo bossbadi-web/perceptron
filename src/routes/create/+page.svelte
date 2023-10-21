@@ -1,5 +1,7 @@
 <script>
-  export let form;
+  export let data, form;
+
+  const { LIMITS } = data;
 </script>
 
 <section>
@@ -16,17 +18,34 @@
           <h1 class="display-4 text-center">New Perceptron</h1>
 
           <div class="mb-3">
-            <label for="title">Title<span class="required">*</span></label>
-            <input class="form-control" type="text" id="title" name="title" required />
+            <label for="title">
+              Title<span class="required">*</span>
+              <small class="text-muted">(max {LIMITS.title} chars)</small>
+            </label>
+            <!-- limit chars to 50 -->
+            <input class="form-control" type="text" id="title" name="title" maxlength={LIMITS.title} required />
           </div>
 
           <div class="mb-3">
-            <label for="description">Description<span class="required">*</span></label>
-            <input class="form-control" type="text" id="description" name="description" required />
+            <label for="description">
+              Description<span class="required">*</span>
+              <small class="text-muted">(max {LIMITS.description} chars)</small>
+            </label>
+            <input
+              class="form-control"
+              type="text"
+              id="description"
+              name="description"
+              maxlength={LIMITS.description}
+              required
+            />
           </div>
 
           <div class="mb-3">
-            <label for="file">Upload your file<span class="required">*</span></label>
+            <label for="file">
+              Upload your file<span class="required">*</span>
+              <small class="text-muted">(max {LIMITS.file / 1024 / 1024} MB)</small>
+            </label>
             <input
               class="form-control"
               type="file"

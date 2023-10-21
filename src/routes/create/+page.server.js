@@ -1,14 +1,26 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { ocrSpace } from "ocr-space-api-wrapper";
 
-import { getQuestions } from "$lib/chatbot.js";
+import { getQuestions } from "$lib/chatbot";
+import { LIMITS } from "$lib/limits";
 import { OCR_API_KEY } from "$env/static/private";
 
 const createQuiz = async ({ request, locals }) => {
-  const session = await locals.getSession();
   const formData = await request.formData();
-
   const { title, description, fileToUpload } = Object.fromEntries(formData);
+
+  // validate input
+  if (title.length > LIMITS.title) {
+    return { inputError: `Title must be less than ${LIMITS.title} characters.` };
+  }
+  if (description.length > LIMITS.description) {
+    return { inputError: `Description must be less than ${LIMITS.description} characters.` };
+  }
+  if (fileToUpload.size > LIMITS.file) {
+    return { inputError: `File must be less than ${LIMITS.file / 1024 / 1024} MB.` };
+  }
+
+  const session = await locals.getSession();
 
   const base64 = new Buffer.from(await fileToUpload.arrayBuffer()).toString("base64");
   const ocrData = await ocrSpace(`data:image/png;base64,${base64}`, { apiKey: OCR_API_KEY, language: "ita" });
@@ -77,7 +89,11 @@ const createQuiz = async ({ request, locals }) => {
 
 export const actions = {
   play: async ({ request, locals }) => {
-    const { data, err } = await createQuiz({ request, locals });
+    const { data, err, inputError } = await createQuiz({ request, locals });
+
+    if (inputError) {
+      return fail(400, { message: inputError });
+    }
 
     if (!data || err) {
       return fail(500, {
@@ -90,6 +106,10 @@ export const actions = {
   preview: async ({ request, locals }) => {
     const { data, err } = await createQuiz({ request, locals });
 
+    if (inputError) {
+      return fail(400, { message: inputError });
+    }
+
     if (!data || err) {
       return fail(500, {
         message: "Server error. Please try again later.",
@@ -100,6 +120,10 @@ export const actions = {
   },
   edit: async ({ request, locals }) => {
     const { data, err } = await createQuiz({ request, locals });
+
+    if (inputError) {
+      return fail(400, { message: inputError });
+    }
 
     if (!data || err) {
       return fail(500, {
@@ -117,4 +141,6 @@ export const load = async ({ cookies, locals, url }) => {
   if (err) {
     throw redirect(303, `/login?redirectTo=${url.pathname}`);
   }
+
+  return { LIMITS };
 };
