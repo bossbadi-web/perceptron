@@ -11,8 +11,8 @@
       <div class="col-md-8 offset-md-2">
         <div class="text-center alert alert-info" role="alert">
           <p>This is a preview of the quiz. You can't submit your answers here.</p>
-          <a href="/edit/{quiz.id}" class="btn btn-primary">Edit</a>
-          <a href="/play/{quiz.id}" class="btn btn-success">Play</a>
+          <a href="/edit/{quiz.id}" class="btn btn-secondary">Edit</a>
+          <a href="/play/{quiz.id}" class="btn btn-main">Play</a>
         </div>
 
         <div class="quiz-metadata">

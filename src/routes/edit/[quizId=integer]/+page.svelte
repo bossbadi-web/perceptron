@@ -113,8 +113,8 @@
       <div class="row">
         <div class="col-md-8 offset-md-2 text-center">
           <input type="hidden" name="questions" bind:value={jsonVersion} />
-          <button class="btn btn-primary btn-lg" formaction="?/save">Save</button>
-          <button class="btn btn-primary btn-lg" formaction="?/preview">Preview</button>
+          <button class="btn btn-main btn-lg" formaction="?/save">Save</button>
+          <button class="btn btn-main btn-lg" formaction="?/preview">Preview</button>
           <button class="btn btn-main btn-lg" formaction="?/play">Play</button>
           <button class="btn btn-danger btn-lg" formaction="?/delete">Delete</button>
         </div>
@@ -124,9 +124,6 @@
 </section>
 
 <style>
-  /* <!-- make a long line divider that has the insert question text in the middle
-          it's actually a button. It's faint and has a plus sign in the middle
-          --> */
   .divider {
     display: flex;
     align-items: center;

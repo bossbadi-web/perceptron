@@ -8,9 +8,9 @@
   <div class="card-body">
     <h5 class="card-title">{quiz.title}</h5>
     <p class="card-text">{quiz.description}</p>
-    <a href={`/preview/${quiz.id}`} class="btn btn-primary">Preview</a>
-    <a href={`/play/${quiz.id}`} class="btn btn-primary">Play</a>
-    <a href={`/edit/${quiz.id}`} class="btn btn-primary">Edit</a>
+    <a href={`/preview/${quiz.id}`} class="btn btn-main">Preview</a>
+    <a href={`/play/${quiz.id}`} class="btn btn-main">Play</a>
+    <a href={`/edit/${quiz.id}`} class="btn btn-secondary">Edit</a>
   </div>
 </div>
 
