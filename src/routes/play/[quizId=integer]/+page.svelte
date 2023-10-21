@@ -1,5 +1,5 @@
 <script>
-  import Mcq from "$lib/models/Mcq.svelte";
+  import Mcq from "$lib/components/mcq/Play.svelte";
 
   export let data;
   const { quiz } = data;

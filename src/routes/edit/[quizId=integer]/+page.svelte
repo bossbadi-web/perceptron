@@ -37,7 +37,7 @@
           </div>
 
           <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)} class="btn btn-secondary btn-sm">
-            Insert
+            Insert Question
           </button>
 
           {#each $editQuizStore as question, questionIdx}
@@ -97,7 +97,7 @@
                 on:click|preventDefault={() => editQuizStore.deleteQuestion(questionIdx)}
                 class="btn btn-outline-danger"
               >
-                Delete
+                Delete Question
               </button>
             </div>
 
@@ -105,7 +105,7 @@
               on:click|preventDefault={() => editQuizStore.insertQuestion(questionIdx)}
               class="btn btn-secondary btn-sm"
             >
-              Insert
+              Insert Question
             </button>
           {/each}
         </div>

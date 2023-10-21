@@ -1,5 +1,5 @@
 <script>
-  import McqPreview from "$lib/models/McqPreview.svelte";
+  import Mcq from "$lib/components/mcq/Preview.svelte";
 
   export let data;
   const { quiz } = data;
@@ -22,7 +22,7 @@
 
         {#each quiz?.data as question}
           <div class="question-box">
-            <McqPreview {question} />
+            <Mcq {question} />
           </div>
         {/each}
       </div>
