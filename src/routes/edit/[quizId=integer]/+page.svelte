@@ -36,9 +36,9 @@
             />
           </div>
 
-          <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)} class="btn btn-secondary btn-sm">
-            Insert Question
-          </button>
+          <div class="divider">
+            <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)}>+</button>
+          </div>
 
           {#each $editQuizStore as question, questionIdx}
             <div class="question-box">
@@ -101,22 +101,21 @@
               </button>
             </div>
 
-            <button
-              on:click|preventDefault={() => editQuizStore.insertQuestion(questionIdx)}
-              class="btn btn-secondary btn-sm"
-            >
-              Insert Question
-            </button>
+            <div class="divider">
+              <button on:click|preventDefault={() => editQuizStore.insertQuestion(questionIdx)}>+</button>
+            </div>
           {/each}
         </div>
       </div>
+
+      <br />
 
       <div class="row">
         <div class="col-md-8 offset-md-2 text-center">
           <input type="hidden" name="questions" bind:value={jsonVersion} />
           <button class="btn btn-primary btn-lg" formaction="?/save">Save</button>
           <button class="btn btn-primary btn-lg" formaction="?/preview">Preview</button>
-          <button class="btn btn-primary btn-lg" formaction="?/play">Play</button>
+          <button class="btn btn-main btn-lg" formaction="?/play">Play</button>
           <button class="btn btn-danger btn-lg" formaction="?/delete">Delete</button>
         </div>
       </div>
@@ -125,6 +124,28 @@
 </section>
 
 <style>
+  /* <!-- make a long line divider that has the insert question text in the middle
+          it's actually a button. It's faint and has a plus sign in the middle
+          --> */
+  .divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .divider button {
+    flex-grow: 1;
+    border: none;
+    background-color: transparent;
+    color: gray;
+    font-size: 2rem;
+    font-weight: bold;
+    transition: 0.5s;
+  }
+  .divider button:hover {
+    color: var(--main-color);
+  }
+
   .question-box {
     border: 1px solid gray;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
