@@ -3,15 +3,17 @@ import { writable } from "svelte/store";
 export const createEditQuizStore = (initialValue = []) => {
   const { subscribe, set, update } = writable(initialValue);
 
-  const EMPTY_QUESTION = {
-    question: "",
-    options: ["", "", "", ""],
-    answer: "",
-  };
-
   const insertQuestion = (index) => {
     update((prev) => {
-      return [...prev.slice(0, index + 1), EMPTY_QUESTION, ...prev.slice(index + 1)];
+      return [
+        ...prev.slice(0, index + 1),
+        {
+          question: "",
+          options: ["", "", "", ""],
+          answer: "",
+        },
+        ...prev.slice(index + 1),
+      ];
     });
   };
 
