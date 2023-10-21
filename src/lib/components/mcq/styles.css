@@ -25,11 +25,13 @@
 
 .quiz-title {
   margin-bottom: 1rem;
+  word-wrap: break-word;
 }
 
 .quiz-description {
   font-size: 1.2rem;
   margin-bottom: 3rem;
+  word-wrap: break-word;
 }
 
 .question-box {

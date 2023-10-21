@@ -88,9 +88,3 @@
     </div>
   </div>
 </section>
-
-<style>
-  .quiz-title {
-    word-break: break-word;
-  }
-</style>
