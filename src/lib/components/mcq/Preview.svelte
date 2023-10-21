@@ -1,4 +1,5 @@
 <script>
+  import "$lib/components/mcq/styles.css";
   export let question;
 </script>
 
@@ -11,20 +12,3 @@
     </button>
   {/each}
 </div>
-
-<style>
-  .the-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .an-option {
-    padding: 1rem;
-  }
-
-  .options-box {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-gap: 0.5rem;
-  }
-</style>

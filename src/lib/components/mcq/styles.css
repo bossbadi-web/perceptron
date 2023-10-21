@@ -1,3 +1,22 @@
+/* for components */
+
+.the-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.an-option {
+  padding: 1rem;
+}
+
+.options-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 0.5rem;
+}
+
+/* for routes */
+
 .quiz-metadata {
   text-align: center;
   margin-top: 4rem;
