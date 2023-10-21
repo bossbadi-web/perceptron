@@ -21,7 +21,7 @@
         </div>
 
         <div class="quiz-metadata">
-          <h1 class="quiz-title display-3">{quiz.title}</h1>
+          <h1 class="quiz-title display-4">{quiz.title}</h1>
           <p class="quiz-description lead">{quiz.description}</p>
         </div>
 
@@ -38,12 +38,17 @@
 <style>
   .quiz-metadata {
     text-align: center;
-    margin-top: 2rem;
+    margin-top: 4rem;
     margin-bottom: 4rem;
+  }
+
+  .quiz-title {
+    margin-bottom: 1rem;
   }
 
   .quiz-description {
     font-size: 1.2rem;
+    margin-bottom: 3rem;
   }
 
   .question-box {
