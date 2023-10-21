@@ -1,5 +1,5 @@
 <script>
-  import { formatDate } from "$lib/utils.js";
+  import { formatDate } from "$lib/utils";
   export let quiz, time;
 
   quiz.created_at = formatDate(quiz.created_at);
@@ -43,6 +43,7 @@
 <style>
   .description {
     margin-bottom: 1rem;
+    word-break: break-word;
   }
 
   .stats {

@@ -1,7 +1,7 @@
 <!-- this is the quiz editing page -->
 
 <script>
-  import { createEditQuizStore } from "$lib/stores/editQuiz.js";
+  import { createEditQuizStore } from "$lib/stores/editQuiz";
   export let data;
 
   const { quiz } = data;

@@ -1,6 +1,6 @@
 <script>
   import QuizCard from "$lib/components/quiz/Explore.svelte";
-  import { createSearchStore, searchHandler } from "$lib/stores/search.js";
+  import { createSearchStore, searchHandler } from "$lib/stores/search";
   import { onDestroy } from "svelte";
 
   export let data;

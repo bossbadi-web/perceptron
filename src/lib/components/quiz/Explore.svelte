@@ -1,7 +1,7 @@
 <!-- a card for a quiz on the explore page -->
 
 <script>
-  import { formatDate } from "$lib/utils.js";
+  import { formatDate } from "$lib/utils";
   export let quiz;
 
   quiz.created_at = formatDate(quiz.created_at);

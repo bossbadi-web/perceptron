@@ -3,7 +3,7 @@
   import Mcq from "$lib/components/mcq/Play.svelte";
   import McqSummary from "$lib/components/mcq/Summary.svelte";
   import QuizDescription from "$lib/components/quiz/Description.svelte";
-  import { secondsToHMS } from "$lib/utils.js";
+  import { secondsToHMS } from "$lib/utils";
 
   export let data;
   const { quiz } = data;
@@ -48,10 +48,8 @@
           <div class="question-box">
             <div class="quiz-metadata">
               <h1 class="quiz-title display-4">{quiz.title}</h1>
-              <p class="quiz-description">
-                <QuizDescription {quiz} {time} />
-              </p>
-
+              <QuizDescription {quiz} {time} />
+              <br />
               <button class="start-btn btn btn-main btn-lg" on:click={nextQuestion}>Start</button>
             </div>
           </div>
@@ -90,3 +88,9 @@
     </div>
   </div>
 </section>
+
+<style>
+  .quiz-title {
+    word-break: break-word;
+  }
+</style>
