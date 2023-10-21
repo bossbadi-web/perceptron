@@ -12,7 +12,7 @@
 
     setTimeout(() => {
       resetOptions();
-      nextQuestion(true);
+      nextQuestion({ wasCorrect: true, idx });
     }, 2000);
   };
 
@@ -32,7 +32,7 @@
 
     setTimeout(() => {
       resetOptions();
-      nextQuestion(false);
+      nextQuestion({ wasCorrect: false, idx });
     }, 2000);
   };
 

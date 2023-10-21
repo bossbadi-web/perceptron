@@ -1,19 +1,24 @@
 <script>
-  export let question;
+  export let question, playerAnswerIdx;
 </script>
 
 <h1 class="the-title display-6">{question.question}</h1>
 
 <div class="options-box">
-  {#each question.options as option}
-    <button
-      class="an-option btn btn-main btn-lg"
-      class:btn-secondary={question.answer !== option}
-      class:btn-main={question.answer === option}
-      disabled
-    >
-      {option}
-    </button>
+  {#each question.options as option, idx}
+    {#if option === question.answer}
+      <button class="an-option btn btn-main btn-lg" disabled>
+        {option}
+      </button>
+    {:else if idx === playerAnswerIdx}
+      <button class="an-option btn btn-danger btn-lg" disabled>
+        {option}
+      </button>
+    {:else}
+      <button class="an-option btn btn-secondary btn-lg" disabled>
+        {option}
+      </button>
+    {/if}
   {/each}
 </div>
 

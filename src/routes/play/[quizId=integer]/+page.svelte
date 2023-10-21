@@ -12,10 +12,15 @@
   let currentQuestionIdx = -1;
   let currentQuestion = null;
   let score = 0;
+  let playerAnswers = [];
 
-  const nextQuestion = (wasCorrect) => {
+  const nextQuestion = ({ wasCorrect, idx }) => {
     if (wasCorrect && currentQuestion) {
       score++;
+    }
+
+    if (idx !== undefined) {
+      playerAnswers.push(idx);
     }
 
     currentQuestionIdx++;
@@ -61,9 +66,9 @@
           </div>
 
           <!-- display summary -->
-          {#each quiz.data as question}
+          {#each quiz.data as question, questionIdx}
             <div class="question-box">
-              <McqSummary {question} />
+              <McqSummary {question} playerAnswerIdx={playerAnswers[questionIdx]} />
             </div>
           {/each}
         {/if}
