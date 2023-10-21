@@ -9,10 +9,15 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <div class="mb-3">
-          <h1 class="display-4">Preview Perceptron</h1>
-          <h1>{quiz.title}</h1>
-          <p>{quiz.description}</p>
+        <div class="text-center alert alert-info" role="alert">
+          <p>This is a preview of the quiz. You can't submit your answers here.</p>
+          <a href="/edit/{quiz.id}" class="btn btn-primary">Edit</a>
+          <a href="/play/{quiz.id}" class="btn btn-success">Play</a>
+        </div>
+
+        <div class="quiz-metadata">
+          <h1 class="quiz-title display-3">{quiz.title}</h1>
+          <p class="quiz-description lead">{quiz.description}</p>
         </div>
 
         {#each quiz?.data as question}
@@ -26,10 +31,21 @@
 </section>
 
 <style>
+  .quiz-metadata {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .quiz-description {
+    font-size: 1.2rem;
+  }
+
   .question-box {
-    border: 1px solid black;
+    border: 1px solid gray;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
     padding: 2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     border-radius: 1rem;
   }
 

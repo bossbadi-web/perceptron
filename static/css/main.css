@@ -17,3 +17,12 @@ section {
 .required {
   color: var(--main-color);
 }
+
+.btn-main {
+  background-color: var(--main-color) !important;
+  color: white !important;
+  transition: 0.5s;
+}
+.btn-main:hover {
+  filter: brightness(80%);
+}
