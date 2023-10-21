@@ -1,4 +1,5 @@
 <script>
+  import { enhance } from "$app/forms";
   export let data, form;
 
   const { LIMITS } = data;
@@ -14,7 +15,7 @@
           </div>
         {/if}
 
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" use:enhance>
           <h1 class="display-4 text-center">New Perceptron</h1>
 
           <div class="mb-3">

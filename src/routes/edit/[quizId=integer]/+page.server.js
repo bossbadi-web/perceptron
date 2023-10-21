@@ -1,15 +1,27 @@
-import { error, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
+import { LIMITS } from "$lib/consts";
 
 const updateQuiz = async ({ request, locals, params }) => {
   const formData = await request.formData();
   let { title, description, questions } = Object.fromEntries(formData);
 
-  questions = JSON.parse(questions);
+  let inputError = "";
+  let newQuiz = { data: JSON.parse(questions) };
 
-  const { error: updateError } = await locals.supabase
-    .from("quizzes")
-    .update({ data: questions, title, description })
-    .eq("id", params.quizId);
+  // validate input
+  if (title.length > LIMITS.title) {
+    inputError = `Title must be less than ${LIMITS.title} characters.`;
+  } else {
+    newQuiz.title = title;
+  }
+
+  if (description.length > LIMITS.description) {
+    inputError = `Description must be less than ${LIMITS.description} characters.`;
+  } else {
+    newQuiz.description = description;
+  }
+
+  const { error: updateError } = await locals.supabase.from("quizzes").update(newQuiz).eq("id", params.quizId);
 
   if (updateError) {
     throw error(500, {
@@ -17,11 +29,17 @@ const updateQuiz = async ({ request, locals, params }) => {
       hint: "Try again later",
     });
   }
+
+  return { inputError };
 };
 
 export const actions = {
   save: async ({ request, locals, params }) => {
-    await updateQuiz({ request, locals, params });
+    const { inputError } = await updateQuiz({ request, locals, params });
+
+    if (inputError) {
+      return fail(400, { message: inputError });
+    }
 
     return {
       status: 200,
@@ -31,11 +49,21 @@ export const actions = {
     };
   },
   preview: async ({ request, locals, params }) => {
-    await updateQuiz({ request, locals, params });
+    const { inputError } = await updateQuiz({ request, locals, params });
+
+    if (inputError) {
+      return fail(400, { message: inputError });
+    }
+
     throw redirect(303, `/preview/${params.quizId}`);
   },
   play: async ({ request, locals, params }) => {
-    await updateQuiz({ request, locals, params });
+    const { inputError } = await updateQuiz({ request, locals, params });
+
+    if (inputError) {
+      return fail(400, { message: inputError });
+    }
+
     throw redirect(303, `/play/${params.quizId}`);
   },
   delete: async ({ locals, params }) => {
@@ -76,5 +104,5 @@ export const load = async ({ cookies, locals, params, url }) => {
     });
   }
 
-  return { quiz: data };
+  return { quiz: data, LIMITS };
 };

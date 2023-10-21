@@ -2,9 +2,9 @@
 
 <script>
   import { createEditQuizStore } from "$lib/stores/editQuiz";
-  export let data;
+  export let data, form;
 
-  const { quiz } = data;
+  const { quiz, LIMITS } = data;
   const editQuizStore = createEditQuizStore(quiz?.data);
 
   $: jsonVersion = JSON.stringify($editQuizStore);
@@ -15,13 +15,27 @@
     <form method="POST">
       <div class="row">
         <div class="col-md-8 offset-md-2">
+          {#if form?.message}
+            <div class="alert alert-danger" role="alert">
+              {form?.message}
+            </div>
+          {/if}
+
           <div class="mb-3">
             <h1 class="display-4 text-center">Edit Perceptron</h1>
           </div>
 
           <div class="mb-3">
             <label for="title">Title<span class="required">*</span></label>
-            <input class="form-control" type="text" id="title" name="title" bind:value={quiz.title} required />
+            <input
+              class="form-control"
+              type="text"
+              id="title"
+              name="title"
+              bind:value={quiz.title}
+              maxlength={LIMITS.title}
+              required
+            />
           </div>
 
           <div class="mb-3">
@@ -32,6 +46,7 @@
               id="description"
               name="description"
               bind:value={quiz.description}
+              maxlength={LIMITS.description}
               required
             />
           </div>

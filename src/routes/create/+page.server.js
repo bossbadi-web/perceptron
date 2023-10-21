@@ -2,7 +2,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { ocrSpace } from "ocr-space-api-wrapper";
 
 import { getQuestions } from "$lib/chatbot";
-import { LIMITS } from "$lib/limits";
+import { LIMITS } from "$lib/consts";
 import { OCR_API_KEY } from "$env/static/private";
 
 const createQuiz = async ({ request, locals }) => {
@@ -65,10 +65,6 @@ const createQuiz = async ({ request, locals }) => {
   //   },
   // ];
 
-  // create new row un quizzes table
-  // put questions in 'data' column
-  // foreign key is the user's id under 'owner' column
-  // get back the id of the new quiz
   const { data, error: err } = await locals.supabase
     .from("quizzes")
     .insert([
