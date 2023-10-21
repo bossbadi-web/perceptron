@@ -1,6 +1,7 @@
 <!-- a card for a quiz on the explore page -->
 
 <script>
+  import "$lib/components/quiz/styles.css";
   export let quiz;
 </script>
 
@@ -13,15 +14,3 @@
     <a href={`/edit/${quiz.id}`} class="btn btn-secondary">Edit</a>
   </div>
 </div>
-
-<style>
-  .card {
-    grid-template-rows: 50% 50%;
-    padding: 10px;
-    border-radius: 10px;
-    transition: 0.5s;
-  }
-  .card:hover {
-    background-color: var(--main-gray);
-  }
-</style>
