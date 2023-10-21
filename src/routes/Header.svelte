@@ -1,8 +1,21 @@
 <script>
+  import { onMount } from "svelte";
   export let data;
 
   let { supabase, session } = data;
   $: ({ supabase, session } = data);
+
+  // scroll indicator
+  onMount(() => {
+    const scrollIndicator = document.querySelector(".scroll-progress");
+    const scrollProgress = () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      scrollIndicator.style.width = scrolled + "%";
+    };
+    window.addEventListener("scroll", scrollProgress);
+  });
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
@@ -77,14 +90,34 @@
   </div>
 </nav>
 
+<div class="scroll-indicator">
+  <div class="scroll-progress" />
+</div>
+
 <style>
   .navbar {
-    background-color: var(--main-color);
+    background-color: var(--primary-color);
   }
 
   .profile-links li {
     display: flex;
     justify-content: center;
+  }
+
+  /* this is for the line under the navbar */
+  .scroll-indicator {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    height: 3.5px; /* adjust height as needed */
+  }
+
+  .scroll-progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, var(--primary-color) 0%, var(--secondary-color) 100%);
+    box-shadow: 0 0 20px black;
+    border-radius: 0 0.5em 0.5em 0;
   }
 
   @media (max-width: 991px) {

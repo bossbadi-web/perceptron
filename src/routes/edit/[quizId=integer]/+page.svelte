@@ -140,7 +140,7 @@
     transition: 0.5s;
   }
   .divider button:hover {
-    color: var(--main-color);
+    color: var(--primary-color);
   }
 
   .question-box {

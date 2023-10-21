@@ -18,7 +18,7 @@
         <div class="col-12">
           <h1 class="text-center">
             Welcome,
-            <span style="color: var(--main-color)">{session.user.username}</span>
+            <span style="color: var(--primary-color)">{session.user.username}</span>
           </h1>
         </div>
       </div>
