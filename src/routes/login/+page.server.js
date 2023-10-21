@@ -20,8 +20,8 @@ export const actions = {
       });
     }
 
-    // set cookie
-    cookies.set("access_token", data.session.access_token, { path: "/" });
+    // set cookie with expiration of 1 week
+    cookies.set("access_token", data.session.access_token, { maxAge: 604800 });
     throw redirect(303, url.searchParams.get("redirectTo") || "/");
   },
 };
