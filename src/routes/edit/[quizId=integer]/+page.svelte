@@ -1,6 +1,7 @@
 <!-- this is the quiz editing page -->
 
 <script>
+  import "$lib/components/mcq/styles.css";
   import { createEditQuizStore } from "$lib/stores/editQuiz";
   export let data, form;
 
@@ -68,6 +69,7 @@
                 type="text"
                 placeholder="Question"
                 bind:value={question.question}
+                maxlength={LIMITS.question}
                 required
               />
 
@@ -107,6 +109,7 @@
                     class="form-control"
                     placeholder="Option {optionIdx + 1}"
                     bind:value={question.options[optionIdx]}
+                    maxlength={LIMITS.option}
                     required
                   />
                 </div>

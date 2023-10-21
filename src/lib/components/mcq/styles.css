@@ -1,15 +1,16 @@
 /* for components */
 
-.the-title {
+.question-title {
   font-size: 2rem;
   margin-bottom: 1rem;
+  word-wrap: break-word;
 }
 
-.an-option {
+.question-option {
   padding: 1rem;
-  word-break: break-word;
+  word-wrap: break-word;
 }
-.an-option:hover {
+.question-option:hover {
   transform: scale(1.02);
 }
 
