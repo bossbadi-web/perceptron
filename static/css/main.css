@@ -32,3 +32,8 @@ section {
 .btn-main:hover {
   background-color: var(--secondary-color) !important;
 }
+
+.bg-main {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}

@@ -2,6 +2,14 @@
   export let question, playerAnswerIdx;
 </script>
 
+<h2>
+  {#if question.answer === question.options[playerAnswerIdx]}
+    <span class="badge bg-main">Correct</span>
+  {:else}
+    <span class="badge bg-danger">Wrong</span>
+  {/if}
+</h2>
+
 <h1 class="the-title display-6">{question.question}</h1>
 
 <div class="options-box">
