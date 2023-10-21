@@ -26,7 +26,10 @@
           </div>
 
           <div class="mb-3">
-            <label for="title">Title<span class="required">*</span></label>
+            <label for="title">
+              Title<span class="required">*</span>
+              <small class="text-muted">(max {LIMITS.title} chars)</small>
+            </label>
             <input
               class="form-control"
               type="text"
@@ -39,7 +42,10 @@
           </div>
 
           <div class="mb-3">
-            <label for="description">Description<span class="required">*</span></label>
+            <label for="description">
+              Description<span class="required">*</span>
+              <small class="text-muted">(max {LIMITS.description} chars)</small>
+            </label>
             <input
               class="form-control"
               type="text"
