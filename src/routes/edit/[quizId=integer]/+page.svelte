@@ -114,8 +114,8 @@
         <div class="col-md-8 offset-md-2 text-center">
           <input type="hidden" name="questions" bind:value={jsonVersion} />
           <button class="btn btn-main btn-lg" formaction="?/save">Save</button>
-          <button class="btn btn-main btn-lg" formaction="?/preview">Preview</button>
           <button class="btn btn-main btn-lg" formaction="?/play">Play</button>
+          <button class="btn btn-secondary btn-lg" formaction="?/preview">Preview</button>
           <button class="btn btn-danger btn-lg" formaction="?/delete">Delete</button>
         </div>
       </div>

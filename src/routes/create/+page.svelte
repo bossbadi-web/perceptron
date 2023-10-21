@@ -35,7 +35,9 @@
         />
       </div>
 
-      <button class="btn btn-main" type="submit">Submit</button>
+      <button class="btn btn-main" formaction="?/play">Create and Play</button>
+      <button class="btn btn-secondary" formaction="?/preview">Preview</button>
+      <button class="btn btn-secondary" formaction="?/edit">Edit</button>
     </form>
   </div>
 </section>
