@@ -7,6 +7,10 @@
 
 .an-option {
   padding: 1rem;
+  word-break: break-word;
+}
+.an-option:hover {
+  transform: scale(1.02);
 }
 
 .options-box {

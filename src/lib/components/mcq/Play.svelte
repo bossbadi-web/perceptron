@@ -65,24 +65,3 @@
     </button>
   {/each}
 </div>
-
-<style>
-  .the-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .an-option {
-    padding: 1rem;
-    word-break: break-word;
-  }
-  .an-option:hover {
-    transform: scale(1.02);
-  }
-
-  .options-box {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-gap: 0.5rem;
-  }
-</style>
