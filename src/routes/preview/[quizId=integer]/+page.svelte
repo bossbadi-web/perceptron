@@ -2,9 +2,26 @@
   import "$lib/components/mcq/styles.css";
   import Mcq from "$lib/components/mcq/Preview.svelte";
   import QuizDescription from "$lib/components/quiz/Description.svelte";
+  import { onMount } from "svelte";
 
   export let data;
   const { quiz } = data;
+
+  if (quiz?.bg) {
+    onMount(() => {
+      document.body.style.backgroundImage = `url(${quiz.bg})`;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundRepeat = "no-repeat";
+      document.body.style.backgroundAttachment = "fixed";
+
+      return () => {
+        document.body.style.backgroundImage = "";
+        document.body.style.backgroundSize = "";
+        document.body.style.backgroundRepeat = "";
+        document.body.style.backgroundAttachment = "";
+      };
+    });
+  }
 
   let { supabase, session } = data;
   $: ({ supabase, session } = data);
