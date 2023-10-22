@@ -3,7 +3,7 @@
   import Description from "./Description.svelte";
   import Visibility from "./Visibility.svelte";
 
-  export let data;
+  export let data = null;
 </script>
 
 <div class="mb-3">
