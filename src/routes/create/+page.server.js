@@ -100,7 +100,7 @@ export const actions = {
     throw redirect(303, `/play/${data[0].id}`);
   },
   preview: async ({ request, locals }) => {
-    const { data, err } = await createQuiz({ request, locals });
+    const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
       return fail(400, { message: inputError });
@@ -115,7 +115,7 @@ export const actions = {
     throw redirect(303, `/preview/${data[0].id}`);
   },
   edit: async ({ request, locals }) => {
-    const { data, err } = await createQuiz({ request, locals });
+    const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
       return fail(400, { message: inputError });
