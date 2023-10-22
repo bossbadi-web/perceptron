@@ -10,7 +10,7 @@
 
   if (quiz?.bg) {
     onMount(() => {
-      const bg = document.getElementById("bg");
+      const bg = document.getElementById("background");
       bg.style.backgroundImage = `url(${quiz.bg})`;
 
       return () => {

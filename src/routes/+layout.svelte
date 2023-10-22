@@ -20,7 +20,7 @@
   });
 </script>
 
-<div id="bg" />
+<div id="background" />
 
 <div class="all-but-footer">
   <Header {data} />

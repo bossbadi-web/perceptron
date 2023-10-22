@@ -36,7 +36,7 @@ body {
   background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
 }
 
-#bg {
+#background {
   position: fixed;
   top: 0;
   left: 0;
