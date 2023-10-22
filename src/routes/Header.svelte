@@ -121,7 +121,7 @@
   .scroll-progress {
     height: 100%;
     width: 0%;
-    background: linear-gradient(to right, var(--primary-color) 0%, var(--secondary-color) 100%);
+    background: linear-gradient(to right, transparent 0%, var(--tertiary-color) 100%);
     box-shadow: 0 0 20px black;
     border-radius: 0 0.5em 0.5em 0;
   }
