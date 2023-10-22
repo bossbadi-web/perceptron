@@ -1,7 +1,6 @@
 <script>
   import "./styles.css";
   import { LIMITS } from "$lib/consts";
-
   export let data;
 </script>
 

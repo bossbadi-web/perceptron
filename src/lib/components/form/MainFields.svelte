@@ -1,9 +1,8 @@
 <script>
-  import Title from "./Title.svelte";
-  import Description from "./Description.svelte";
-  import Visibility from "./Visibility.svelte";
   import Bg from "./Bg.svelte";
-
+  import Description from "./Description.svelte";
+  import Title from "./Title.svelte";
+  import Visibility from "./Visibility.svelte";
   export let data = null;
 </script>
 

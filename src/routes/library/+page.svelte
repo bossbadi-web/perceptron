@@ -1,9 +1,8 @@
 <script>
   import "$lib/components/explore/styles.css";
-  import QuizCard from "$lib/components/quiz/Library.svelte";
   import { createSearchStore, searchHandler } from "$lib/stores/search";
   import { onDestroy } from "svelte";
-
+  import QuizCard from "$lib/components/quiz/Library.svelte";
   export let data;
 
   const searchQuizzes = data.quizzes.map((quiz) => ({

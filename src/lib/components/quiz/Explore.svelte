@@ -1,8 +1,8 @@
 <!-- a card for a quiz on the explore page -->
 
 <script>
-  import QuizDescription from "./Description.svelte";
   import { formatDate } from "$lib/utils";
+  import QuizDescription from "./Description.svelte";
   export let quiz,
     showVisibility = false;
 

@@ -1,10 +1,8 @@
 <script>
-  import Header from "./Header.svelte";
-  import Footer from "./Footer.svelte";
-
   import { invalidate } from "$app/navigation";
   import { onMount } from "svelte";
-
+  import Footer from "./Footer.svelte";
+  import Header from "./Header.svelte";
   export let data;
 
   $: ({ supabase, session } = data);

@@ -1,13 +1,13 @@
 <script>
   import "$lib/components/mcq/styles.css";
+  import { fade } from "svelte/transition";
+  import { onMount } from "svelte";
+  import { secondsToHmsString } from "$lib/utils";
   import Mcq from "$lib/components/mcq/Play.svelte";
   import McqSummary from "$lib/components/mcq/Summary.svelte";
   import QuizDescription from "$lib/components/quiz/Description.svelte";
-  import { secondsToHmsString } from "$lib/utils";
-  import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
-
   export let data;
+
   const { quiz } = data;
 
   if (quiz?.bg) {

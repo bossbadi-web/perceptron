@@ -1,9 +1,8 @@
 <script>
   import "$lib/components/form/styles.css";
-  import MainFields from "$lib/components/form/MainFields.svelte";
-  import Loading from "./Loading.svelte";
   import { enhance } from "$app/forms";
-
+  import Loading from "./Loading.svelte";
+  import MainFields from "$lib/components/form/MainFields.svelte";
   export let data, form;
 
   const { LIMITS } = data;

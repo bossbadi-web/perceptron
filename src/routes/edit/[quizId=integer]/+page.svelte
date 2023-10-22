@@ -2,12 +2,11 @@
 
 <script>
   import "$lib/components/mcq/styles.css";
-  import Stats from "$lib/components/quiz/Stats.svelte";
-  import MainFields from "$lib/components/form/MainFields.svelte";
   import { createEditQuizStore } from "$lib/stores/editQuiz";
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
-
+  import MainFields from "$lib/components/form/MainFields.svelte";
+  import Stats from "$lib/components/quiz/Stats.svelte";
   export let data, form;
 
   const { quiz, LIMITS } = data;
