@@ -69,7 +69,12 @@
           </div>
 
           <div class="divider">
-            <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)}>+</button>
+            <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)}>
+              {#if $editQuizStore.length === 0}
+                <div class="add-question-hint">Click this to add a question</div>
+              {/if}
+              <div>+</div>
+            </button>
           </div>
 
           {#each $editQuizStore as question, questionIdx}
@@ -158,6 +163,12 @@
 </section>
 
 <style>
+  .add-question-hint {
+    font-size: 1rem;
+    font-weight: normal;
+    margin-bottom: -1rem;
+  }
+
   .divider {
     display: flex;
     align-items: center;
