@@ -10,7 +10,7 @@
   <div class="container">
     <div class="row normal-row">
       <div class="col-md-10 offset-md-1">
-        <h1 class="text-center display-4">Register</h1>
+        <h1 class="text-center display-4">Change Password</h1>
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
           {#if form?.message}
             <div
@@ -22,10 +22,6 @@
               {form?.message}
             </div>
           {/if}
-          <div class="mb-3">
-            <label for="emailInput" class="form-label">Email address</label>
-            <input class="form-control" id="emailInput" type="email" name="email" placeholder="Email" required />
-          </div>
           <div class="mb-3">
             <label for="passwordInput" class="form-label">Password</label>
             <input
@@ -48,12 +44,8 @@
               required
             />
           </div>
-          <button type="submit" class="btn btn-main">Register</button>
+          <button type="submit" class="btn btn-main">Change Password</button>
         </form>
-        <br />
-        <small class="text-muted">
-          Already have an account? <a class="hover-underline" href="/login">Login</a>
-        </small>
       </div>
     </div>
   </div>

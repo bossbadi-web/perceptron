@@ -2,7 +2,7 @@
 import { fail } from "@sveltejs/kit";
 
 export const actions = {
-  default: async ({ request, url, locals: { supabase } }) => {
+  default: async ({ locals, request, url }) => {
     const formData = await request.formData();
     const email = formData.get("email");
     const password = formData.get("password");
@@ -12,7 +12,7 @@ export const actions = {
       return fail(400, { message: "Passwords do not match." });
     }
 
-    const { error: err } = await supabase.auth.signUp({
+    const { error: err } = await locals.supabase.auth.signUp({
       email,
       password,
       options: {

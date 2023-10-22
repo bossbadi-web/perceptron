@@ -19,19 +19,38 @@
           {/if}
           <div class="mb-3">
             <label for="emailInput" class="form-label">Email address</label>
-            <input class="form-control" id="emailInput" type="text" name="email" placeholder="Email" />
+            <input class="form-control" id="emailInput" type="email" name="email" placeholder="Email" required />
           </div>
           <div class="mb-3">
             <label for="passwordInput" class="form-label">Password</label>
-            <input class="form-control" id="passwordInput" type="password" name="password" placeholder="Password" />
+            <input
+              class="form-control"
+              id="passwordInput"
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+            />
           </div>
           <button type="submit" class="btn btn-main">Login</button>
+          <small class="forgot-password text-muted">
+            <a class="hover-underline" href="/password/forgot">Forgot password?</a>
+          </small>
         </form>
         <br />
         <small class="text-muted">
-          Don't have an account? <a href="/register">Sign up</a>
+          Don't have an account? <a class="hover-underline" href="/register">Create one</a>
         </small>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .forgot-password {
+    margin-left: 0.5rem;
+  }
+  .forgot-password a {
+    font-weight: normal;
+  }
+</style>
