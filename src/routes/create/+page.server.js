@@ -19,6 +19,9 @@ const createQuiz = async ({ request, locals }) => {
   if (fileToUpload.size > LIMITS.file) {
     return { inputError: `File must be less than ${LIMITS.file / 1024 / 1024} MB.` };
   }
+  if (!LIMITS.filetypes.includes(fileToUpload.type.split("/")[1])) {
+    return { inputError: "Unsupported file type." };
+  }
   if (!LIMITS.visibilities.includes(visibility)) {
     return { inputError: "Invalid visibility." };
   }
