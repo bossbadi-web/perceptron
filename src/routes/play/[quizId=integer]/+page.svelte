@@ -44,8 +44,9 @@
           <div class="question-box">
             <div class="quiz-metadata">
               <h1 class="quiz-title display-4">{quiz.title}</h1>
-              <QuizDescription {quiz} />
-              <br />
+              <p>
+                <QuizDescription {quiz} />
+              </p>
               <button class="start-btn btn btn-main btn-lg" on:click={nextQuestion}>Start</button>
             </div>
           </div>

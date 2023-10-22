@@ -11,8 +11,9 @@
 <div class="card">
   <div class="card-body">
     <h1 class="card-title">{quiz.title}</h1>
-    <QuizDescription {quiz} />
-    <br />
+    <p>
+      <QuizDescription {quiz} />
+    </p>
     <a href={`/play/${quiz.id}`} class="btn btn-main">Play</a>
     <a href={`/preview/${quiz.id}`} class="btn btn-secondary">Preview</a>
     <slot />
