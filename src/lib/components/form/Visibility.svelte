@@ -2,7 +2,7 @@
   export let data;
 </script>
 
-<label for="visibility"><b>Visibility</b><span class="required">*</span></label>
+<span><b>Visibility</b><span class="required">*</span></span>
 
 <br />
 
