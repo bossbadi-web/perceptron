@@ -32,7 +32,7 @@
   </div>
 
   <div>
-    <b>Estimated time to complete:</b>
+    <b>Expected time:</b>
     {timeToComplete}
   </div>
 
