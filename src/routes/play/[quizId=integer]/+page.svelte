@@ -45,7 +45,7 @@
             <div class="quiz-metadata">
               <h1 class="quiz-title display-4">{quiz.title}</h1>
               <p>
-                <QuizDescription {quiz} />
+                <QuizDescription {quiz} showVisibility={true} />
               </p>
               <button class="start-btn btn btn-main btn-lg" on:click={nextQuestion}>Start</button>
             </div>

@@ -1,6 +1,7 @@
 <script>
   import { formatDate, secondsToHmsString, wordCount } from "$lib/utils";
-  export let quiz;
+  export let quiz,
+    showVisibility = false;
 
   let timeToComplete = "";
 
@@ -40,10 +41,12 @@
     {quiz.created_at}
   </div>
 
-  <div>
-    <b>Visibility:</b>
-    {quiz.visibility}
-  </div>
+  {#if showVisibility}
+    <div>
+      <b>Visibility:</b>
+      {quiz.visibility}
+    </div>
+  {/if}
 </div>
 
 <style>

@@ -1,9 +1,10 @@
 <script>
   import Stats from "./Stats.svelte";
-  export let quiz;
+  export let quiz,
+    showVisibility = false;
 </script>
 
-<Stats {quiz}>
+<Stats {quiz} {showVisibility}>
   <div class="description lead">
     {quiz.description}
   </div>

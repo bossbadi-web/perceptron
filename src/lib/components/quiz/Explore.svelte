@@ -3,7 +3,7 @@
 <script>
   import QuizDescription from "./Description.svelte";
   import { formatDate } from "$lib/utils";
-  export let quiz;
+  export let quiz, showVisibility = false;
 
   quiz.created_at = formatDate(quiz.created_at);
 </script>
@@ -12,7 +12,7 @@
   <div class="card-body">
     <h1 class="card-title">{quiz.title}</h1>
     <p>
-      <QuizDescription {quiz} />
+      <QuizDescription {quiz} {showVisibility} />
     </p>
     <a href={`/play/${quiz.id}`} class="btn btn-main">Play</a>
     <a href={`/preview/${quiz.id}`} class="btn btn-secondary">Preview</a>

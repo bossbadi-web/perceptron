@@ -1,7 +1,7 @@
 <script>
   import "$lib/components/mcq/styles.css";
   import Mcq from "$lib/components/mcq/Preview.svelte";
-  import Stats from "$lib/components/quiz/Stats.svelte";
+  import QuizDescription from "$lib/components/quiz/Description.svelte";
 
   export let data;
   const { quiz } = data;
@@ -24,7 +24,7 @@
 
         <div class="quiz-metadata">
           <h1 class="quiz-title display-4">{quiz.title}</h1>
-          <Stats {quiz} />
+          <QuizDescription {quiz} showVisibility={true} />
         </div>
 
         {#each quiz?.data as question, questionIdx}
