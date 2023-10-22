@@ -19,7 +19,7 @@
   };
 </script>
 
-<section in:fade={{ duration: 300, delay: 400 }} out:fade={{ duration: 300 }}>
+<section in:fade>
   <div class="container">
     <form method="POST" use:enhance>
       <div class="row normal-row">
