@@ -33,7 +33,7 @@
         <div class="text-center alert alert-info" role="alert">
           <p>This is a preview of the quiz. You can't submit your answers here.</p>
           <a href="/play/{quiz.id}" class="btn btn-main">Play</a>
-          {#if session}
+          {#if session?.user?.id === quiz?.owner}
             <a href="/edit/{quiz.id}" class="btn btn-secondary">Edit</a>
           {/if}
         </div>
