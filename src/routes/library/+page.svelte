@@ -26,13 +26,13 @@
         <i class="fas fa-layer-group" />
         My Library
       </h1>
-      {#if $searchStore.filtered.length > 0}
+      {#if $searchStore.data.length > 0}
         <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
       {/if}
     </div>
 
     <div class="all-cards">
-      {#if $searchStore.filtered.length === 0}
+      {#if $searchStore.data.length === 0}
         <div class="text-center">
           <h3>Nothing here...yet</h3>
           <p>
