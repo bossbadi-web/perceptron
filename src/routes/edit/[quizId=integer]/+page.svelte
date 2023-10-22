@@ -66,34 +66,32 @@
 
               {#each question.options as _, optionIdx}
                 <div class="input-group mb-1">
-                  <span class="input-group-text">
-                    {#if question.answer !== undefined && optionIdx === question.answer}
-                      <input
-                        type="radio"
-                        class="btn-check"
-                        name="options-{questionIdx}"
-                        id="option-{questionIdx}-{optionIdx}"
-                        autocomplete="off"
-                        checked
-                        required
-                        on:change={() => (question.answer = optionIdx)}
-                      />
-                    {:else}
-                      <input
-                        type="radio"
-                        class="btn-check"
-                        name="options-{questionIdx}"
-                        id="option-{questionIdx}-{optionIdx}"
-                        autocomplete="off"
-                        required
-                        on:change={() => (question.answer = optionIdx)}
-                      />
-                    {/if}
+                  {#if question.answer !== undefined && optionIdx === question.answer}
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="options-{questionIdx}"
+                      id="option-{questionIdx}-{optionIdx}"
+                      autocomplete="off"
+                      checked
+                      required
+                      on:change={() => (question.answer = optionIdx)}
+                    />
+                  {:else}
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      name="options-{questionIdx}"
+                      id="option-{questionIdx}-{optionIdx}"
+                      autocomplete="off"
+                      required
+                      on:change={() => (question.answer = optionIdx)}
+                    />
+                  {/if}
 
-                    <label class="btn btn-outline-success" for="option-{questionIdx}-{optionIdx}">
-                      <span style="width: 1rem; display: inline-block;" />
-                    </label>
-                  </span>
+                  <label class="correctAnswerToggle btn btn-outline-success" for="option-{questionIdx}-{optionIdx}">
+                    <span style="width: 1rem; display: inline-block;" />
+                  </label>
 
                   <input
                     type="text"
@@ -173,16 +171,18 @@
   }
   .question-box:focus-within {
     background-color: white;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+  }
+
+  .correctAnswerToggle {
+    border-radius: 0.375rem 0 0 0.375rem !important;
+    border: 1px solid rgba(0, 0, 0, 0.125) !important;
   }
 
   .a-title {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1rem;
-  }
-
-  .input-group-text {
-    background-color: white;
   }
 
   @media (max-width: 768px) {
