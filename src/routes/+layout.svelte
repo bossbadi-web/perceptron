@@ -1,5 +1,6 @@
 <script>
   import Header from "./Header.svelte";
+  import Footer from "./Footer.svelte";
 
   import { invalidate } from "$app/navigation";
   import { onMount } from "svelte";
@@ -22,5 +23,14 @@
   });
 </script>
 
-<Header {data} />
-<slot />
+<div class="all-but-footer">
+  <Header {data} />
+  <slot />
+</div>
+<Footer />
+
+<style>
+  .all-but-footer {
+    min-height: calc(100vh);
+  }
+</style>
