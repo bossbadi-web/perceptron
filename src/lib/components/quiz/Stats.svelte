@@ -1,22 +1,25 @@
 <script>
   import { formatDate, secondsToHmsString, wordCount } from "$lib/utils";
   export let quiz;
-  
-  quiz.created_at = formatDate(quiz.created_at);
-  console.log(quiz.created_at);
 
-  let wc = 0;
-  quiz.data.forEach((question) => {
-    wc += wordCount(question.question);
-    question.options.forEach((option) => {
-      wc += wordCount(option);
+  let timeToComplete = "";
+
+  $: {
+    quiz.created_at = formatDate(quiz.created_at);
+
+    let wc = 0;
+    quiz.data.forEach((question) => {
+      wc += wordCount(question.question);
+      question.options.forEach((option) => {
+        wc += wordCount(option);
+      });
     });
-  });
 
-  let seconds = Math.ceil(wc / 7);
-  seconds += 2 * quiz.data.length;
+    let seconds = Math.ceil(wc / 7);
+    seconds += 2 * quiz.data.length;
 
-  const timeToComplete = secondsToHmsString(seconds);
+    timeToComplete = secondsToHmsString(seconds);
+  }
 </script>
 
 <slot />
