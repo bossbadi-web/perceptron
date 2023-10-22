@@ -12,7 +12,7 @@
 
 <section>
   <div class="container">
-    <div class="row">
+    <div class="row normal-row">
       <div class="col-md-10 offset-md-1">
         <div class="text-center alert alert-info" role="alert">
           <p>This is a preview of the quiz. You can't submit your answers here.</p>

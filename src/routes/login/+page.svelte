@@ -8,7 +8,7 @@
 
 <section>
   <div class="container">
-    <div class="row">
+    <div class="row normal-row">
       <div class="col-md-10 offset-md-1">
         <h1 class="text-center display-4">Login</h1>
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>

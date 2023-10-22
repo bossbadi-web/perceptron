@@ -20,7 +20,7 @@
 <section>
   <div class="container">
     <form method="POST">
-      <div class="row">
+      <div class="row normal-row">
         <div class="col-md-10 offset-md-1">
           {#if form?.message}
             <div class="alert alert-danger" role="alert">
@@ -164,6 +164,7 @@
 
   .question-box {
     border: 1px solid gray;
+    background-color: white;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
     padding: 2rem;
     margin-bottom: 1rem;

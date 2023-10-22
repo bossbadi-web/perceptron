@@ -15,7 +15,7 @@
   {#if session}
     <div class="container">
       <div class="row">
-        <div class="col-12">
+        <div class="col-md-10 offset-md-1">
           <h1 class="text-center">
             Welcome,
             <span style="color: var(--primary-color)">{session.user.username}</span>
