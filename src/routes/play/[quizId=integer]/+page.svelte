@@ -12,16 +12,11 @@
 
   if (quiz?.bg) {
     onMount(() => {
-      document.body.style.backgroundImage = `url(${quiz.bg})`;
-      document.body.style.backgroundSize = "cover";
-      document.body.style.backgroundRepeat = "no-repeat";
-      document.body.style.backgroundAttachment = "fixed";
+      const bg = document.getElementById("bg");
+      bg.style.backgroundImage = `url(${quiz.bg})`;
 
       return () => {
-        document.body.style.backgroundImage = "";
-        document.body.style.backgroundSize = "";
-        document.body.style.backgroundRepeat = "";
-        document.body.style.backgroundAttachment = "";
+        bg.style.backgroundImage = "";
       };
     });
   }
@@ -52,7 +47,7 @@
   };
 </script>
 
-<section in:fade={{ duration: 300, delay: 400 }} out:fade={{ duration: 300 }}>
+<section in:fade>
   <div class="container">
     <div class="row">
       <div class="col-md-10 offset-md-1">
