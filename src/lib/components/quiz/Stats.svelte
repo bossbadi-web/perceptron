@@ -39,6 +39,11 @@
     <b>Created:</b>
     {quiz.created_at}
   </div>
+
+  <div>
+    <b>Visibility:</b>
+    {quiz.visibility}
+  </div>
 </div>
 
 <style>

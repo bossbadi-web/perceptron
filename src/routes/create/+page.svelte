@@ -1,4 +1,5 @@
 <script>
+  import MainFields from "$lib/components/form/MainFields.svelte";
   import { enhance } from "$app/forms";
   export let data, form;
 
@@ -18,33 +19,11 @@
         <form method="POST" enctype="multipart/form-data" use:enhance>
           <h1 class="display-4 text-center">New Perceptron</h1>
 
-          <div class="mb-3">
-            <label for="title">
-              Title<span class="required">*</span>
-              <small class="text-muted">(max {LIMITS.title} chars)</small>
-            </label>
-            <!-- limit chars to 50 -->
-            <input class="form-control" type="text" id="title" name="title" maxlength={LIMITS.title} required />
-          </div>
-
-          <div class="mb-3">
-            <label for="description">
-              Description<span class="required">*</span>
-              <small class="text-muted">(max {LIMITS.description} chars)</small>
-            </label>
-            <input
-              class="form-control"
-              type="text"
-              id="description"
-              name="description"
-              maxlength={LIMITS.description}
-              required
-            />
-          </div>
+          <MainFields />
 
           <div class="mb-3">
             <label for="file">
-              Upload your file
+              <b>Upload your file</b>
               <small class="text-muted">(max {LIMITS.file / 1024 / 1024} MB)</small>
               <br />
               <small class="text-muted">Leave this blank to start from scratch</small>

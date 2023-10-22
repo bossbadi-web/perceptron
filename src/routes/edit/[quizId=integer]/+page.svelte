@@ -3,6 +3,7 @@
 <script>
   import "$lib/components/mcq/styles.css";
   import Stats from "$lib/components/quiz/Stats.svelte";
+  import MainFields from "$lib/components/form/MainFields.svelte";
   import { createEditQuizStore } from "$lib/stores/editQuiz";
   export let data, form;
 
@@ -36,37 +37,7 @@
 
           <br />
 
-          <div class="mb-3">
-            <label for="title">
-              Title<span class="required">*</span>
-              <small class="text-muted">(max {LIMITS.title} chars)</small>
-            </label>
-            <input
-              class="form-control"
-              type="text"
-              id="title"
-              name="title"
-              bind:value={quiz.title}
-              maxlength={LIMITS.title}
-              required
-            />
-          </div>
-
-          <div class="mb-3">
-            <label for="description">
-              Description<span class="required">*</span>
-              <small class="text-muted">(max {LIMITS.description} chars)</small>
-            </label>
-            <input
-              class="form-control"
-              type="text"
-              id="description"
-              name="description"
-              bind:value={quiz.description}
-              maxlength={LIMITS.description}
-              required
-            />
-          </div>
+          <MainFields data={storeData} />
 
           <div class="divider">
             <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)}>

@@ -7,7 +7,7 @@ import { OCR_API_KEY } from "$env/static/private";
 
 const createQuiz = async ({ request, locals }) => {
   const formData = await request.formData();
-  const { title, description, fileToUpload } = Object.fromEntries(formData);
+  const { title, description, fileToUpload, visibility } = Object.fromEntries(formData);
 
   // validate input
   if (title.length > LIMITS.title) {
@@ -18,6 +18,9 @@ const createQuiz = async ({ request, locals }) => {
   }
   if (fileToUpload.size > LIMITS.file) {
     return { inputError: `File must be less than ${LIMITS.file / 1024 / 1024} MB.` };
+  }
+  if (!LIMITS.visibilities.includes(visibility)) {
+    return { inputError: "Invalid visibility." };
   }
 
   let questions = [];
@@ -74,6 +77,7 @@ const createQuiz = async ({ request, locals }) => {
         data: questions,
         title,
         description,
+        visibility,
       },
     ])
     .select();
