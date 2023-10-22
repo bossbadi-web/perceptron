@@ -20,6 +20,8 @@
   });
 </script>
 
+<div id="bg" />
+
 <div class="all-but-footer">
   <Header {data} />
   <slot />
