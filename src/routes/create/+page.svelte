@@ -1,4 +1,5 @@
 <script>
+  import "$lib/components/form/styles.css";
   import MainFields from "$lib/components/form/MainFields.svelte";
   import Loading from "./Loading.svelte";
   import { enhance } from "$app/forms";
@@ -45,9 +46,9 @@
 
             <MainFields />
 
-            <div class="mb-3">
+            <div class="mb-4">
               <label for="file">
-                <b>Upload your file</b>
+                <b class="label-title">Upload your file</b>
                 <small class="text-muted">(max {LIMITS.file / 1024 / 1024} MB)</small>
                 <br />
                 <small class="text-muted">Supported file types: {acceptedFileTypes}</small>

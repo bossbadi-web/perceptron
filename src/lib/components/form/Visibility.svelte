@@ -1,8 +1,9 @@
 <script>
+  import "./styles.css";
   export let data;
 </script>
 
-<span><b>Visibility</b><span class="required">*</span></span>
+<span><b class="label-title">Visibility</b><span class="required">*</span></span>
 
 <br />
 

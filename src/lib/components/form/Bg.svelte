@@ -1,8 +1,12 @@
 <script>
+  import "./styles.css";
   export let data;
 </script>
 
-<label for="bg"><b>Background image</b></label>
+<label for="bg">
+  <b class="label-title">Background image</b>
+  <small class="text-muted">(from Unsplash)</small>
+</label>
 
 {#if data?.bg}
   <input class="form-control" type="url" id="bg" name="bg" bind:value={data.bg} />

@@ -1,10 +1,12 @@
 <script>
+  import "./styles.css";
   import { LIMITS } from "$lib/consts";
+
   export let data;
 </script>
 
 <label for="title">
-  <b>Title</b><span class="required">*</span>
+  <b class="label-title">Title</b><span class="required">*</span>
   <small class="text-muted">(max {LIMITS.title} chars)</small>
 </label>
 
@@ -19,5 +21,13 @@
     required
   />
 {:else}
-  <input class="form-control" type="text" id="title" name="title" placeholder="Title" maxlength={LIMITS.title} required />
+  <input
+    class="form-control"
+    type="text"
+    id="title"
+    name="title"
+    placeholder="Title"
+    maxlength={LIMITS.title}
+    required
+  />
 {/if}
