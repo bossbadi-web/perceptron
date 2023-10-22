@@ -19,9 +19,6 @@ const createQuiz = async ({ request, locals }) => {
   if (fileToUpload.size > LIMITS.file) {
     return { inputError: `File must be less than ${LIMITS.file / 1024 / 1024} MB.` };
   }
-  if (!LIMITS.filetypes.includes(fileToUpload.type.split("/")[1])) {
-    return { inputError: "Unsupported file type." };
-  }
   if (!LIMITS.visibilities.includes(visibility)) {
     return { inputError: "Invalid visibility." };
   }
@@ -29,6 +26,10 @@ const createQuiz = async ({ request, locals }) => {
   let questions = [];
 
   if (fileToUpload.size > 0) {
+    if (!LIMITS.filetypes.includes(fileToUpload.type.split("/")[1])) {
+      return { inputError: "Unsupported file type." };
+    }
+
     const base64 = new Buffer.from(await fileToUpload.arrayBuffer()).toString("base64");
     const ocrData = await ocrSpace(`data:image/png;base64,${base64}`, { apiKey: OCR_API_KEY, language: "ita" });
 
@@ -40,6 +41,8 @@ const createQuiz = async ({ request, locals }) => {
     }
 
     questions = await getQuestions(text);
+  } else {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
   // const questions = [
