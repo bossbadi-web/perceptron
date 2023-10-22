@@ -53,12 +53,7 @@ export const actions = {
       return fail(400, { message: inputError });
     }
 
-    return {
-      status: 200,
-      body: {
-        message: "Successfully updated quiz",
-      },
-    };
+    throw redirect(303, `/edit/${params.quizId}`);
   },
   preview: async ({ request, locals, params }) => {
     const { inputError } = await updateQuiz({ request, locals, params });

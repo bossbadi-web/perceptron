@@ -5,6 +5,8 @@
   import Stats from "$lib/components/quiz/Stats.svelte";
   import MainFields from "$lib/components/form/MainFields.svelte";
   import { createEditQuizStore } from "$lib/stores/editQuiz";
+  import { enhance } from "$app/forms";
+
   export let data, form;
 
   const { quiz, LIMITS } = data;
@@ -19,7 +21,7 @@
 
 <section>
   <div class="container">
-    <form method="POST">
+    <form method="POST" use:enhance>
       <div class="row normal-row">
         <div class="col-md-10 offset-md-1">
           {#if form?.message}
