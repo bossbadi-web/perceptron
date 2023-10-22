@@ -109,7 +109,7 @@
                 on:click|preventDefault={() => editQuizStore.deleteQuestion(questionIdx)}
                 class="btn btn-outline-danger"
               >
-                Delete Question
+                <i class="fas fa-trash-alt" />
               </button>
             </div>
 
