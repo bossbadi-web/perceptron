@@ -31,12 +31,6 @@ html {
 }
 
 body {
-  /* background-color: var(--main-bg); */
-  /* background-image: url(/img/bg/7.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed; */
-
   background: linear-gradient(to bottom, var(--primary-color), var(--tertiary-color));
 }
 
