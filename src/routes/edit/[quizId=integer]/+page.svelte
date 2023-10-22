@@ -6,6 +6,7 @@
   import MainFields from "$lib/components/form/MainFields.svelte";
   import { createEditQuizStore } from "$lib/stores/editQuiz";
   import { enhance } from "$app/forms";
+  import { fade } from "svelte/transition";
 
   export let data, form;
 
@@ -19,7 +20,7 @@
   };
 </script>
 
-<section>
+<section in:fade={{ duration: 300, delay: 400 }} out:fade={{ duration: 300 }}>
   <div class="container">
     <form method="POST" use:enhance>
       <div class="row normal-row">

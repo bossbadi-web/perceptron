@@ -5,6 +5,7 @@
   import QuizDescription from "$lib/components/quiz/Description.svelte";
   import { secondsToHmsString } from "$lib/utils";
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
 
   export let data;
   const { quiz } = data;
@@ -51,7 +52,7 @@
   };
 </script>
 
-<section>
+<section in:fade={{ duration: 300, delay: 400 }} out:fade={{ duration: 300 }}>
   <div class="container">
     <div class="row">
       <div class="col-md-10 offset-md-1">
@@ -84,7 +85,7 @@
             </div>
             <button class="btn btn-main" on:click={() => window.location.reload()}>Play Again</button>
             {#if session}
-              <a href="/edit/{quiz.id}" class="btn btn-secondary">Edit</a>
+              <a href="/edit/{quiz.id}" class="btn btn-secondary" data-sveltekit-preload-data="tap">Edit</a>
             {/if}
           </div>
 

@@ -15,8 +15,8 @@
     <p>
       <QuizDescription {quiz} {showVisibility} />
     </p>
-    <a href={`/play/${quiz.id}`} class="btn btn-main">Play</a>
-    <a href={`/preview/${quiz.id}`} class="btn btn-secondary">Preview</a>
+    <a href={`/play/${quiz.id}`} class="btn btn-main" data-sveltekit-preload-data="tap">Play</a>
+    <a href={`/preview/${quiz.id}`} class="btn btn-secondary" data-sveltekit-preload-data="tap">Preview</a>
     <slot />
   </div>
 </div>
