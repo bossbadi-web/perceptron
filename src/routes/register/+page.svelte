@@ -13,7 +13,12 @@
         <h1 class="text-center display-4">Register</h1>
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
           {#if form?.message}
-            <div class="alert alert-danger" role="alert">
+            <div
+              class="alert"
+              role="alert"
+              class:alert-success={form.status === 200}
+              class:alert-danger={form.status !== 200}
+            >
               {form?.message}
             </div>
           {/if}
