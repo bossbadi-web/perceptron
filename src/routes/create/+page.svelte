@@ -57,17 +57,6 @@
               <input class="form-control" type="file" id="file" name="fileToUpload" accept={acceptedFileTypes} />
             </div>
 
-            <div class="mb-3">
-              <label for="bg"><b>Background image</b></label>
-              <input
-                class="form-control"
-                type="url"
-                id="bg"
-                name="bg"
-                placeholder="https://images.unsplash.com/photo-123"
-              />
-            </div>
-
             <br />
 
             <span class="row-of-buttons">

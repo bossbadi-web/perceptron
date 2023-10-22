@@ -3,7 +3,7 @@ import { LIMITS } from "$lib/consts";
 
 const updateQuiz = async ({ request, locals, params }) => {
   const formData = await request.formData();
-  let { title, description, questions, visibility } = Object.fromEntries(formData);
+  let { title, description, questions, visibility, bg } = Object.fromEntries(formData);
 
   let inputError = "";
   let newQuiz = { data: JSON.parse(questions) };
@@ -25,6 +25,12 @@ const updateQuiz = async ({ request, locals, params }) => {
     inputError = "Invalid visibility.";
   } else {
     newQuiz.visibility = visibility;
+  }
+
+  if (bg && !bg.match(LIMITS.bg)) {
+    inputError = "Background image must be from Unsplash.";
+  } else {
+    newQuiz.bg = bg;
   }
 
   const { error: updateError } = await locals.supabase.from("quizzes").update(newQuiz).eq("id", params.quizId);
