@@ -31,7 +31,7 @@
   </div>
 
   <div>
-    <b>Time to complete:</b>
+    <b>Estimated time to complete:</b>
     {timeToComplete}
   </div>
 
