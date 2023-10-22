@@ -17,8 +17,7 @@
       <div class="row">
         <div class="col-md-10 offset-md-1">
           <h1 class="text-center">
-            Welcome,
-            <span style="color: var(--primary-color)">{session.user.username}</span>
+            Welcome, {session.user.username}
           </h1>
         </div>
       </div>

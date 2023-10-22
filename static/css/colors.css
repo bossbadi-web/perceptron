@@ -1,6 +1,5 @@
 :root {
-  --primary-color-lt: rgba(0, 138, 131, 0.5);
   --primary-color: #008a83;
-  --secondary-color: #00678a;
-  --main-bg: #ebebeb;
+  --secondary-color: #00718a;
+  --tertiary-color: #ab96bd;
 }
