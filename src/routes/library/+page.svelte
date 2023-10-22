@@ -26,17 +26,29 @@
         <i class="fas fa-layer-group" />
         My Library
       </h1>
-      <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
+      {#if $searchStore.filtered.length > 0}
+        <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
+      {/if}
     </div>
 
-    <div class="row">
-      <div class="all-cards">
-        {#each $searchStore.filtered as quiz}
-          <div class="quiz-box">
-            <QuizCard {quiz} />
-          </div>
-        {/each}
-      </div>
+    <div class="all-cards">
+      {#if $searchStore.filtered.length === 0}
+        <div class="text-center">
+          <h3>Nothing here...yet</h3>
+          <p>
+            <a class="hover-underline" href="/create">Create</a> a Perceptron and it will show up here.
+          </p>
+        </div>
+      {/if}
+
+      {#each $searchStore.filtered as quiz}
+        <div class="quiz-box">
+          <QuizCard {quiz} />
+        </div>
+      {/each}
     </div>
   </div>
 </section>
+
+<style>
+</style>

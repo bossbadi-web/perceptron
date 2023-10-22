@@ -164,11 +164,15 @@
 
   .question-box {
     border: 1px solid gray;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
     padding: 2rem;
     margin-bottom: 1rem;
     border-radius: 1rem;
+    transition: 0.5s;
+  }
+  .question-box:focus-within {
+    background-color: white;
   }
 
   .a-title {

@@ -29,14 +29,12 @@
       <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
     </div>
 
-    <div class="row">
-      <div class="all-cards">
-        {#each $searchStore.filtered as quiz}
-          <div class="quiz-box">
-            <QuizCard {quiz} />
-          </div>
-        {/each}
-      </div>
+    <div class="all-cards">
+      {#each $searchStore.filtered as quiz}
+        <div class="quiz-box">
+          <QuizCard {quiz} />
+        </div>
+      {/each}
     </div>
   </div>
 </section>
