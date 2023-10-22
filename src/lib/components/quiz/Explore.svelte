@@ -33,7 +33,7 @@
   }
   .card:hover {
     background-color: white;
-    transform: scale(1.02);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
   }
 
   .card-title {
