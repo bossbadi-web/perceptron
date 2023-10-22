@@ -62,10 +62,13 @@ section {
   color: var(--primary-color);
 }
 
+.btn {
+  transition: 0.5s;
+}
+
 .btn-main {
   background-color: var(--primary-color) !important;
   color: white !important;
-  transition: 0.5s;
 }
 .btn-main:hover {
   background-color: var(--secondary-color) !important;

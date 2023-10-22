@@ -70,23 +70,23 @@
         {:else}
           <!-- if quiz over -->
           <div class="text-center alert alert-info" role="alert">
-            <div class="score">
-              <p>
-                Your Score: {score}/{quiz.data.length} ({(score / quiz.data.length) * 100}%)
-              </p>
-              <p>
-                Time Taken: {secondsToHmsString((Date.now() - startTime) / 1000)}
-              </p>
-            </div>
+            <p>
+              Your Score: {score}/{quiz.data.length} ({(score / quiz.data.length) * 100}%)
+            </p>
+            <p>
+              Time Taken: {secondsToHmsString((Date.now() - startTime) / 1000)}
+            </p>
             <button class="btn btn-main" on:click={() => window.location.reload()}>Play Again</button>
             {#if session}
               <a href="/edit/{quiz.id}" class="btn btn-secondary" data-sveltekit-preload-data="tap">Edit</a>
             {/if}
           </div>
 
-          <div class="quiz-metadata">
-            <h1 class="quiz-title display-4">{quiz.title}</h1>
-            <p class="quiz-description lead">{quiz.description}</p>
+          <div class="question-box">
+            <div class="quiz-metadata">
+              <h1 class="quiz-title display-4">{quiz.title}</h1>
+              <p class="quiz-description lead">{quiz.description}</p>
+            </div>
           </div>
 
           <!-- display summary -->
