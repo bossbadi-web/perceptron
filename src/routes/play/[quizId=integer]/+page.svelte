@@ -25,7 +25,6 @@
     });
   }
 
-  let { supabase, session } = data;
   $: ({ supabase, session } = data);
 
   let currentQuestionIdx = -1;
