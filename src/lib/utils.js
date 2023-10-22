@@ -21,7 +21,7 @@ export const secondsToHms = (raw) => {
   raw -= time.h * 3600;
   time.m = Math.floor(raw / 60);
   raw -= time.m * 60;
-  time.s = raw.toFixed(0);
+  time.s = Math.floor(raw);
 
   return time;
 };
