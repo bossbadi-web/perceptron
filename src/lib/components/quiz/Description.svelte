@@ -3,21 +3,17 @@
   export let quiz;
 
   quiz.created_at = formatDate(quiz.created_at);
-  console.log(quiz.title);
-  let wc = 0;
 
+  let wc = 0;
   quiz.data.forEach((question) => {
-    wc = wordCount(question.question);
+    wc += wordCount(question.question);
     question.options.forEach((option) => {
       wc += wordCount(option);
-      console.log("option", wordCount(option));
     });
   });
 
-  console.log("wc", wc);
-
-  let seconds = Math.ceil(wc / 4);
-  // seconds += 2 * quiz.data.length;
+  let seconds = Math.ceil(wc / 7);
+  seconds += 2 * quiz.data.length;
 
   const timeToComplete = secondsToHmsString(seconds);
 </script>
