@@ -29,7 +29,10 @@
           {/if}
 
           <div class="mb-3">
-            <h1 class="display-4 text-center">Edit Perceptron</h1>
+            <h1 class="display-4 text-center">
+              <i class="fas fa-edit" />
+              Edit Perceptron
+            </h1>
             <p class="text-center">
               <Stats quiz={storeData} />
             </p>
