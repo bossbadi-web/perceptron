@@ -1,5 +1,5 @@
 <script>
-  export let question, nextQuestion;
+  export let question, questionIdx, nextQuestion;
 
   const answerRight = (idx) => {
     document.querySelectorAll(".question-option").forEach((el, i) => {
@@ -56,6 +56,7 @@
   };
 </script>
 
+<p class="text-muted">Question {questionIdx + 1}</p>
 <h1 class="question-title display-6">{question.question}</h1>
 
 <div class="options-box">

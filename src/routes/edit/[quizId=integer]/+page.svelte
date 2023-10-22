@@ -2,6 +2,7 @@
 
 <script>
   import "$lib/components/mcq/styles.css";
+  import Stats from "$lib/components/quiz/Stats.svelte";
   import { createEditQuizStore } from "$lib/stores/editQuiz";
   export let data, form;
 
@@ -9,6 +10,10 @@
   const editQuizStore = createEditQuizStore(quiz?.data);
 
   $: jsonVersion = JSON.stringify($editQuizStore);
+  $: storeData = {
+    ...quiz,
+    data: $editQuizStore,
+  };
 </script>
 
 <section>
@@ -24,7 +29,12 @@
 
           <div class="mb-3">
             <h1 class="display-4 text-center">Edit Perceptron</h1>
+            <p class="text-center">
+              <Stats quiz={storeData} />
+            </p>
           </div>
+
+          <br />
 
           <div class="mb-3">
             <label for="title">
@@ -64,6 +74,8 @@
 
           {#each $editQuizStore as question, questionIdx}
             <div class="question-box">
+              <p class="text-muted">Question {questionIdx + 1}</p>
+
               <input
                 class="form-control a-title"
                 type="text"

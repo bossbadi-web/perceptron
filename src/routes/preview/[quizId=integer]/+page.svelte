@@ -1,6 +1,7 @@
 <script>
   import "$lib/components/mcq/styles.css";
   import Mcq from "$lib/components/mcq/Preview.svelte";
+  import Stats from "$lib/components/quiz/Stats.svelte";
 
   export let data;
   const { quiz } = data;
@@ -23,12 +24,12 @@
 
         <div class="quiz-metadata">
           <h1 class="quiz-title display-4">{quiz.title}</h1>
-          <p class="quiz-description lead">{quiz.description}</p>
+          <Stats {quiz} />
         </div>
 
-        {#each quiz?.data as question}
+        {#each quiz?.data as question, questionIdx}
           <div class="question-box">
-            <Mcq {question} />
+            <Mcq {question} {questionIdx} />
           </div>
         {/each}
       </div>

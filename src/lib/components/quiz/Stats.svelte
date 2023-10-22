@@ -1,8 +1,9 @@
 <script>
   import { formatDate, secondsToHmsString, wordCount } from "$lib/utils";
   export let quiz;
-
+  
   quiz.created_at = formatDate(quiz.created_at);
+  console.log(quiz.created_at);
 
   let wc = 0;
   quiz.data.forEach((question) => {
