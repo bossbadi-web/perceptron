@@ -3,6 +3,7 @@
   import Mcq from "$lib/components/mcq/Play.svelte";
   import McqSummary from "$lib/components/mcq/Summary.svelte";
   import QuizDescription from "$lib/components/quiz/Description.svelte";
+  import { secondsToHmsString } from "$lib/utils";
 
   export let data;
   const { quiz } = data;
@@ -14,8 +15,13 @@
   let currentQuestion = null;
   let score = 0;
   let playerAnswers = [];
+  let startTime = null;
 
   const nextQuestion = ({ wasCorrect, idx }) => {
+    if (!startTime) {
+      startTime = new Date();
+    }
+
     if (wasCorrect && currentQuestion) {
       score++;
     }
@@ -54,6 +60,9 @@
             <div class="score">
               <p>
                 Your Score: {score}/{quiz.data.length} ({(score / quiz.data.length) * 100}%)
+              </p>
+              <p>
+                Time Taken: {secondsToHmsString((Date.now() - startTime) / 1000)}
               </p>
             </div>
             <button class="btn btn-main" on:click={() => window.location.reload()}>Play Again</button>

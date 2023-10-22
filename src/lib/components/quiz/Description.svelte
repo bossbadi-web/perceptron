@@ -1,17 +1,25 @@
 <script>
-  import { formatDate, secondsToHMS } from "$lib/utils";
+  import { formatDate, secondsToHmsString, wordCount } from "$lib/utils";
   export let quiz;
 
   quiz.created_at = formatDate(quiz.created_at);
+  console.log(quiz.title);
+  let wc = 0;
 
-  // time to complete based total length of questions and options
-  let seconds = 0;
   quiz.data.forEach((question) => {
-    seconds += question.options.length * 5;
+    wc = wordCount(question.question);
+    question.options.forEach((option) => {
+      wc += wordCount(option);
+      console.log("option", wordCount(option));
+    });
   });
 
-  // convert to hours, minutes, seconds
-  let time = secondsToHMS(seconds);
+  console.log("wc", wc);
+
+  let seconds = Math.ceil(wc / 4);
+  // seconds += 2 * quiz.data.length;
+
+  const timeToComplete = secondsToHmsString(seconds);
 </script>
 
 <div class="description lead">
@@ -26,21 +34,7 @@
 
   <div>
     <b>Time to complete:</b>
-    {#if time.h === 0 && time.m === 0 && time.s === 0}
-      0 seconds
-    {:else}
-      {#if time.h !== 0}
-        {time.h} hour{#if time.h !== 1}s{/if}
-      {/if}
-
-      {#if time.m !== 0}
-        {time.m} minute{#if time.m !== 1}s{/if}
-      {/if}
-
-      {#if time.s !== 0}
-        {time.s} second{#if time.s !== 1}s{/if}
-      {/if}
-    {/if}
+    {timeToComplete}
   </div>
 
   <div>

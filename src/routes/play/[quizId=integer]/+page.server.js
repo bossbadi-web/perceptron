@@ -1,4 +1,5 @@
 import { error } from "@sveltejs/kit";
+import {shuffle} from "$lib/utils";
 
 // get quiz id from params, url is /play/[quizId]/+page
 export const load = async ({ locals, params }) => {
@@ -12,7 +13,7 @@ export const load = async ({ locals, params }) => {
   }
 
   // randomize the order of the questions
-  data.data = data.data.sort(() => Math.random() - 0.5);
+  data.data = data.data.sort(() => Math.random());
 
   return { quiz: data };
 };
