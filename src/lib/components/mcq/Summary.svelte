@@ -1,5 +1,5 @@
 <script>
-  import "$lib/components/mcq/styles.css";
+  import "./styles.css";
   export let question, playerAnswerIdx;
 </script>
 

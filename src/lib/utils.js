@@ -1,3 +1,11 @@
+// add username to session.user
+export const completeUser = (user) => {
+  return {
+    ...user,
+    username: user.email.split("@")[0],
+  };
+};
+
 export const formatDate = (s) => {
   return new Date(s).toLocaleDateString("en-US", {
     year: "numeric",

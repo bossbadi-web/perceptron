@@ -1,7 +1,7 @@
 <!-- a card for a quiz on the explore page -->
 
 <script>
-  import QuizDescription from "$lib/components/quiz/Description.svelte";
+  import QuizDescription from "./Description.svelte";
   import { formatDate } from "$lib/utils";
   export let quiz;
 

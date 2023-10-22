@@ -1,7 +1,7 @@
 <!-- a card for a quiz on the library page -->
 
 <script>
-  import Explore from "$lib/components/quiz/Explore.svelte";
+  import Explore from "./Explore.svelte";
   export let quiz;
 </script>
 
