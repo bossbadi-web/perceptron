@@ -32,7 +32,10 @@
           {/if}
 
           <form method="POST" enctype="multipart/form-data" use:enhance={submitHelper}>
-            <h1 class="display-4 text-center">New Perceptron</h1>
+            <h1 class="display-4 text-center">
+              <i class="fas fa-hammer" />
+              New Perceptron
+            </h1>
 
             <MainFields />
 

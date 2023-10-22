@@ -22,7 +22,10 @@
 <section>
   <div class="container">
     <div class="title-part">
-      <h1 class="text-center display-4">Explore</h1>
+      <h1 class="text-center display-4">
+        <i class="fas fa-search" />
+        Explore
+      </h1>
       <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
     </div>
 
