@@ -25,7 +25,7 @@
 
 <slot />
 
-<div class="stats text-muted">
+<div class="stats">
   <div>
     <b>Length:</b>
     {quiz.data.length} question{#if quiz.data.length !== 1}s{/if}
