@@ -31,7 +31,7 @@ html {
 }
 
 body {
-  background: linear-gradient(to bottom, var(--primary-color), var(--tertiary-color));
+  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
 }
 
 section {
