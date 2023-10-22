@@ -7,7 +7,7 @@ import { OCR_API_KEY } from "$env/static/private";
 
 const createQuiz = async ({ request, locals }) => {
   const formData = await request.formData();
-  const { title, description, fileToUpload, visibility } = Object.fromEntries(formData);
+  const { title, description, fileToUpload, visibility, bg } = Object.fromEntries(formData);
 
   // validate input
   if (title.length > LIMITS.title) {
@@ -21,6 +21,9 @@ const createQuiz = async ({ request, locals }) => {
   }
   if (!LIMITS.visibilities.includes(visibility)) {
     return { inputError: "Invalid visibility." };
+  }
+  if (bg && !bg.match(LIMITS.bg)) {
+    return { inputError: "Background image must be from Unsplash." };
   }
 
   let questions = [];
@@ -84,6 +87,7 @@ const createQuiz = async ({ request, locals }) => {
         title,
         description,
         visibility,
+        bg,
       },
     ])
     .select();

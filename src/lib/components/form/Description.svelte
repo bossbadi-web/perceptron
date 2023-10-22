@@ -25,6 +25,7 @@
     type="text"
     id="description"
     name="description"
+    placeholder="Description"
     maxlength={LIMITS.description}
     required
   />

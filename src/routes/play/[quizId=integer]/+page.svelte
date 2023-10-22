@@ -6,23 +6,24 @@
   import { secondsToHmsString } from "$lib/utils";
   import { onMount } from "svelte";
 
-  onMount(() => {
-    document.body.style.backgroundImage =
-      "url(https://images.unsplash.com/photo-1682687220777-2c60708d6889?auto=format&fit=crop&q=80&w=2370&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)";
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundRepeat = "no-repeat";
-    document.body.style.backgroundAttachment = "fixed";
-
-    return () => {
-      document.body.style.backgroundImage = "";
-      document.body.style.backgroundSize = "";
-      document.body.style.backgroundRepeat = "";
-      document.body.style.backgroundAttachment = "";
-    };
-  });
-
   export let data;
   const { quiz } = data;
+
+  if (quiz?.bg) {
+    onMount(() => {
+      document.body.style.backgroundImage = `url(${quiz.bg})`;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundRepeat = "no-repeat";
+      document.body.style.backgroundAttachment = "fixed";
+
+      return () => {
+        document.body.style.backgroundImage = "";
+        document.body.style.backgroundSize = "";
+        document.body.style.backgroundRepeat = "";
+        document.body.style.backgroundAttachment = "";
+      };
+    });
+  }
 
   let { supabase, session } = data;
   $: ({ supabase, session } = data);

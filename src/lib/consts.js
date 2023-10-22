@@ -6,4 +6,5 @@ export const LIMITS = {
   question: 100,
   option: 200,
   visibilities: ["public", "unlisted", "private"],
+  bg: /^https:\/\/images\.unsplash\.com\/photo-\d{13}-\w{12}/,
 };

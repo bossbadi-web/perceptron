@@ -22,9 +22,15 @@
 
 <section>
   <div class="container">
-    <div class="row normal-row">
-      <div class="col-md-10 offset-md-1">
-        {#if !loading}
+    {#if loading}
+      <div class="row">
+        <div class="col-md-10 offset-md-1">
+          <Loading />
+        </div>
+      </div>
+    {:else}
+      <div class="row normal-row">
+        <div class="col-md-10 offset-md-1">
           {#if form?.message}
             <div class="alert alert-danger" role="alert">
               {form?.message}
@@ -51,6 +57,17 @@
               <input class="form-control" type="file" id="file" name="fileToUpload" accept={acceptedFileTypes} />
             </div>
 
+            <div class="mb-3">
+              <label for="bg"><b>Background image</b></label>
+              <input
+                class="form-control"
+                type="url"
+                id="bg"
+                name="bg"
+                placeholder="https://images.unsplash.com/photo-123"
+              />
+            </div>
+
             <br />
 
             <span class="row-of-buttons">
@@ -59,10 +76,8 @@
               <button class="btn btn-secondary btn-lg" formaction="?/edit">Edit</button>
             </span>
           </form>
-        {:else}
-          <Loading />
-        {/if}
+        </div>
       </div>
-    </div>
+    {/if}
   </div>
 </section>
