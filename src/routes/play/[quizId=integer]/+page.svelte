@@ -45,8 +45,6 @@
     currentQuestionIdx++;
     currentQuestion = quiz.data[currentQuestionIdx];
   };
-
-  $: scorePct = ((score / quiz.data.length) * 100).toFixed(0);
 </script>
 
 <section in:fade>
@@ -73,7 +71,7 @@
           <!-- if quiz over -->
           <div class="text-center alert alert-info" role="alert">
             <p>
-              Your Score: {score}/{quiz.data.length} ({scorePct}%)
+              Your Score: {score}/{quiz.data.length} ({((score / quiz.data.length) * 100).toFixed(0)}%)
             </p>
             <p>
               Time Taken: {secondsToHmsString((Date.now() - startTime) / 1000)}
