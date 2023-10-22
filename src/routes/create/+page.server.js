@@ -82,9 +82,6 @@ const createQuiz = async ({ request, locals }) => {
     ])
     .select();
 
-  console.log("data", data);
-  console.log("err", err);
-
   return { data, err };
 };
 

@@ -23,7 +23,6 @@ NOTES:
 `;
 
 const toJSON = (text) => {
-  console.log("text", text);
   // to
 
   // [
