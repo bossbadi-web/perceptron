@@ -1,10 +1,10 @@
 <script>
   import MainFields from "$lib/components/form/MainFields.svelte";
   import { enhance } from "$app/forms";
+
   export let data, form;
 
   const { LIMITS } = data;
-
   const acceptedFileTypes = LIMITS.filetypes.map((type) => `.${type}`).join(", ");
 </script>
 

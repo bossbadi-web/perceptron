@@ -38,14 +38,24 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/create">Create</a>
+          <a class="nav-link" href="/create">
+            <i class="fas fa-hammer" />
+            Create
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/explore">Explore</a>
+          <a class="nav-link" href="/explore">
+            <i class="fas fa-search" />
+            Explore
+          </a>
         </li>
         {#if session}
           <li class="nav-item">
-            <a class="nav-link" href="/library">My Library</a>
+            <a class="nav-link" href="/library">
+              <!-- rack icon -->
+              <i class="fas fa-layer-group" />
+              My Library
+            </a>
           </li>
         {/if}
       </ul>
