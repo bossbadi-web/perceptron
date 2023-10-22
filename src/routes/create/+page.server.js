@@ -20,21 +20,21 @@ const createQuiz = async ({ request, locals }) => {
     return { inputError: `File must be less than ${LIMITS.file / 1024 / 1024} MB.` };
   }
 
-  const session = await locals.getSession();
+  let questions = [];
 
-  const base64 = new Buffer.from(await fileToUpload.arrayBuffer()).toString("base64");
-  const ocrData = await ocrSpace(`data:image/png;base64,${base64}`, { apiKey: OCR_API_KEY, language: "ita" });
+  if (fileToUpload.size > 0) {
+    const base64 = new Buffer.from(await fileToUpload.arrayBuffer()).toString("base64");
+    const ocrData = await ocrSpace(`data:image/png;base64,${base64}`, { apiKey: OCR_API_KEY, language: "ita" });
 
-  const text = ocrData?.ParsedResults[0]?.ParsedText;
-  console.log(text);
-  if (!text) {
-    return fail(400, {
-      message: "No text found in the image.",
-    });
+    const text = ocrData?.ParsedResults[0]?.ParsedText;
+    if (!text) {
+      return fail(400, {
+        message: "No text found in the image.",
+      });
+    }
+
+    questions = await getQuestions(text);
   }
-
-  const questions = await getQuestions(text);
-  console.log(questions);
 
   // const questions = [
   //   {
@@ -65,6 +65,7 @@ const createQuiz = async ({ request, locals }) => {
   //   },
   // ];
 
+  const session = await locals.getSession();
   const { data, error: err } = await locals.supabase
     .from("quizzes")
     .insert([
