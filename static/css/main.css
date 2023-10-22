@@ -7,12 +7,40 @@ body::-webkit-scrollbar {
   width: 0;
 }
 
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* change navbar transparency on scroll */
+.navbar {
+  transition: 1s;
+  background-color: transparent;
+  box-shadow: none;
+}
+.navbar-scrolled {
+  transition: 0.5s;
+  background-color: var(--primary-color);
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-menu {
+  background-color: var(--secondary-color);
+  border: none;
+}
+
 body {
   /* background-color: var(--main-bg); */
   background-image: url(/img/bg/1.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+
+/* highlight color when mouse dragged over text */
+::selection {
+  background: var(--primary-color-lt);
 }
 
 section {

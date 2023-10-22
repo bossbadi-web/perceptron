@@ -105,10 +105,6 @@
 </div>
 
 <style>
-  .navbar {
-    background-color: var(--primary-color);
-  }
-
   .profile-links li {
     display: flex;
     justify-content: center;
