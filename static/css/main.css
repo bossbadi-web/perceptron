@@ -113,7 +113,7 @@ section {
 }
 
 .row {
-  padding-bottom: 3rem;
+  padding-bottom: 2rem !important;
 }
 .normal-row {
   border-radius: 1rem;
