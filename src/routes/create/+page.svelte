@@ -17,16 +17,22 @@
       await update();
     };
   };
+
+  $: if (form?.message) {
+    loading = false;
+  }
 </script>
 
 <section>
   <div class="container">
     <!-- loading screen -->
-    <div class="row" class:d-none={!loading}>
-      <div class="col-md-10 offset-md-1">
-        <Loading />
+    {#if !form?.message}
+      <div class="row" class:d-none={!loading}>
+        <div class="col-md-10 offset-md-1">
+          <Loading />
+        </div>
       </div>
-    </div>
+    {/if}
 
     <!-- normal screen -->
     <div class="row normal-row" class:d-none={loading}>
@@ -47,7 +53,7 @@
 
           <div class="mb-4">
             <label for="file">
-              <b class="label-title">Upload your file</b>
+              <b class="label-title">Upload your image</b>
               <small class="text-muted">(max {LIMITS.file / 1024 / 1024} MB)</small>
               <br />
               <small class="text-muted">Supported file types: {acceptedFileTypes}</small>
@@ -55,6 +61,23 @@
               <small class="text-muted">Leave this blank to start from scratch</small>
             </label>
             <input class="form-control" type="file" id="file" name="fileToUpload" accept={acceptedFileTypes} />
+          </div>
+
+          <div class="mb-4">
+            <label for="notes">
+              <b class="label-title">Notes</b>
+              <small class="text-muted">(max {LIMITS.notes} chars)</small>
+            </label>
+            <!-- cannot resize -->
+            <textarea
+              class="form-control"
+              id="notes"
+              name="notes"
+              rows="3"
+              maxlength={LIMITS.notes}
+              placeholder="Paste any notes you have (optional)"
+              style="resize: none;"
+            />
           </div>
 
           <br />

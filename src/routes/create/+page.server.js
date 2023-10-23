@@ -7,7 +7,7 @@ import { OCR_API_KEY } from "$env/static/private";
 
 const createQuiz = async ({ request, locals }) => {
   const formData = await request.formData();
-  const { title, description, fileToUpload, visibility, bg } = Object.fromEntries(formData);
+  const { title, description, fileToUpload, visibility, bg, notes } = Object.fromEntries(formData);
 
   // validate input
   if (title.length > LIMITS.title) {
@@ -25,9 +25,14 @@ const createQuiz = async ({ request, locals }) => {
   if (bg && !bg.match(LIMITS.bg)) {
     return { inputError: "Background image must be from Unsplash." };
   }
+  if (notes && notes.length > LIMITS.notes) {
+    return { inputError: `Notes must be less than ${LIMITS.notes} characters.` };
+  }
 
   let questions = [];
+  let text = "";
 
+  // extract text from image
   if (fileToUpload.size > 0) {
     if (!LIMITS.filetypes.includes(fileToUpload.type.split("/")[1])) {
       return { inputError: "Unsupported file type." };
@@ -36,47 +41,32 @@ const createQuiz = async ({ request, locals }) => {
     const base64 = new Buffer.from(await fileToUpload.arrayBuffer()).toString("base64");
     const ocrData = await ocrSpace(`data:image/png;base64,${base64}`, { apiKey: OCR_API_KEY, language: "ita" });
 
-    const text = ocrData?.ParsedResults[0]?.ParsedText;
-    if (!text) {
-      return fail(400, {
-        message: "No text found in the image.",
-      });
+    const ocrText = ocrData?.ParsedResults[0]?.ParsedText;
+    if (!ocrText) {
+      return {
+        inputError: "No text found in the image.",
+      };
     }
-
-    questions = await getQuestions(text);
+    text += ocrText;
   } else {
     await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
-  // const questions = [
-  //   {
-  //     question: "Who is known for his work in classical conditioning?",
-  //     options: ["David Myers", "Socrates", "Ivan Pavlov", "William James"],
-  //     answer: "Ivan Pavlov",
-  //   },
-  //   {
-  //     question: "Who is known for his work in behaviorism and the Little Albert experiment?",
-  //     options: ["John Locke", "B.F. Skinner", "Carl Rogers", "John Watson"],
-  //     answer: "John Watson",
-  //   },
-  //   {
-  //     question: "Who is known for his work in humanistic psychology and the concept of self-actualization?",
-  //     options: ["Abraham Maslow", "Wilhelm Wundt", "Edward Titchener", "Margaret Washburn"],
-  //     answer: "Abraham Maslow",
-  //   },
-  //   {
-  //     question:
-  //       "Which perspective in psychology focuses on the biological and neurological processes that underlie behavior?",
-  //     options: ["Humanistic Perspective", "Behavioral P.", "Biological/Neuroscience P.", "Cognitive P."],
-  //     answer: "Biological/Neuroscience P.",
-  //   },
-  //   {
-  //     question: "Which perspective in psychology focuses on the unconscious and early childhood experiences?",
-  //     options: ["Psychodynamic P.", "Social-Cultural P.", "Evolutionary P.", "Counseling Psychology"],
-  //     answer: "Psychodynamic P.",
-  //   },
-  // ];
+  // add notes
+  if (notes) {
+    text += `\n\n${notes}`;
+  }
 
+  // generate questions
+  if (text) {
+    questions = await getQuestions(text);
+  } else {
+    return {
+      inputError: "Please upload an image or paste some notes.",
+    };
+  }
+
+  // save to db
   const session = await locals.getSession();
   const { data, error: err } = await locals.supabase
     .from("quizzes")
@@ -100,6 +90,7 @@ export const actions = {
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
+      console.log(inputError);
       return fail(400, { message: inputError });
     }
 

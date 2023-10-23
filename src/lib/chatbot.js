@@ -54,9 +54,18 @@ const toJSON = (text) => {
 };
 
 const chatbot = async (query) => {
-  const response = await fetch(`https://api.gopubby.com/chatbot?text=${encodeURIComponent(query)}`);
-  const text = await response.text();
-  return toJSON(text);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 20000);
+
+  try {
+    const response = await fetch(`https://api.gopubby.com/chatbot?text=${encodeURIComponent(query)}`, {
+      signal: controller.signal,
+    });
+    const text = await response.text();
+    return toJSON(text);
+  } catch (err) {
+    return [];
+  }
 };
 
 export const getQuestions = async (text) => {
