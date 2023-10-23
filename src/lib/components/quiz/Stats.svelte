@@ -16,8 +16,8 @@
       });
     });
 
-    let seconds = Math.ceil(wc / 7);
-    seconds += 2 * quiz.data.length;
+    let seconds = Math.ceil(wc / 4.5);  // how many words read per second
+    seconds += 4 * quiz.data.length;  // 2s thinking + 2s loading per question
 
     timeToComplete = secondsToHmsString(seconds);
   }
