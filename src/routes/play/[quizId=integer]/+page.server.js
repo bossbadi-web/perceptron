@@ -29,5 +29,12 @@ export const load = async ({ cookies, locals, params, url }) => {
   // randomize the order of the questions
   data.data = data.data.sort(() => Math.random() - 0.5);
 
+  // randomize the order of the options
+  data.data.forEach((q) => {
+    let correctAnswer = q.options[q.answer];
+    q.options = q.options.sort(() => Math.random() - 0.5);
+    q.answer = q.options.indexOf(correctAnswer);
+  });
+
   return { quiz: data };
 };
