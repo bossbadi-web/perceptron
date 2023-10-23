@@ -45,3 +45,8 @@
 
 <h1 class="display-4 text-center">{slide.title}</h1>
 <p class="lead text-center">{slide.message}</p>
+<p class="text-center">
+  <small>
+    This should normally take about 20 seconds. If it takes too long then you may need to retry later.
+  </small>
+</p>

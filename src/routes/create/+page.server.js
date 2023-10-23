@@ -48,8 +48,6 @@ const createQuiz = async ({ request, locals }) => {
       };
     }
     text += ocrText;
-  } else {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
   // add notes
