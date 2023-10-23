@@ -5,7 +5,7 @@
   import Header from "./Header.svelte";
   export let data;
 
-  $: ({ session } = data);
+  $: ({ supabase, session } = data);
 
   onMount(() => {
     const {
