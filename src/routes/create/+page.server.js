@@ -60,10 +60,6 @@ const createQuiz = async ({ request, locals }) => {
   // generate questions
   if (text) {
     questions = await getQuestions(text);
-  } else {
-    return {
-      inputError: "Please upload an image or paste some notes.",
-    };
   }
 
   // save to db
