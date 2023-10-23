@@ -1,7 +1,7 @@
 # The Plan
 
+delete quiz don't check form
 add stuff to front page
-add text upload option
 display progressbar on quiz
 dark theme
 
