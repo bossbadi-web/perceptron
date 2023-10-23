@@ -27,7 +27,7 @@
     <div class="row normal-row">
       <div class="col-md-10 offset-md-1">
         <div class="text-center alert alert-info" role="alert">
-          <p>This is a preview of the quiz. You can't submit your answers here.</p>
+          <p>This is a preview. You can't submit your answers here.</p>
           <a href="/play/{quiz.id}" class="btn btn-main" data-sveltekit-preload-data="tap">Play</a>
           {#if session?.user?.id === quiz?.owner}
             <a href="/edit/{quiz.id}" class="btn btn-secondary" data-sveltekit-preload-data="tap">Edit</a>
