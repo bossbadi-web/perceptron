@@ -26,6 +26,10 @@
         My Library
       </h1>
       {#if $searchStore.data.length > 0}
+        <p class="text-center">
+          <span>{$searchStore.filtered.length}</span> of
+          <span>{$searchStore.data.length}</span>
+        </p>
         <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
       {/if}
     </div>
