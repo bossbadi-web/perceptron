@@ -112,6 +112,9 @@ section {
   color: white !important;
 }
 
+.row {
+  padding-bottom: 3rem;
+}
 .normal-row {
   border-radius: 1rem;
   padding: 1rem;
