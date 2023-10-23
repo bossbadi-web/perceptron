@@ -13,6 +13,10 @@
   const submitHelper = () => {
     loading = true;
 
+    if (form?.message) {
+      form.message = "";
+    }
+
     return async ({ update }) => {
       await update();
     };
