@@ -9,7 +9,7 @@
   quiz.created_at = formatDate(quiz.created_at);
 </script>
 
-<div class="card">
+<div class="card" data-aos="flip-left" data-aos-easing="ease-out-cubic" data-aos-duration="1000">
   <div class="card-body">
     <h1 class="card-title">{quiz.title}</h1>
     <p>
