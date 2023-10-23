@@ -1,5 +1,6 @@
 <script>
-  import { invalidate } from "$app/navigation";
+  import { invalidate, afterNavigate } from "$app/navigation";
+  import { page } from "$app/stores";
   import { onMount } from "svelte";
   import Footer from "./Footer.svelte";
   import Header from "./Header.svelte";
@@ -17,6 +18,16 @@
     });
 
     return () => subscription.unsubscribe();
+  });
+
+  afterNavigate(() => {
+    const subpage = $page.route.id.split("/")[1].replace(/^\w/, (c) => c.toUpperCase());
+
+    if (subpage) {
+      document.title = `${subpage} | Perceptron`;
+    } else {
+      document.title = "Perceptron";
+    }
   });
 </script>
 
