@@ -1,11 +1,10 @@
 <script>
-  import "./styles.css";
   import { LIMITS } from "$lib/consts";
   export let data;
 </script>
 
 <label for="title">
-  <b class="label-title">Title</b><span class="required">*</span>
+  Title<span class="required">*</span>
   <small class="text-muted">(max {LIMITS.title} chars)</small>
 </label>
 

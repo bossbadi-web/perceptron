@@ -1,10 +1,9 @@
 <script>
-  import "./styles.css";
   export let data;
 </script>
 
 <label for="bg">
-  <b class="label-title">Background image</b>
+  Background image
   <small class="text-muted">(from Unsplash)</small>
 </label>
 

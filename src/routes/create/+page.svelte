@@ -1,5 +1,4 @@
 <script>
-  import "$lib/components/form/styles.css";
   import { enhance } from "$app/forms";
   import Loading from "./Loading.svelte";
   import MainFields from "$lib/components/form/MainFields.svelte";
@@ -55,21 +54,26 @@
 
           <MainFields />
 
+          <div class="note">
+            <div class="title">Initialize your Perceptron</div>
+            <div class="description">
+              Generate questions based on your image and/or notes. Leave these fields blank to start from scratch.
+            </div>
+          </div>
+
           <div class="mb-4">
             <label for="file">
-              <b class="label-title">Upload your image</b>
+              Upload an image
               <small class="text-muted">(max {LIMITS.file / 1024 / 1024} MB)</small>
               <br />
               <small class="text-muted">Supported file types: {acceptedFileTypes}</small>
-              <br />
-              <small class="text-muted">Leave this blank to start from scratch</small>
             </label>
             <input class="form-control" type="file" id="file" name="fileToUpload" accept={acceptedFileTypes} />
           </div>
 
           <div class="mb-4">
             <label for="notes">
-              <b class="label-title">Notes</b>
+              Notes
               <small class="text-muted">(max {LIMITS.notes} chars)</small>
             </label>
             <!-- cannot resize -->
@@ -79,7 +83,7 @@
               name="notes"
               rows="3"
               maxlength={LIMITS.notes}
-              placeholder="Paste any notes you have (optional)"
+              placeholder="Paste any notes you have"
               style="resize: none;"
             />
           </div>
@@ -96,3 +100,18 @@
     </div>
   </div>
 </section>
+
+<style>
+  .note {
+    margin-top: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  .note .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .note .description {
+    font-size: 1rem;
+  }
+</style>
