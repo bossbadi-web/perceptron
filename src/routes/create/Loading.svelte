@@ -2,7 +2,7 @@
 <script>
   import { onMount } from "svelte";
 
-  const loadings = ["Loading", "Loading.", "Loading..", "Loading..."];
+  const title = "Creating your Perceptron";
 
   let hints = [
     "Fetching the digital puzzle pieces",
@@ -16,26 +16,29 @@
   hints = hints.sort(() => Math.random() - 0.5);
 
   const slide = {
-    title: loadings[0],
+    title: title,
     message: hints[0],
   };
 
   let i = 0;
 
   onMount(() => {
-    const fastInterval = setInterval(() => {
-      i = (i + 1) % loadings.length;
-      slide.title = loadings[i];
+    const titleInt = setInterval(() => {
+      if (slide.title.length < title.length + 3) {
+        slide.title += ".";
+      } else {
+        slide.title = title;
+      }
     }, 500);
 
-    const slowInterval = setInterval(() => {
+    const hintInt = setInterval(() => {
       i = (i + 1) % hints.length;
       slide.message = hints[i];
-    }, 3000);
+    }, 2000);
 
     return () => {
-      clearInterval(fastInterval);
-      clearInterval(slowInterval);
+      clearInterval(titleInt);
+      clearInterval(hintInt);
     };
   });
 </script>
