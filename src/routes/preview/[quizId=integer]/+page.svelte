@@ -41,7 +41,7 @@
 
         {#each quiz?.data as question, questionIdx}
           <div class="question-box">
-            <Mcq {question} {questionIdx} />
+            <Mcq {question} {questionIdx} length={quiz.data.length} />
           </div>
         {/each}
       </div>

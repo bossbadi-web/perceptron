@@ -55,7 +55,7 @@
 
           {#each $editQuizStore as question, questionIdx}
             <div class="question-box">
-              <p class="text-muted">Question {questionIdx + 1}</p>
+              <p class="text-muted">Question {questionIdx + 1} of {$editQuizStore.length}</p>
 
               <input
                 class="form-control a-title"

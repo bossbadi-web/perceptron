@@ -65,7 +65,7 @@
         {:else if currentQuestionIdx < quiz.data.length}
           <!-- if quiz not over -->
           <div class="question-box">
-            <Mcq question={currentQuestion} questionIdx={currentQuestionIdx} {nextQuestion} />
+            <Mcq question={currentQuestion} questionIdx={currentQuestionIdx} {nextQuestion} length={quiz.data.length} />
           </div>
         {:else}
           <!-- if quiz over -->
@@ -92,7 +92,12 @@
           <!-- display summary -->
           {#each quiz.data as question, questionIdx}
             <div class="question-box">
-              <McqSummary {question} {questionIdx} playerAnswerIdx={playerAnswers[questionIdx]} />
+              <McqSummary
+                {question}
+                {questionIdx}
+                playerAnswerIdx={playerAnswers[questionIdx]}
+                length={quiz.data.length}
+              />
             </div>
           {/each}
         {/if}

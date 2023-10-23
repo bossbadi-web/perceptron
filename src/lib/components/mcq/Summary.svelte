@@ -1,6 +1,6 @@
 <script>
   import "./styles.css";
-  export let question, questionIdx, playerAnswerIdx;
+  export let question, questionIdx, playerAnswerIdx, length;
 </script>
 
 <h2>
@@ -11,7 +11,7 @@
   {/if}
 </h2>
 
-<p class="text-muted">Question {questionIdx + 1}</p>
+<p class="text-muted">Question {questionIdx + 1} of {length}</p>
 <h1 class="question-title display-6">{question.question}</h1>
 
 <div class="options-box">
