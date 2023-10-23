@@ -1,6 +1,5 @@
 # The Plan
 
-delete quiz don't check form
 add stuff to front page
 display progressbar on quiz
 dark theme
