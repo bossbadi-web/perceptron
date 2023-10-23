@@ -7,5 +7,5 @@ export const LIMITS = {
   option: 200,
   visibilities: ["public", "unlisted", "private"],
   bg: /^https:\/\/images\.unsplash\.com\/photo-/,
-  notes: 1000,
+  notes: 500,
 };
