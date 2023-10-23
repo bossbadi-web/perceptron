@@ -16,19 +16,16 @@ html {
 
 /* change navbar transparency on scroll */
 .navbar {
-  transition: 1s;
   background-color: transparent;
   box-shadow: none;
 }
 .navbar-scrolled {
-  transition: 0.5s;
-  background-color: var(--primary-color);
+  backdrop-filter: blur(20px);
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
 }
 
 .dropdown-menu {
-  background-color: var(--secondary-color);
-  border: none;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 body {

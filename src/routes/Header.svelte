@@ -17,10 +17,10 @@
   });
 </script>
 
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+<nav class="navbar navbar-expand-lg sticky-top">
   <div class="container container-fluid">
     <a class="navbar-brand" href="/">
-      <img src="/img/logo-white.svg" alt="avatar" height="30" width="30" />
+      <img src="/img/logo-black.svg" alt="avatar" height="30" width="30" />
     </a>
     <a class="navbar-brand" href="/">Perceptron</a>
     <button
