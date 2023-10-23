@@ -129,7 +129,7 @@
           <button class="btn btn-main btn-lg" formaction="?/save">Save</button>
           <button class="btn btn-main btn-lg" formaction="?/play">Play</button>
           <button class="btn btn-secondary btn-lg" formaction="?/preview">Preview</button>
-          <button class="btn btn-danger btn-lg" formaction="?/delete">Delete</button>
+          <button class="btn btn-danger btn-lg" formaction="?/delete" formnovalidate>Delete</button>
         </div>
       </div>
     </form>
