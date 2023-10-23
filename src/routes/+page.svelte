@@ -1,7 +1,7 @@
 <script>
   export let data;
 
-  $: ({ supabase, session } = data);
+  $: ({ session } = data);
 </script>
 
 <section>

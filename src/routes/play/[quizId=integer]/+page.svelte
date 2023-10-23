@@ -21,7 +21,7 @@
     });
   }
 
-  $: ({ supabase, session } = data);
+  $: ({ session } = data);
 
   let currentQuestionIdx = -1;
   let currentQuestion = null;

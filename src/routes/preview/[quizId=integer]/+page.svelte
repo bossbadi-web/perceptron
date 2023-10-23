@@ -19,7 +19,7 @@
     });
   }
 
-  $: ({ supabase, session } = data);
+  $: ({ session } = data);
 </script>
 
 <section in:fade>

@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   export let data;
 
-  $: ({ supabase, session } = data);
+  $: ({ session } = data);
 
   // scroll indicator
   onMount(() => {
