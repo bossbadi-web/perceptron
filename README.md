@@ -1,7 +1,8 @@
-<p align="center">
+<h1 align="center">
   <img src="https://perceptron.gopubby.com/favicon.png" width="100" height="100">
-</p>
-<h1 align="center">Perceptron</h1>
+  <br>
+  Perceptron
+</h1>
 <p align="center">
   Convert your handwritten notes into an interactive study guide
   <br>
