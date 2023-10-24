@@ -1,38 +1,36 @@
-# create-svelte
+<p align="center">
+  <img src="https://perceptron.gopubby.com/favicon.png" width="100" height="100">
+</p>
+<h1 align="center">Perceptron</h1>
+<p align="center">
+  Convert your handwritten notes into an interactive study guide
+  <br>
+  https://perceptron.gopubby.com
+</p>
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Installation
 
-## Creating a project
+1. Clone the repository
 
-If you're seeing this, you've probably already done this step. Congrats!
+   ```bash
+   git clone https://github.com/bossbadi/perceptron
+   ```
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+2. Install the dependencies
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+   ```bash
+   npm install
+   ```
 
-## Developing
+3. Run the application in development mode
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm run dev
+   or in production mode
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+   ```bash
+   npm run build
+   npm run preview
+   ```
