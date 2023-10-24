@@ -1,5 +1,8 @@
 <script>
   import "$lib/components/mcq/styles.css";
+  import { LANDING_QUESTIONS } from "$lib/landingQuestions.js";
+
+  $: idx = Math.floor(Math.random() * LANDING_QUESTIONS.length);
 </script>
 
 <section>
@@ -7,24 +10,21 @@
     <div class="container mobile-center">
       <div class="d-flex flex-lg-row flex-column">
         <div class="flex-grow-1 main-text">
-          <h1 class="display-1">
-            <span>
-              <img class="logo img-fluid" src="/img/logo-black.svg" alt="logo" />
-            </span>
-            <span>
-              Perceptron
-              <!-- <div class="lead text-center">Convert your handwritten notes into an interactive study guide.</div> -->
-            </span>
+          <h1 class="display-1 text-center">
+            <img class="logo img-fluid" src="/img/logo-black.svg" alt="logo" />
+            <br />
+            Perceptron
+            <p class="subtitle lead">Convert your handwritten notes into an interactive study guide.</p>
           </h1>
         </div>
         <div class="main-img" data-aos="zoom-in" data-aos-duration="2000">
           <div class="example-quiz question-box">
-            <p class="text-muted">Question 1 of 2</p>
-            <h1 class="question-title display-6">hi?</h1>
+            <p class="text-muted">Question {idx + 1} of {LANDING_QUESTIONS.length}</p>
+            <h1 class="question-title display-6">{LANDING_QUESTIONS[idx].question}</h1>
 
             <div class="options-box">
-              {#each ["a", "b", "c", "d"] as option, idx}
-                <button class="question-option btn btn-main btn-lg btn-block">
+              {#each LANDING_QUESTIONS[idx].options as option}
+                <button class="question-option btn btn-main btn-lg">
                   {option}
                 </button>
               {/each}
@@ -49,9 +49,8 @@
     justify-content: center;
   }
 
-  .lead {
-    color: var(--main-gray-lt-2);
-    margin-right: 2em;
+  .subtitle {
+    margin-top: 1em;
   }
 
   /* vertically center book cover img within this */
@@ -63,6 +62,7 @@
 
   /* cool image animation */
   .example-quiz {
+    width: 400px;
     min-width: 300px;
     transform: rotate3d(0.5, -0.866, 0, 15deg) rotate(1deg);
     box-shadow: 2em 4em 6em -2em rgba(0, 0, 0, 0.5), 1em 2em 3.5em -2.5em rgba(0, 0, 0, 0.5);
@@ -92,43 +92,15 @@
       margin-bottom: 2em;
     }
 
-    .lead {
-      margin-right: 0;
-    }
-
     .main-img {
       display: block;
       height: auto;
     }
 
-    /* if on mobile, don't tilt book cover */
+    /* if on mobile, don't tilt */
     .example-quiz {
       transform: none;
       box-shadow: none;
-    }
-  }
-
-  /* typing animation, make sure you set the --len variable */
-  .typing {
-    font-family: "Azeret Mono", monospace;
-    width: calc(var(--len) * 1ch);
-    --speed: 1.2s;
-
-    animation: type var(--speed) steps(var(--len)), blink 1s linear var(--speed) infinite alternate;
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: 2px solid;
-  }
-
-  @keyframes type {
-    from {
-      width: 0;
-    }
-  }
-
-  @keyframes blink {
-    50% {
-      border-color: transparent;
     }
   }
 </style>

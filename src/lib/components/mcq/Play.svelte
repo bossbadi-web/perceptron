@@ -61,7 +61,7 @@
 
 <div class="options-box">
   {#each question.options as option, idx}
-    <button class="question-option btn btn-main btn-lg btn-block" on:click={() => checkAnswer(idx)}>
+    <button class="question-option btn btn-main btn-lg" on:click={() => checkAnswer(idx)}>
       {option}
     </button>
   {/each}
