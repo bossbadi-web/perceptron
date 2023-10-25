@@ -48,6 +48,7 @@
   const checkAnswer = (idx) => {
     if (idx === question.answer) {
       // answer is correct
+      confetti();
       answerRight(idx);
     } else {
       // answer is wrong
