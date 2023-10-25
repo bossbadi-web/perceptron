@@ -70,7 +70,7 @@
       </p>
     </div>
 
-    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="300">
+    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000">
       <h1 class="landing__card-title">
         <i class="fas fa-edit" />
         Editor
@@ -80,7 +80,7 @@
       </p>
     </div>
 
-    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="400">
+    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="100">
       <h1 class="landing__card-title">
         <i class="fas fa-rocket" />
         No limit
@@ -90,7 +90,7 @@
       </p>
     </div>
 
-    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="500">
+    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200">
       <h1 class="landing__card-title">
         <i class="fas fa-share" />
         Share
