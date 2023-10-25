@@ -33,9 +33,9 @@
     </div>
 
     <div class="all-cards">
-      {#each $searchStore.filtered as quiz}
+      {#each $searchStore.filtered as quiz, quizIdx}
         <div class="quiz-box">
-          <QuizCard {quiz} />
+          <QuizCard {quiz} {quizIdx} />
         </div>
       {/each}
     </div>
