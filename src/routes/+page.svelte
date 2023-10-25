@@ -17,7 +17,7 @@
           <p class="subtitle lead">Convert your handwritten notes into an interactive study guide.</p>
         </h1>
       </div>
-      <div class="main-img" data-aos="zoom-in" data-aos-duration="2000">
+      <div class="main-img" data-aos="zoom-in" data-aos-duration="1000">
         <div class="example-quiz question-box">
           <p class="text-muted">Question {idx + 1} of {LANDING_QUESTIONS.length}</p>
           <h1 class="question-title display-6">{LANDING_QUESTIONS[idx].question}</h1>
@@ -36,66 +36,66 @@
 </section>
 
 <section id="cards">
-  <div class="all-cards">
-    <div class="card">
-      <h1 class="card-title">
+  <div class="landing__all-cards">
+    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000">
+      <h1 class="landing__card-title">
         <i class="fas fa-hammer" />
         Create
       </h1>
-      <p class="card-text">
+      <p class="landing__card-text">
         Create a quiz by uploading your notes—picture, screenshot, plain text. Also add a background image for good
         measure.
       </p>
     </div>
 
-    <div class="card">
-      <h1 class="card-title">
+    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="100">
+      <h1 class="landing__card-title">
         <i class="fas fa-gamepad" />
         Play
       </h1>
-      <p class="card-text">
+      <p class="landing__card-text">
         Choose an option and get instant feedback. Review your answers at the end to see your score and how long you
         took.
       </p>
     </div>
 
-    <div class="card">
-      <h1 class="card-title">
+    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200">
+      <h1 class="landing__card-title">
         <i class="fas fa-cog" />
         Options
       </h1>
-      <p class="card-text">
+      <p class="landing__card-text">
         Upon creation, you can choose to immediately play the quiz, preview it, or start editing it. (So no answers are
         leaked.)
       </p>
     </div>
 
-    <div class="card">
-      <h1 class="card-title">
+    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="300">
+      <h1 class="landing__card-title">
         <i class="fas fa-edit" />
         Editor
       </h1>
-      <p class="card-text">
+      <p class="landing__card-text">
         Easily insert, delete, and modify questions. Did we make a mistake? Correct it in the editor. Click, save, done.
       </p>
     </div>
 
-    <div class="card">
-      <h1 class="card-title">
+    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="400">
+      <h1 class="landing__card-title">
         <i class="fas fa-rocket" />
         No limit
       </h1>
-      <p class="card-text">
+      <p class="landing__card-text">
         Create as many quizzes as you want. Create as many questions as you want. Play as many times as you want.
       </p>
     </div>
 
-    <div class="card">
-      <h1 class="card-title">
+    <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="500">
+      <h1 class="landing__card-title">
         <i class="fas fa-share" />
         Share
       </h1>
-      <p class="card-text">
+      <p class="landing__card-text">
         Super easy to share with your friends—just send them the link. They don't even need an account to play!
       </p>
     </div>
