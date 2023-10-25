@@ -62,6 +62,7 @@
 
   /* cool image animation */
   .example-quiz {
+    width: 400px;
     min-width: 300px;
     transform: rotate3d(0.5, -0.866, 0, 15deg) rotate(1deg);
     box-shadow: 2em 4em 6em -2em rgba(0, 0, 0, 0.5), 1em 2em 3.5em -2.5em rgba(0, 0, 0, 0.5);
@@ -98,6 +99,7 @@
 
     /* if on mobile, don't tilt */
     .example-quiz {
+      width: 100%;
       transform: none;
       box-shadow: none;
     }
