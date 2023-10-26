@@ -3,10 +3,10 @@
 
   const answerRight = (idx) => {
     document.querySelectorAll(".question-option").forEach((el, i) => {
+      el.disabled = true;
       if (i !== idx) {
         el.classList.remove("btn-main");
         el.classList.add("btn-secondary");
-        el.disabled = true;
       }
     });
 
@@ -18,15 +18,14 @@
 
   const answerWrong = (idx) => {
     document.querySelectorAll(".question-option").forEach((el, i) => {
+      el.disabled = true;
       el.classList.remove("btn-main");
       if (i === idx) {
         el.classList.add("btn-danger");
       } else if (i === question.answer) {
         el.classList.add("btn-main");
-        el.disabled = true;
       } else {
         el.classList.add("btn-secondary");
-        el.disabled = true;
       }
     });
 
