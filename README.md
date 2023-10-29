@@ -35,3 +35,9 @@
    npm run build
    npm run preview
    ```
+
+## Hosting
+
+Vercel is the obvious choice here, but keep in mind that Vercel functions have a 10 second timeout limit. If the images you upload are too large, the question generation will be stuck on the loading screen.
+
+I'm currently hosting this app on my own virtual machine with an nginx reverse proxy.
