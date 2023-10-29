@@ -5,5 +5,6 @@ export default {
     adapter: adapter({
       // see the 'Deployment configuration' section below
     }),
+    csrf: { checkOrigin: false },
   },
 };
