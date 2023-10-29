@@ -26,9 +26,9 @@
 1. Create a Supabase project
 
    - Go to the "SQL Editor" tab
-   - Paste the contents of `supabase/schema.sql` into the editor
-   - Run
    - Paste the contents of `supabase/roles.sql` into the editor
+   - Run
+   - Paste the contents of `supabase/schema.sql` into the editor
    - Run
 
 1. Add environment variables
