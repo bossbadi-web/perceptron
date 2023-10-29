@@ -40,4 +40,4 @@
 
 Vercel is the obvious choice here, but keep in mind that Vercel functions have a 10 second timeout limit. If the images you upload are too large, the question generation will be stuck on the loading screen.
 
-I'm currently hosting this app on my own virtual machine with an nginx reverse proxy.
+Therefore, I recommend hosting the app on a private server. I'm currently using Fly.io and everything works great.
