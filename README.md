@@ -23,6 +23,14 @@
    npm install
    ```
 
+1. Create a Supabase project
+
+   - Go to the "SQL Editor" tab
+   - Paste the contents of `supabase/schema.sql` into the editor
+   - Run
+   - Paste the contents of `supabase/roles.sql` into the editor
+   - Run
+
 1. Add environment variables
 
    - Rename `.env.example` to `.env`
@@ -54,3 +62,13 @@ To automatically redeploy the app on Fly.io every time you push changes, add the
 
 - `ENV_FILE` - Copy and paste the contents of `.env`
 - `FLY_API_TOKEN` - Create a Fly.io access token and add it here
+
+## Backup
+
+To backup the database, run the following commands:
+
+```bash
+npm run dump-roles
+npm run dump-schema
+npm run dump-data
+```
