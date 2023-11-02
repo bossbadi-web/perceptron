@@ -46,8 +46,9 @@
 }
 
 .question-box {
-  border: 1px solid gray;
-  background-color: rgba(255, 255, 255, 0.5);
+  color: var(--font);
+  border: 1px solid var(--font);
+  background-color: var(--card-background);
   backdrop-filter: blur(20px);
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
   padding: 4rem;

@@ -4,8 +4,16 @@
 
   $: ({ session } = data);
 
-  // scroll indicator
   onMount(() => {
+    const theme = document.cookie.split(";").find((c) => c.includes("theme"));
+    if (theme) {
+      if (theme.split("=")[1] === "dark") {
+        toDark();
+      } else {
+        toLight();
+      }
+    }
+
     const scrollIndicator = document.querySelector(".scroll-progress");
     const scrollProgress = () => {
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -15,6 +23,60 @@
     };
     window.addEventListener("scroll", scrollProgress);
   });
+
+  const toggle = () => {
+    if (document.documentElement.classList.contains("dark")) {
+      toLight();
+    } else {
+      toDark();
+    }
+  };
+
+  const toDark = () => {
+    const toggle = document.querySelector(".the-toggle");
+    const nav = document.querySelector(".navbar");
+    const logo = document.querySelector(".navbar-brand img");
+
+    // change colors
+    document.documentElement.classList.add("dark");
+
+    // change icon
+    toggle.classList.remove("fa-moon");
+    toggle.classList.add("fa-sun");
+
+    // change navbar
+    nav.classList.add("navbar-dark");
+
+    // change logo
+    logo.src = "/img/logo-white.svg";
+
+    // add cookie
+    document.cookie = "theme=dark; path=/;";
+  };
+
+  const toLight = () => {
+    const toggle = document.querySelector(".the-toggle");
+    const nav = document.querySelector(".navbar");
+    const logo = document.querySelector(".navbar-brand img");
+
+    // change colors
+    document.documentElement.classList.remove("dark");
+
+    // change icon
+    toggle.classList.remove("fa-sun");
+    toggle.classList.add("fa-moon");
+
+    // change navbar
+    if (nav.classList.contains("navbar-dark")) {
+      nav.classList.remove("navbar-dark");
+    }
+
+    // change logo
+    logo.src = "/img/logo-black.svg";
+
+    // remove dark theme cookie
+    document.cookie = "theme=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  };
 </script>
 
 <nav class="navbar navbar-expand-lg sticky-top">
@@ -51,15 +113,14 @@
         {#if session}
           <li class="nav-item">
             <a class="nav-link" href="/library">
-              <!-- rack icon -->
               <i class="fas fa-layer-group" />
               My Library
             </a>
           </li>
         {/if}
       </ul>
-      {#if session}
-        <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto">
+        {#if session}
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -84,17 +145,20 @@
               </li>
             </ul>
           </li>
-        </ul>
-      {:else}
-        <ul class="navbar-nav ms-auto">
+        {:else}
           <li class="nav-item">
             <a class="nav-link" href="/login">Login</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/register">Register</a>
           </li>
-        </ul>
-      {/if}
+        {/if}
+        <li class="nav-item">
+          <button class="nav-link" on:click={toggle}>
+            <i class="fas fa-moon the-toggle" />
+          </button>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>
@@ -120,7 +184,7 @@
   .scroll-progress {
     height: 100%;
     width: 0%;
-    background: linear-gradient(to right, transparent 0%, black 100%);
+    background: linear-gradient(to right, transparent 0%, var(--font) 100%);
     box-shadow: 0 0 20px black;
     border-radius: 0 0.5em 0.5em 0;
   }

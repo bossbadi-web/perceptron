@@ -159,12 +159,13 @@
     transition: 0.5s;
   }
   .divider button:hover {
-    color: var(--primary-color);
+    color: var(--primary);
   }
 
   .question-box {
+    color: var(--font);
     border: 1px solid gray;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--card-background);
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
     padding: 2rem;
     margin-bottom: 1rem;
@@ -172,7 +173,7 @@
     transition: 0.5s;
   }
   .question-box:focus-within {
-    background-color: white;
+    background-color: var(--card-hover);
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
   }
 
