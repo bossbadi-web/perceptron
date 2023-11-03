@@ -33,7 +33,7 @@
   };
 
   const toDark = () => {
-    const toggle = document.querySelector(".the-toggle");
+    const toggle = document.querySelector("#toggle");
     const nav = document.querySelector(".navbar");
     const logo = document.querySelector(".navbar-brand img");
 
@@ -55,7 +55,7 @@
   };
 
   const toLight = () => {
-    const toggle = document.querySelector(".the-toggle");
+    const toggle = document.querySelector("#toggle");
     const nav = document.querySelector(".navbar");
     const logo = document.querySelector(".navbar-brand img");
 
@@ -153,9 +153,9 @@
             <a class="nav-link" href="/register">Register</a>
           </li>
         {/if}
-        <li class="nav-item">
+        <li class="nav-item the-toggle">
           <button class="nav-link" on:click={toggle}>
-            <i class="fas fa-moon the-toggle" />
+            <i class="fas fa-moon" id="toggle" />
           </button>
         </li>
       </ul>
@@ -171,6 +171,12 @@
   .profile-links li {
     display: flex;
     justify-content: center;
+  }
+
+  .the-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   /* this is for the line under the navbar */
