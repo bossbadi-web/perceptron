@@ -13,20 +13,6 @@
   min-width: 300px;
 }
 
-.dropdown-menu {
-  background-color: var(--secondary);
-}
-
-.dropdown-item {
-  color: white;
-}
-
-.the-filters {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
-}
-
 .all-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

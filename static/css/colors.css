@@ -1,7 +1,9 @@
 :root {
   --primary: #008a83;
   --secondary: #00718a;
+
   --font: black;
+  --font-opp: white;
   --font-muted: #5f5f5f;
   --font-placeholder: #8d8d8d;
 
@@ -49,7 +51,9 @@
 :root.dark {
   --primary: #00718a;
   --secondary: #00538a;
+
   --font: white;
+  --font-opp: black;
   --font-muted: #949494;
   --font-placeholder: #3a3a3a;
 
