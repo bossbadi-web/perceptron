@@ -8,10 +8,10 @@
 
 <section>
   <div class="container">
-    <div class="row normal-row">
-      <div class="col-md-10 offset-md-1">
+    <div class="col-md-8 offset-md-2">
+      <div class="row normal-row">
         <h1 class="text-center display-4">Register</h1>
-        <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
+        <form class="mb-3" method="POST" action="?redirectTo={redirectTo}" use:enhance>
           {#if form?.message}
             <div
               class="alert"
@@ -23,7 +23,7 @@
             </div>
           {/if}
           <div class="mb-3">
-            <label for="emailInput" class="form-label">Email address</label>
+            <label for="emailInput" class="form-label">Email</label>
             <input class="form-control" id="emailInput" type="email" name="email" placeholder="Email" required />
           </div>
           <div class="mb-3">
@@ -51,7 +51,7 @@
           <button type="submit" class="btn btn-main">Register</button>
         </form>
         <br />
-        <small class="text-muted">
+        <small class="text-muted text-center">
           Already have an account? <a class="hover-underline" href="/login">Login</a>
         </small>
       </div>
