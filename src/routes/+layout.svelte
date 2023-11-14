@@ -21,7 +21,19 @@
   });
 
   afterNavigate(() => {
-    const subpage = $page.route.id.split("/")[1].replace(/^\w/, (c) => c.toUpperCase());
+    const subpages = $page.route.id.split("/");
+    let subpage;
+
+    for (let i = 0; i < subpages.length; i++) {
+      const part = subpages[i];
+
+      if (!part || part.startsWith("(")) {
+        continue;
+      } else {
+        subpage = part.replace(/^\w/, (c) => c.toUpperCase());
+        break;
+      }
+    }
 
     if (subpage) {
       document.title = `${subpage} | Perceptron`;
