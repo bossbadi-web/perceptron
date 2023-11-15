@@ -1,8 +1,16 @@
 <script>
   import { onMount } from "svelte";
+  import { afterNavigate } from "$app/navigation";
   export let data;
 
   $: ({ session } = data);
+
+  let path;
+
+  // get path of current page so if user logins in, they are redirected to the page they were on
+  afterNavigate(({ to }) => {
+    path = to.url.pathname;
+  });
 
   onMount(() => {
     const theme = document.cookie.split(";").find((c) => c.includes("theme"));
@@ -147,7 +155,7 @@
           </li>
         {:else}
           <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
+            <a class="nav-link" href="/login?redirectTo={path}">Login</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/register">Register</a>
