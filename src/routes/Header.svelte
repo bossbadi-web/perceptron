@@ -13,15 +13,6 @@
   });
 
   onMount(() => {
-    const theme = document.cookie.split(";").find((c) => c.includes("theme"));
-    if (theme) {
-      if (theme.split("=")[1] === "dark") {
-        toDark();
-      } else {
-        toLight();
-      }
-    }
-
     const scrollIndicator = document.querySelector(".scroll-progress");
     const scrollProgress = () => {
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -31,66 +22,15 @@
     };
     window.addEventListener("scroll", scrollProgress);
   });
-
-  const toggle = () => {
-    if (document.documentElement.classList.contains("dark")) {
-      toLight();
-    } else {
-      toDark();
-    }
-  };
-
-  const toDark = () => {
-    const toggle = document.querySelector("#toggle");
-    const nav = document.querySelector(".navbar");
-    const logo = document.querySelector(".navbar-brand img");
-
-    // change colors
-    document.documentElement.classList.add("dark");
-
-    // change icon
-    toggle.classList.remove("fa-moon");
-    toggle.classList.add("fa-sun");
-
-    // change navbar
-    nav.classList.add("navbar-dark");
-
-    // change logo
-    logo.src = "/img/logo-white.svg";
-
-    // add cookie
-    document.cookie = "theme=dark; path=/;";
-  };
-
-  const toLight = () => {
-    const toggle = document.querySelector("#toggle");
-    const nav = document.querySelector(".navbar");
-    const logo = document.querySelector(".navbar-brand img");
-
-    // change colors
-    document.documentElement.classList.remove("dark");
-
-    // change icon
-    toggle.classList.remove("fa-sun");
-    toggle.classList.add("fa-moon");
-
-    // change navbar
-    if (nav.classList.contains("navbar-dark")) {
-      nav.classList.remove("navbar-dark");
-    }
-
-    // change logo
-    logo.src = "/img/logo-black.svg";
-
-    // remove dark theme cookie
-    document.cookie = "theme=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  };
 </script>
 
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container container-fluid">
     <a class="navbar-brand" href="/">
-      <img src="/img/logo-black.svg" alt="avatar" height="30" width="30" />
+      <picture>
+        <source srcset="/img/logo-white.svg" media="(prefers-color-scheme: dark)" />
+        <img src="/img/logo-black.svg" alt="avatar" height="30" width="30" />
+      </picture>
     </a>
     <a class="navbar-brand" href="/">Perceptron</a>
     <button
@@ -107,20 +47,20 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/create">
+          <a class="nav-link hover-underline" href="/create">
             <i class="fas fa-hammer" />
             Create
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/explore">
+          <a class="nav-link hover-underline" href="/explore">
             <i class="fas fa-search" />
             Explore
           </a>
         </li>
         {#if session}
           <li class="nav-item">
-            <a class="nav-link" href="/library">
+            <a class="nav-link hover-underline" href="/library">
               <i class="fas fa-layer-group" />
               My Library
             </a>
@@ -144,28 +84,25 @@
               aria-labelledby="navbarDropdownMenuLink"
             >
               <li class="nav-item">
-                <a class="nav-link" href="/profile"><i class="fas fa-user" /> Profile</a>
+                <a class="nav-link hover-underline" href="/profile"><i class="fas fa-user" /> Profile</a>
               </li>
               <li class="nav-item">
                 <form action="/logout" method="POST">
-                  <button class="nav-link" type="submit"><i class="fas fa-sign-out-alt" /> Logout</button>
+                  <button class="nav-link hover-underline" type="submit"
+                    ><i class="fas fa-sign-out-alt" /> Logout</button
+                  >
                 </form>
               </li>
             </ul>
           </li>
         {:else}
           <li class="nav-item">
-            <a class="nav-link" href="/login?redirectTo={path}">Login</a>
+            <a class="nav-link hover-underline" href="/login?redirectTo={path}">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/register">Register</a>
+            <a class="nav-link hover-underline" href="/register">Register</a>
           </li>
         {/if}
-        <li class="nav-item the-toggle">
-          <button class="nav-link" on:click={toggle}>
-            <i class="fas fa-moon" id="toggle" />
-          </button>
-        </li>
       </ul>
     </div>
   </div>
@@ -176,15 +113,13 @@
 </div>
 
 <style>
+  .navbar a {
+    color: var(--font) !important;
+  }
+
   .profile-links li {
     display: flex;
     justify-content: center;
-  }
-
-  .the-toggle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   /* this is for the line under the navbar */

@@ -23,9 +23,6 @@ html {
   backdrop-filter: blur(20px);
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
 }
-.navbar a {
-  transition: 0.5s;
-}
 
 .dropdown-menu {
   background-color: var(--card-background);

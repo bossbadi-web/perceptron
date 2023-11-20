@@ -3,9 +3,6 @@
   import "$lib/components/mcq/styles.css";
   import { LANDING_QUESTIONS } from "$lib/landingQuestions.js";
 
-  export let data;
-  const { logoPath } = data;
-
   $: idx = Math.floor(Math.random() * LANDING_QUESTIONS.length);
 </script>
 
@@ -14,7 +11,10 @@
     <div class="d-flex flex-lg-row flex-column">
       <div class="flex-grow-1 main-text">
         <h1 class="display-1 text-center">
-          <img class="logo img-fluid" src={logoPath} alt="logo" />
+          <picture>
+            <source srcset="/img/logo-white.svg" media="(prefers-color-scheme: dark)" />
+            <img class="logo img-fluid" src="/img/logo-black.svg" alt="logo" />
+          </picture>
           <br />
           Perceptron
           <p class="subtitle lead">Convert your handwritten notes into an interactive study guide.</p>
