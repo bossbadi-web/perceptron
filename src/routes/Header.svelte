@@ -113,7 +113,7 @@
 </div>
 
 <style>
-  .navbar a {
+  .navbar * {
     color: var(--font) !important;
   }
 
