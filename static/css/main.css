@@ -117,9 +117,8 @@ section {
   background-color: var(--font);
   transition: transform 0.25s ease-out;
   transform: scaleX(0);
-  transform-origin: bottom left;
+  transform-origin: center;
 }
 .hover-underline:hover::after {
   transform: scaleX(1);
-  transform-origin: bottom left;
 }
