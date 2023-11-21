@@ -7,28 +7,23 @@ const openai = new OpenAI({
   baseURL: "https://api.chatanywhere.cn/v1",
 });
 
-const MCQ_FORMAT = `
-1. The question
-0) Option
-1) Option
-2) Option
-3) Option
-Answer: 3
+const MCQ_QUERY_PRE = `create multiple choice questions using this format:
 
-2. The question
-0) Option
-1) Option
-2) Option
-3) Option
-Answer: 2
-`;
+1. <question>
+0) <option>
+1) <option>
+2) <option>
+3) <option>
+Answer: 0
 
-const MCQ_QUERY_PRE = `create multiple choice questions and answers
+2. <question>
+0) <option>
+1) <option>
+2) <option>
+3) <option>
+Answer: 1
 
-use this format:
-${MCQ_FORMAT}
-
-NOTES:
+and so on...
 `;
 
 const toJSON = (text) => {
@@ -43,9 +38,9 @@ const toJSON = (text) => {
   // ]
   let output = [];
 
-  try {
-    const question_chunks = text.split("\n\n");
-    for (let i = 0; i < question_chunks.length; i++) {
+  const question_chunks = text.split("\n\n");
+  for (let i = 0; i < question_chunks.length; i++) {
+    try {
       const question_chunk = question_chunks[i];
       const lines = question_chunk.split("\n");
       const question = lines[0].replace(/^\d+\. /, "");
@@ -56,8 +51,8 @@ const toJSON = (text) => {
         options,
         answer,
       });
-    }
-  } catch (e) {}
+    } catch (err) {}
+  }
 
   return output;
 };
