@@ -1,4 +1,66 @@
 :root {
-  --primary-color: #008a83;
-  --secondary-color: #00718a;
+  --primary: #008a83;
+  --secondary: #00718a;
+
+  --font: black;
+  --font-opp: white;
+  --font-muted: #5f5f5f;
+  --font-placeholder: #8d8d8d;
+
+  --card-background: rgba(255, 255, 255, 0.5);
+  --card-hover: rgba(255, 255, 255, 0.7);
+
+  --background: radial-gradient(
+      circle at 40% 91%,
+      rgba(251, 251, 251, 0.04) 0%,
+      rgba(251, 251, 251, 0.04) 50%,
+      rgba(229, 229, 229, 0.04) 50%,
+      rgba(229, 229, 229, 0.04) 100%
+    ),
+    radial-gradient(
+      circle at 66% 97%,
+      rgba(36, 36, 36, 0.04) 0%,
+      rgba(36, 36, 36, 0.04) 50%,
+      rgba(46, 46, 46, 0.04) 50%,
+      rgba(46, 46, 46, 0.04) 100%
+    ),
+    radial-gradient(
+      circle at 86% 7%,
+      rgba(40, 40, 40, 0.04) 0%,
+      rgba(40, 40, 40, 0.04) 50%,
+      rgba(200, 200, 200, 0.04) 50%,
+      rgba(200, 200, 200, 0.04) 100%
+    ),
+    radial-gradient(
+      circle at 15% 16%,
+      rgba(99, 99, 99, 0.04) 0%,
+      rgba(99, 99, 99, 0.04) 50%,
+      rgba(45, 45, 45, 0.04) 50%,
+      rgba(45, 45, 45, 0.04) 100%
+    ),
+    radial-gradient(
+      circle at 75% 99%,
+      rgba(243, 243, 243, 0.04) 0%,
+      rgba(243, 243, 243, 0.04) 50%,
+      rgba(37, 37, 37, 0.04) 50%,
+      rgba(37, 37, 37, 0.04) 100%
+    ),
+    linear-gradient(90deg, rgb(34, 222, 237), rgb(135, 89, 215));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #00718a;
+    --secondary: #00538a;
+
+    --font: white;
+    --font-opp: black;
+    --font-muted: #949494;
+    --font-placeholder: #3a3a3a;
+
+    --card-background: rgba(0, 0, 0, 0.5);
+    --card-hover: rgba(0, 0, 0, 0.7);
+
+    --background: linear-gradient(to right, #c31432, #240b36);
+  }
 }

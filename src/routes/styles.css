@@ -26,7 +26,6 @@
 /* cool image animation */
 .example-quiz {
   padding: 2rem !important;
-  background-color: rgba(255, 255, 255, 0.4) !important;
   backdrop-filter: none !important;
 
   width: 400px;
@@ -88,8 +87,8 @@
   text-align: center;
   grid-template-rows: 50% 50%;
   padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 2px solid black;
+  background-color: var(--card-background);
+  border: 2px solid var(--font);
   border-radius: 10px;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
 }

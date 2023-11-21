@@ -1,3 +1,4 @@
+import { getSafeRedirect } from "$lib/utils";
 import { redirect } from "@sveltejs/kit";
 
 export const GET = async ({ cookies, url, locals }) => {
@@ -8,6 +9,5 @@ export const GET = async ({ cookies, url, locals }) => {
     cookies.set("access_token", data.session.access_token, { maxAge: 604800 });
   }
 
-  const next = url.searchParams.get("next");
-  throw redirect(303, next || "/login");
+  throw redirect(303, getSafeRedirect(url.searchParams.get("next"), "/login"));
 };

@@ -1,5 +1,6 @@
 import { AuthApiError } from "@supabase/supabase-js";
 import { fail, redirect } from "@sveltejs/kit";
+import { getSafeRedirect } from "$lib/utils";
 
 export const actions = {
   default: async ({ cookies, request, locals, url }) => {
@@ -21,6 +22,6 @@ export const actions = {
     }
 
     cookies.set("access_token", data.session.access_token, { maxAge: 604800 });
-    throw redirect(303, url.searchParams.get("redirectTo") || "/");
+    throw redirect(303, getSafeRedirect(url.searchParams.get("redirectTo")));
   },
 };

@@ -55,3 +55,10 @@ export const secondsToHmsString = (raw) => {
 export const wordCount = (s) => {
   return s.split(" ").length;
 };
+
+export const getSafeRedirect = (url, defaultUrl = "/") => {
+  if (url && url.startsWith("/")) {
+    return url;
+  }
+  return defaultUrl;
+};

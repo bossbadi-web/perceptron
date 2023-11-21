@@ -4,8 +4,8 @@
 
 <section>
   <div class="container">
-    <div class="row normal-row">
-      <div class="col-md-10 offset-md-1">
+    <div class="col-md-8 offset-md-2">
+      <div class="row normal-row">
         <h1 class="display-4 text-center">My Profile</h1>
 
         <div>

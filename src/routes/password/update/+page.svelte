@@ -8,8 +8,8 @@
 
 <section>
   <div class="container">
-    <div class="row normal-row">
-      <div class="col-md-10 offset-md-1">
+    <div class="col-md-8 offset-md-2">
+      <div class="row normal-row">
         <h1 class="text-center display-4">Change Password</h1>
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
           {#if form?.message}

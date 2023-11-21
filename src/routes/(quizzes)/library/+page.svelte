@@ -3,6 +3,7 @@
   import { createSearchStore, searchHandler } from "$lib/stores/search";
   import { onDestroy } from "svelte";
   import QuizCard from "$lib/components/quiz/Library.svelte";
+  import SortByOptions from "$lib/components/explore/SortByOptions.svelte";
   export let data;
 
   const searchQuizzes = data.quizzes.map((quiz) => ({
@@ -34,6 +35,8 @@
       {/if}
     </div>
 
+    <SortByOptions {searchStore} />
+
     <div class="all-cards">
       {#if $searchStore.data.length === 0}
         <div class="text-center">
@@ -52,6 +55,3 @@
     </div>
   </div>
 </section>
-
-<style>
-</style>

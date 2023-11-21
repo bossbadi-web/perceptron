@@ -45,16 +45,17 @@
 
 <style>
   .card {
+    color: var(--font);
     grid-template-rows: 50% 50%;
     padding: 10px;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--card-background);
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
     transition: 0.5s;
   }
   .card:hover {
-    background-color: white;
+    background-color: var(--card-hover);
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
   }
 

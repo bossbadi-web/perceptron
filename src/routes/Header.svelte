@@ -1,10 +1,17 @@
 <script>
   import { onMount } from "svelte";
+  import { afterNavigate } from "$app/navigation";
   export let data;
 
   $: ({ session } = data);
 
-  // scroll indicator
+  let path;
+
+  // get path of current page so if user logins in, they are redirected to the page they were on
+  afterNavigate(({ to }) => {
+    path = to.url.pathname;
+  });
+
   onMount(() => {
     const scrollIndicator = document.querySelector(".scroll-progress");
     const scrollProgress = () => {
@@ -20,7 +27,10 @@
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container container-fluid">
     <a class="navbar-brand" href="/">
-      <img src="/img/logo-black.svg" alt="avatar" height="30" width="30" />
+      <picture>
+        <source srcset="/img/logo-white.svg" media="(prefers-color-scheme: dark)" />
+        <img src="/img/logo-black.svg" alt="avatar" height="30" width="30" />
+      </picture>
     </a>
     <a class="navbar-brand" href="/">Perceptron</a>
     <button
@@ -37,29 +47,28 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/create">
+          <a class="nav-link hover-underline" href="/create">
             <i class="fas fa-hammer" />
             Create
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/explore">
+          <a class="nav-link hover-underline" href="/explore">
             <i class="fas fa-search" />
             Explore
           </a>
         </li>
         {#if session}
           <li class="nav-item">
-            <a class="nav-link" href="/library">
-              <!-- rack icon -->
+            <a class="nav-link hover-underline" href="/library">
               <i class="fas fa-layer-group" />
               My Library
             </a>
           </li>
         {/if}
       </ul>
-      {#if session}
-        <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto">
+        {#if session}
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -75,26 +84,26 @@
               aria-labelledby="navbarDropdownMenuLink"
             >
               <li class="nav-item">
-                <a class="nav-link" href="/profile"><i class="fas fa-user" /> Profile</a>
+                <a class="nav-link hover-underline" href="/profile"><i class="fas fa-user" /> Profile</a>
               </li>
               <li class="nav-item">
                 <form action="/logout" method="POST">
-                  <button class="nav-link" type="submit"><i class="fas fa-sign-out-alt" /> Logout</button>
+                  <button class="nav-link hover-underline" type="submit"
+                    ><i class="fas fa-sign-out-alt" /> Logout</button
+                  >
                 </form>
               </li>
             </ul>
           </li>
-        </ul>
-      {:else}
-        <ul class="navbar-nav ms-auto">
+        {:else}
           <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
+            <a class="nav-link hover-underline" href="/login?redirectTo={path}">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/register">Register</a>
+            <a class="nav-link hover-underline" href="/register">Register</a>
           </li>
-        </ul>
-      {/if}
+        {/if}
+      </ul>
     </div>
   </div>
 </nav>
@@ -104,6 +113,10 @@
 </div>
 
 <style>
+  .navbar * {
+    color: var(--font) !important;
+  }
+
   .profile-links li {
     display: flex;
     justify-content: center;
@@ -120,7 +133,7 @@
   .scroll-progress {
     height: 100%;
     width: 0%;
-    background: linear-gradient(to right, transparent 0%, black 100%);
+    background: linear-gradient(to right, transparent 0%, var(--font) 100%);
     box-shadow: 0 0 20px black;
     border-radius: 0 0.5em 0.5em 0;
   }
