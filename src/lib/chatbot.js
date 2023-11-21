@@ -1,3 +1,12 @@
+import OpenAI from "openai";
+import { OPENAI_KEY } from "$env/static/private";
+
+// create openai client
+const openai = new OpenAI({
+  apiKey: OPENAI_KEY,
+  baseURL: "https://api.chatanywhere.cn/v1",
+});
+
 const MCQ_FORMAT = `
 1. The question
 0) Option
@@ -54,15 +63,12 @@ const toJSON = (text) => {
 };
 
 const chatbot = async (query) => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 20000);
-
   try {
-    const response = await fetch(`https://api.gopubby.com/chatbot?text=${encodeURIComponent(query)}`, {
-      signal: controller.signal,
+    const chatCompletion = await openai.chat.completions.create({
+      messages: [{ role: "user", content: query }],
+      model: "gpt-3.5-turbo",
     });
-    const text = await response.text();
-    return toJSON(text);
+    return toJSON(chatCompletion.choices[0].message.content);
   } catch (err) {
     return [];
   }
