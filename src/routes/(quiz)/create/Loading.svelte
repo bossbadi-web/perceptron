@@ -47,6 +47,6 @@
 <p class="lead text-center">{slide.message}</p>
 <p class="text-center">
   <small>
-    This should normally take about 20 seconds. If it takes too long then you may need to retry later.
+    This should normally take about 30 seconds. If it takes too long then you may need to retry later.
   </small>
 </p>
