@@ -1,9 +1,8 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { ocrSpace } from "ocr-space-api-wrapper";
+import Tesseract from "tesseract.js";
 
 import { getQuestions } from "$lib/chatbot";
 import { LIMITS } from "$lib/consts";
-import { OCR_API_KEY } from "$env/static/private";
 
 const createQuiz = async ({ request, locals }) => {
   const formData = await request.formData();
@@ -39,9 +38,11 @@ const createQuiz = async ({ request, locals }) => {
     }
 
     const base64 = new Buffer.from(await fileToUpload.arrayBuffer()).toString("base64");
-    const ocrData = await ocrSpace(`data:image/png;base64,${base64}`, { apiKey: OCR_API_KEY, language: "ita" });
+    const base64URL = `data:image/png;base64,${base64}`;
 
-    const ocrText = ocrData?.ParsedResults[0]?.ParsedText;
+    const { data } = await Tesseract.recognize(base64URL, "eng");
+    const ocrText = data.text.trim();
+
     if (!ocrText) {
       return {
         inputError: "No text found in the image.",
@@ -52,7 +53,7 @@ const createQuiz = async ({ request, locals }) => {
 
   // add notes
   if (notes) {
-    text += `\n\n${notes}`;
+    text += `\n\nNOTES:\n${notes}`;
   }
 
   // generate questions
