@@ -88,7 +88,7 @@
   grid-template-rows: 50% 50%;
   padding: 2rem;
   background-color: var(--card-background);
-  border: 2px solid var(--font);
+  border: 1px solid var(--font);
   border-radius: 10px;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
 }
