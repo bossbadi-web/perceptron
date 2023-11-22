@@ -1,10 +1,10 @@
 import OpenAI from "openai";
-import { OPENAI_KEY } from "$env/static/private";
+import { OPENAI_URL, OPENAI_KEY } from "$env/static/private";
 
 // create openai client
 const openai = new OpenAI({
+  baseURL: OPENAI_URL,
   apiKey: OPENAI_KEY,
-  baseURL: "https://api.chatanywhere.cn/v1",
 });
 
 const MCQ_QUERY_PRE = `create multiple choice questions using this format:
