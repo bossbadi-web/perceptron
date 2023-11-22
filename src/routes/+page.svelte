@@ -20,7 +20,7 @@
           <p class="subtitle lead">Convert your handwritten notes into an interactive study guide.</p>
         </h1>
       </div>
-      <div class="main-img" data-aos="zoom-in" data-aos-duration="1000">
+      <div class="main-img">
         <div class="example-quiz question-box">
           <p class="text-muted">Question {idx + 1} of {LANDING_QUESTIONS.length}</p>
           <h1 class="question-title display-6">{LANDING_QUESTIONS[idx].question}</h1>
