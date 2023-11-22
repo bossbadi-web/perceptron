@@ -34,6 +34,14 @@
           </li>
         </ol>
       </div>
+
+      <div class="row">
+        <p class="text-center">
+          <a class="btn btn-lg btn-main" href="https://github.com/bossbadi-web/perceptron" target="_blank"
+            >Source Code</a
+          >
+        </p>
+      </div>
     </div>
 
     <div class="col-md-8 offset-md-2">
