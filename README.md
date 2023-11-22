@@ -65,10 +65,18 @@ To automatically redeploy the app on Fly.io every time you push changes, add the
 
 ## Backup
 
-To backup the database, run the following commands:
+1. Link your Supabase project (only needs to be done once)
 
-```bash
-npm run dump-roles
-npm run dump-schema
-npm run dump-data
-```
+   ```bash
+   cd node_modules/supabase/bin/ && supabase link --project-ref YOUR_PROJECT_REFERENCE_ID
+   ```
+
+2. Make sure Docker is running
+
+3. Run the following commands:
+
+   ```bash
+   npm run dump-roles
+   npm run dump-schema
+   npm run dump-data
+   ```
