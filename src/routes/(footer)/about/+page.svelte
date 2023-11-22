@@ -14,21 +14,23 @@
 
         <p>This app is potentially transformative to students’ study habits:</p>
 
-        <ol style="padding-left: 2rem">
+        <ol>
           <li>
-            <p><b>Perceptron encourages students to learn.</b></p>
-            <p>By adding confetti animations and instant right or wrong feedback, students are always engaged.</p>
+            <b>Perceptron encourages students to learn.</b>
+            <div class="desc">
+              By adding confetti animations and instant right or wrong feedback, students are always engaged.
+            </div>
           </li>
           <li>
-            <p><b>Perception embodies the beneficial use of AI.</b></p>
-            <p>
+            <b>Perception embodies the beneficial use of AI.</b>
+            <div class="desc">
               Nowadays, AI is often criticized for being used to cheat. Perceptron tries to undermine that criticism by
               helping students to study.
-            </p>
+            </div>
           </li>
           <li>
-            <p><b>Perceptron reinforces key technical concepts.</b></p>
-            <p>You can take a quiz over and over again until you have nailed every concept.</p>
+            <b>Perceptron reinforces key technical concepts.</b>
+            <div class="desc">You can take a quiz over and over again until you have nailed every concept.</div>
           </li>
         </ol>
       </div>
@@ -48,3 +50,17 @@
     </div>
   </div>
 </section>
+
+<style>
+  ol {
+    padding-left: 2rem;
+  }
+
+  li:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  .desc {
+    margin-top: 0.25rem;
+  }
+</style>
