@@ -34,8 +34,7 @@
 1. Add environment variables
 
    - Rename `.env.example` to `.env`
-   - Add the corresponding variables from your Supabase project
-   - Create an OCR API account and add the API key
+   - Follow the instructions in the file
 
 1. Run the application in development mode
 
