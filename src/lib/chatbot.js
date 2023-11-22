@@ -9,18 +9,18 @@ const openai = new OpenAI({
 
 const MCQ_QUERY_PRE = `create multiple choice questions using this format:
 
-1. <question>
-0) <option>
-1) <option>
-2) <option>
-3) <option>
+1. a question
+0) an option
+1) an option
+2) an option
+3) an option
 Answer: 0
 
-2. <question>
-0) <option>
-1) <option>
-2) <option>
-3) <option>
+2. a question
+0) an option
+1) an option
+2) an option
+3) an option
 Answer: 1
 
 and so on...
