@@ -111,7 +111,7 @@ section {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: var(--font);
+  background-color: currentColor;
   transition: transform 0.25s ease-out;
   transform: scaleX(0);
   transform-origin: center;
