@@ -33,5 +33,18 @@
         </ol>
       </div>
     </div>
+
+    <div class="col-md-8 offset-md-2">
+      <div class="row">
+        <iframe
+          height="400"
+          src="https://www.youtube.com/embed/UOzoM5wVJ6E"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        />
+      </div>
+    </div>
   </div>
 </section>
