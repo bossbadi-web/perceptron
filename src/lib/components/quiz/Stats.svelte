@@ -32,7 +32,7 @@
   </div>
 
   <div>
-    <b>Expected time:</b>
+    <b>Play time:</b>
     {timeToComplete}
   </div>
 
