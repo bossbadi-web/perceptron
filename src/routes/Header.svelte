@@ -117,7 +117,7 @@
     color: var(--font) !important;
   }
 
-  .profile-links li {
+  .nav-item:not(.dropdown) {
     display: flex;
     justify-content: center;
   }
