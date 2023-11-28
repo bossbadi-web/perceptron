@@ -9,7 +9,7 @@ export const actions = {
     const email = formData.get("email");
 
     const { error: err } = await locals.supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${url.origin}/auth/callback?next=/password/update`,
+      redirectTo: `${url.origin}/auth/callback?next=/password/change`,
     });
 
     if (err) {
