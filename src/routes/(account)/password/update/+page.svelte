@@ -23,7 +23,7 @@
             </div>
           {/if}
           <div class="mb-3">
-            <label for="passwordInput" class="form-label">Password</label>
+            <label for="passwordInput" class="form-label">New Password</label>
             <input
               class="form-control"
               id="passwordInput"
@@ -34,7 +34,7 @@
             />
           </div>
           <div class="mb-3">
-            <label for="passwordConfirmInput" class="form-label">Confirm Password</label>
+            <label for="passwordConfirmInput" class="form-label">Confirm New Password</label>
             <input
               class="form-control"
               id="passwordConfirmInput"
