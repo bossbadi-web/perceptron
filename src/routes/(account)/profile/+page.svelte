@@ -18,7 +18,8 @@
         </div>
 
         <div>
-          <a class="btn btn-secondary" href="/password/change">Change Password</a>
+          <a class="btn btn-main" href="/email/change">Change Email</a>
+          <a class="btn btn-main" href="/password/change">Change Password</a>
         </div>
       </div>
     </div>
