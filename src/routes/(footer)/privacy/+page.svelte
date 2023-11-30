@@ -43,8 +43,13 @@
 
         <h2 class="a-heading">Data Deletion</h2>
         <p class="a-paragraph">To delete a Perceptron, you can click the "Delete" button on the edit page.</p>
+        <p class="a-paragraph">
+          To delete your account, you can click the "Delete Account" button on your profile page. This will delete all
+          of your Perceptrons and your account. We will not be able to recover your profile or your Perceptrons after
+          you delete them.
+        </p>
 
-        <p class="last-updated">Last updated November 15, 2023</p>
+        <p class="last-updated">Last updated November 30, 2023</p>
       </div>
     </div>
   </div>
