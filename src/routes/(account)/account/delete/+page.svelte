@@ -22,12 +22,23 @@
               {form?.message}
             </div>
           {/if}
+
+          <div class="mb-3">
+            <p>All your Perceptrons will be deleted. This action cannot be undone.</p>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input class="form-control" id="password" type="password" name="password" placeholder="Password" required />
+          </div>
+
           <div class="mb-3">
             <label for="deleteConfirm" class="form-label">
               Type <code>delete my account</code>
             </label>
             <input class="form-control" id="deleteConfirm" type="text" name="deleteConfirm" required />
           </div>
+
           <button type="submit" class="btn btn-danger">Delete Account</button>
         </form>
       </div>

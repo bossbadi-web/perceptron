@@ -6,8 +6,27 @@ import { fail, redirect } from "@sveltejs/kit";
 export const actions = {
   default: async ({ cookies, request, locals }) => {
     const formData = await request.formData();
+    const password = formData.get("password");
     const deleteConfirm = formData.get("deleteConfirm");
 
+    // check password
+    const session = await locals.getSession();
+    const email = session.user.email;
+    const { data, error: loginErr } = await locals.supabase.auth.signInWithPassword({ email, password });
+    cookies.set("access_token", data.session.access_token, { maxAge: 604800 });
+
+    if (loginErr) {
+      if (loginErr instanceof AuthApiError && loginErr.status === 400) {
+        return fail(400, {
+          message: "Invalid password.",
+        });
+      }
+      return fail(500, {
+        message: "Server error. Please try again later.",
+      });
+    }
+
+    // check delete confirmation
     if (deleteConfirm.toLowerCase() !== "delete my account") {
       return fail(400, { message: 'Please type "delete my account" to confirm.' });
     }
@@ -16,7 +35,7 @@ export const actions = {
     cookies.delete("access_token", { path: "/" });
     await locals.supabase.auth.signOut();
 
-    // call stored procedure
+    // delete account
     const { error: err } = await locals.supabase.rpc("delete_account");
 
     if (err) {
