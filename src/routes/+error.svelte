@@ -8,6 +8,6 @@
     {#if $page.error?.hint}
       <p>{$page.error.hint}</p>
     {/if}
-    <a href="/">Go home</a>
+    <a class="btn btn-main" href="/">Go home</a>
   </div>
 </section>
