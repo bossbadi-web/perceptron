@@ -1,6 +1,7 @@
 :root {
   --primary: #008a83;
   --secondary: #00718a;
+  --code: #00524e;
 
   --font: black;
   --font-opp: white;
@@ -52,6 +53,7 @@
   :root {
     --primary: #00718a;
     --secondary: #00538a;
+    --code: #00bdb3;
 
     --font: white;
     --font-opp: black;

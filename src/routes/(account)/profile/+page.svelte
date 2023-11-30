@@ -20,6 +20,7 @@
         <div>
           <a class="btn btn-main" href="/email/change">Change Email</a>
           <a class="btn btn-main" href="/password/change">Change Password</a>
+          <a class="btn btn-danger" href="/account/delete">Delete Account</a>
         </div>
       </div>
     </div>

@@ -1,5 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400&display=swap");
+@import url(colors.css);
 
 body {
   font-family: "Playpen Sans", sans-serif;
+}
+
+code {
+  color: var(--code);
+  font-size: inherit;
 }
