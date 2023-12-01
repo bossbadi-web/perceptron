@@ -1,7 +1,7 @@
 import { error, redirect } from "@sveltejs/kit";
 
 // get quiz id from params, url is /preview/[quizId]/+page
-export const load = async ({ cookies, locals, params, url }) => {
+export const load = async ({ locals, params, url }) => {
   const { data } = await locals.supabase.from("quizzes").select("*").eq("id", params.quizId).single();
 
   if (!data) {
