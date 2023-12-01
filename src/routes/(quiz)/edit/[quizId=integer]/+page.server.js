@@ -88,10 +88,10 @@ export const actions = {
 };
 
 // get quiz id from params, url is /edit/[quizId]/+page
-export const load = async ({ cookies, locals, params, url }) => {
-  const { data: sessionData, error: err } = await locals.supabase.auth.getUser(cookies.get("access_token"));
+export const load = async ({ locals, params, url }) => {
+  const session = await locals.getSession();
 
-  if (err) {
+  if (!session) {
     throw redirect(303, `/login?redirectTo=${url.pathname}`);
   }
 
@@ -104,7 +104,7 @@ export const load = async ({ cookies, locals, params, url }) => {
     });
   }
 
-  if (data.owner !== sessionData.user.id) {
+  if (data.owner !== session.user.id) {
     throw error(403, {
       message: "Unauthorized",
       hint: "You are not the owner of this quiz",
