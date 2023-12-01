@@ -84,7 +84,6 @@ export const actions = {
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
-      console.log(inputError);
       return fail(400, { message: inputError });
     }
 
