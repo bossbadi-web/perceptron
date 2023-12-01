@@ -53,10 +53,9 @@ export const actions = {
   },
 };
 
-export const load = async ({ cookies, locals, url }) => {
-  const { error: err } = await locals.supabase.auth.getUser(cookies.get("access_token"));
-
-  if (err) {
+// check if user is logged in
+export const load = async ({ locals, url }) => {
+  if (!(await locals.getSession())) {
     throw redirect(303, `/login?redirectTo=${url.pathname}`);
   }
 };
