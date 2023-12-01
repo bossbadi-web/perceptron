@@ -12,13 +12,13 @@ export const load = async ({ cookies, locals, params, url }) => {
   }
 
   if (data.visibility === "private") {
-    const { data: sessionData, error: err } = await locals.supabase.auth.getUser(cookies.get("access_token"));
+    const session = await locals.getSession();
 
-    if (err) {
+    if (!session) {
       throw redirect(303, `/login?redirectTo=${url.pathname}`);
     }
 
-    if (data.owner !== sessionData.user.id) {
+    if (data.owner !== session.user.id) {
       throw error(403, {
         message: "Unauthorized",
         hint: "You are not the owner of this quiz",
