@@ -1,12 +1,11 @@
 import { getSafeRedirect } from "$lib/utils";
 import { redirect } from "@sveltejs/kit";
 
-export const GET = async ({ cookies, url, locals }) => {
+export const GET = async ({ url, locals }) => {
   const code = url.searchParams.get("code");
 
   if (code) {
-    const { data } = await locals.supabase.auth.exchangeCodeForSession(code);
-    cookies.set("access_token", data.session.access_token, { maxAge: 604800 });
+    await locals.supabase.auth.exchangeCodeForSession(code);
   }
 
   throw redirect(303, getSafeRedirect(url.searchParams.get("next"), "/login"));
