@@ -23,6 +23,17 @@
             </div>
           {/if}
           <div class="mb-3">
+            <label for="passwordInput" class="form-label">Password</label>
+            <input
+              class="form-control"
+              id="passwordInput"
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <div class="mb-3">
             <label for="emailInput" class="form-label">New Email</label>
             <input
               class="form-control"

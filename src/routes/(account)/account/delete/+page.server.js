@@ -4,35 +4,23 @@ import { AuthApiError } from "@supabase/supabase-js";
 import { fail, redirect } from "@sveltejs/kit";
 
 export const actions = {
-  default: async ({ cookies, request, locals }) => {
+  default: async ({ request, locals }) => {
     const formData = await request.formData();
-    const password = formData.get("password");
-    const deleteConfirm = formData.get("deleteConfirm");
 
     // check password
-    const session = await locals.getSession();
-    const email = session.user.email;
-    const { data, error: loginErr } = await locals.supabase.auth.signInWithPassword({ email, password });
-    cookies.set("access_token", data.session.access_token, { maxAge: 604800 });
-
-    if (loginErr) {
-      if (loginErr instanceof AuthApiError && loginErr.status === 400) {
-        return fail(400, {
-          message: "Invalid password.",
-        });
-      }
-      return fail(500, {
-        message: "Server error. Please try again later.",
-      });
+    const password = formData.get("password");
+    const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
+    if (!passwordCorrect) {
+      return fail(400, { message: "Wrong password." });
     }
 
     // check delete confirmation
+    const deleteConfirm = formData.get("deleteConfirm");
     if (deleteConfirm.toLowerCase() !== "delete my account") {
       return fail(400, { message: 'Please type "delete my account" to confirm.' });
     }
 
     // sign out
-    cookies.delete("access_token", { path: "/" });
     await locals.supabase.auth.signOut();
 
     // delete account
