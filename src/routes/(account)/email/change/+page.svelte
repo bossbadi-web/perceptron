@@ -29,7 +29,6 @@
               id="passwordInput"
               type="password"
               name="password"
-              placeholder="Password"
               required
             />
           </div>
@@ -40,7 +39,6 @@
               id="emailInput"
               type="email"
               name="email"
-              placeholder="Email"
               required
             />
           </div>
@@ -51,7 +49,6 @@
               id="emailConfirmInput"
               type="email"
               name="emailConfirm"
-              placeholder="Email"
               required
             />
           </div>
