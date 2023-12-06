@@ -1,9 +1,25 @@
 <script>
   import { enhance } from "$app/forms";
+  import { onMount } from "svelte";
   import { page } from "$app/stores";
   export let form;
 
+  let isFromPasswordReset = false;
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";
+
+  onMount(() => {
+    const referrer = document.referrer;
+    let error;
+
+    if (referrer && typeof referrer === "string") {
+      const url = new URL(referrer);
+      error = url.searchParams.get("error");
+    }
+
+    if (!error) {
+      isFromPasswordReset = referrer.startsWith(`${window.location.origin}/auth/callback`);
+    }
+  });
 </script>
 
 <section>
@@ -22,28 +38,32 @@
               {form?.message}
             </div>
           {/if}
+
+          {#if !isFromPasswordReset}
+            <div class="mb-3">
+              <label for="passwordInput" class="form-label">Current Password</label>
+              <input class="form-control" id="passwordInput" type="password" name="password" required />
+            </div>
+          {/if}
+
           <div class="mb-3">
-            <label for="passwordInput" class="form-label">New Password</label>
+            <label for="newPasswordInput" class="form-label">New Password</label>
+            <input class="form-control" id="newPasswordInput" type="password" name="newPassword" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="newPasswordConfirmInput" class="form-label">Confirm New Password</label>
             <input
               class="form-control"
-              id="passwordInput"
+              id="newPasswordConfirmInput"
               type="password"
-              name="password"
-              placeholder="Password"
+              name="newPasswordConfirm"
               required
             />
           </div>
-          <div class="mb-3">
-            <label for="passwordConfirmInput" class="form-label">Confirm New Password</label>
-            <input
-              class="form-control"
-              id="passwordConfirmInput"
-              type="password"
-              name="passwordConfirm"
-              placeholder="Password"
-              required
-            />
-          </div>
+
+          <input type="hidden" name="isFromPasswordReset" value={isFromPasswordReset ? 1 : 0} />
+
           <button type="submit" class="btn btn-main">Change Password</button>
         </form>
       </div>
