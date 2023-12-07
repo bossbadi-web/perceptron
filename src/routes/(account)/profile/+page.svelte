@@ -17,7 +17,7 @@
           </p>
         </div>
 
-        <div>
+        <div class="buttons">
           <a class="btn btn-main" href="/email/change">Change Email</a>
           <a class="btn btn-main" href="/password/change">Change Password</a>
           <a class="btn btn-danger" href="/account/delete">Delete Account</a>
@@ -26,3 +26,17 @@
     </div>
   </div>
 </section>
+
+<style>
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 450px) {
+    .buttons {
+      flex-direction: column;
+    }
+  }
+</style>
