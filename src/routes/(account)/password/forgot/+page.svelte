@@ -24,7 +24,7 @@
           {/if}
           <div class="mb-3">
             <label for="emailInput" class="form-label">Email address</label>
-            <input class="form-control" id="emailInput" type="email" name="email" placeholder="Email" required />
+            <input class="form-control" id="emailInput" type="email" name="email" required />
           </div>
           <button type="submit" class="btn btn-main">Send Reset Link</button>
         </form>

@@ -29,7 +29,7 @@
 
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input class="form-control" id="password" type="password" name="password" placeholder="Password" required />
+            <input class="form-control" id="password" type="password" name="password" required />
           </div>
 
           <div class="mb-3">
