@@ -19,13 +19,5 @@
     required
   />
 {:else}
-  <input
-    class="form-control"
-    type="text"
-    id="description"
-    name="description"
-    placeholder="Description"
-    maxlength={LIMITS.description}
-    required
-  />
+  <input class="form-control" type="text" id="description" name="description" maxlength={LIMITS.description} required />
 {/if}
