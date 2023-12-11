@@ -1,4 +1,5 @@
 // src/routes/login/+page.server.js
+import { AuthApiError } from "@supabase/supabase-js";
 import { fail } from "@sveltejs/kit";
 
 export const actions = {
@@ -21,7 +22,7 @@ export const actions = {
     });
 
     if (err) {
-      if (err.__isAuthError) {
+      if (err instanceof AuthApiError) {
         return fail(400, { message: err.message });
       }
       return fail(500, { message: "Server error. Try again later." });
