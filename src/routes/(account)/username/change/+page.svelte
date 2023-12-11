@@ -30,7 +30,7 @@
           </div>
           <div class="mb-3">
             <label for="usernameInput" class="form-label">New Username<span class="required">*</span></label>
-            <input class="form-control" id="usernameInput" type="text" name="username" value={username} required />
+            <input class="form-control" id="usernameInput" type="text" name="username" value={username ?? ""} required />
           </div>
           <button type="submit" class="btn btn-main">Change Username</button>
         </form>
