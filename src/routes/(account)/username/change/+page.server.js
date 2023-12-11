@@ -16,8 +16,8 @@ export const actions = {
 
     const username = formData.get("username");
 
-    const { data, error: err } = await locals.supabase.auth.updateUser({ data: { username } });
-    console.log("data", data);
+    const { error: err } = await locals.supabase.auth.updateUser({ data: { username } });
+
     if (err) {
       if (err instanceof AuthApiError) {
         return fail(400, {
@@ -40,8 +40,8 @@ export const load = async ({ locals, url }) => {
   if (!session) {
     throw redirect(303, `/login?redirectTo=${url.pathname}`);
   }
-  console.log(session);
+
   return {
     username: session.user.username,
-  }
+  };
 };
