@@ -8,7 +8,6 @@
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";
 </script>
 
-username: {username}
 <section>
   <div class="container">
     <div class="col-md-8 offset-md-2">
@@ -26,14 +25,14 @@ username: {username}
             </div>
           {/if}
           <div class="mb-3">
-            <label for="passwordInput" class="form-label">Password</label>
+            <label for="passwordInput" class="form-label">Password<span class="required">*</span></label>
             <input class="form-control" id="passwordInput" type="password" name="password" required />
           </div>
           <div class="mb-3">
-            <label for="usernameInput" class="form-label">New Username</label>
-            <input class="form-control" id="usernameInput" type="text" name="username" required />
+            <label for="usernameInput" class="form-label">New Username<span class="required">*</span></label>
+            <input class="form-control" id="usernameInput" type="text" name="username" value={username} required />
           </div>
-          <button type="submit" class="btn btn-main">Change Email</button>
+          <button type="submit" class="btn btn-main">Change Username</button>
         </form>
       </div>
     </div>

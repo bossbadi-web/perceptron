@@ -10,6 +10,10 @@
 
         <div>
           <p>
+            Username: {data.username}
+          </p>
+
+          <p>
             Email: {data.email}
           </p>
           <p>
@@ -18,6 +22,7 @@
         </div>
 
         <div class="buttons">
+          <a class="btn btn-main" href="/username/change">Change Username</a>
           <a class="btn btn-main" href="/email/change">Change Email</a>
           <a class="btn btn-main" href="/password/change">Change Password</a>
           <a class="btn btn-danger" href="/account/delete">Delete Account</a>

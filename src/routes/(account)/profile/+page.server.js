@@ -8,6 +8,7 @@ export const load = async ({ locals, url }) => {
   }
   console.log(session);
   return {
+    username: session.user.username,
     email: session.user.email,
     id: session.user.id,
   };

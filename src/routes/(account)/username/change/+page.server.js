@@ -29,7 +29,7 @@ export const actions = {
       });
     }
 
-    return { status: 200, message: "Username updated." };
+    return { status: 200, message: "Username updated. Please sign in again to see your new name." };
   },
 };
 
