@@ -1,6 +1,6 @@
 // src/routes/login/+page.server.js
 import { AuthApiError } from "@supabase/supabase-js";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 
 export const actions = {
   default: async ({ locals, request, url }) => {
@@ -33,4 +33,10 @@ export const actions = {
       message: "Success! Check your email for the login link.",
     };
   },
+};
+
+export const load = async ({ locals }) => {
+  if (await locals.getSession()) {
+    throw redirect(303, "/");
+  }
 };

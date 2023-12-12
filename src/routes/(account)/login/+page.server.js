@@ -24,3 +24,9 @@ export const actions = {
     throw redirect(303, getSafeRedirect(url.searchParams.get("redirectTo")));
   },
 };
+
+export const load = async ({ locals }) => {
+  if (await locals.getSession()) {
+    throw redirect(303, "/");
+  }
+};
