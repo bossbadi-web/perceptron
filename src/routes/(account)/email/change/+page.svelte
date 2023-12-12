@@ -1,7 +1,9 @@
 <script>
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
-  export let form;
+  export let form, data;
+
+  const { email } = data;
 
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";
 </script>
@@ -24,33 +26,15 @@
           {/if}
           <div class="mb-3">
             <label for="passwordInput" class="form-label">Password</label>
-            <input
-              class="form-control"
-              id="passwordInput"
-              type="password"
-              name="password"
-              required
-            />
+            <input class="form-control" id="passwordInput" type="password" name="password" required />
           </div>
           <div class="mb-3">
             <label for="emailInput" class="form-label">New Email</label>
-            <input
-              class="form-control"
-              id="emailInput"
-              type="email"
-              name="email"
-              required
-            />
+            <input class="form-control" id="emailInput" type="email" name="email" placeholder={email ?? ""} required />
           </div>
           <div class="mb-3">
             <label for="emailConfirmInput" class="form-label">Confirm New Email</label>
-            <input
-              class="form-control"
-              id="emailConfirmInput"
-              type="email"
-              name="emailConfirm"
-              required
-            />
+            <input class="form-control" id="emailConfirmInput" type="email" name="emailConfirm" required />
           </div>
           <button type="submit" class="btn btn-main">Change Email</button>
         </form>
