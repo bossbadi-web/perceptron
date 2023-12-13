@@ -16,8 +16,8 @@
       });
     });
 
-    let seconds = Math.ceil(wc / 4.5);  // how many words read per second
-    seconds += 4 * quiz.data.length;  // 2s thinking + 2s loading per question
+    let seconds = Math.ceil(wc / 4.5); // how many words read per second
+    seconds += 4 * quiz.data.length; // 2s thinking + 2s loading per question
 
     timeToComplete = secondsToHmsString(seconds);
   }
@@ -26,6 +26,13 @@
 <slot />
 
 <div class="stats">
+  {#if quiz.username}
+    <div>
+      <b>Author:</b>
+      {quiz.username}
+    </div>
+  {/if}
+
   <div>
     <b>Length:</b>
     {quiz.data.length} question{#if quiz.data.length !== 1}s{/if}
