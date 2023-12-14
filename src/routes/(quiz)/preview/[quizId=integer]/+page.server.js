@@ -1,3 +1,4 @@
+import { cleanQuiz } from "$lib/utils";
 import { error, redirect } from "@sveltejs/kit";
 
 // get quiz id from params, url is /preview/[quizId]/+page
@@ -29,6 +30,8 @@ export const load = async ({ locals, params, url }) => {
   const {
     data: [dataOwner],
   } = await locals.supabase.rpc("get_user_by_id", { user_id: data.owner });
+
+  data.data = cleanQuiz(data.data);
 
   return {
     quiz: { ...data, ...dataOwner?.raw_user_meta_data },

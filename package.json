@@ -23,6 +23,7 @@
   "dependencies": {
     "@supabase/auth-helpers-sveltekit": "^0.10.3",
     "@supabase/supabase-js": "^2.36.0",
+    "leo-profanity": "^1.7.0",
     "ocr-space-api-wrapper": "^2.3.0",
     "openai": "^4.19.1"
   }

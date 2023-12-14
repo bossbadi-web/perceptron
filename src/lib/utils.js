@@ -1,3 +1,5 @@
+import filter from "leo-profanity";
+
 // add username to session.user
 export const completeUser = (user) => {
   return {
@@ -61,4 +63,13 @@ export const getSafeRedirect = (url, defaultUrl = "/") => {
     return url;
   }
   return defaultUrl;
+};
+
+// remove profanity from quiz
+export const cleanQuiz = (questions) => {
+  return questions.map((q) => {
+    q.question = filter.clean(q.question);
+    q.options = q.options.map((option) => filter.clean(option));
+    return q;
+  });
 };
