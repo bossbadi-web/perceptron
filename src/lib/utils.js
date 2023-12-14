@@ -66,10 +66,15 @@ export const getSafeRedirect = (url, defaultUrl = "/") => {
 };
 
 // remove profanity from quiz
-export const cleanQuiz = (questions) => {
-  return questions.map((q) => {
-    q.question = filter.clean(q.question);
-    q.options = q.options.map((option) => filter.clean(option));
-    return q;
-  });
+export const cleanQuiz = (data) => {
+  return {
+    ...data,
+    title: filter.clean(data.title),
+    description: filter.clean(data.description),
+    questions: data.data.map((q) => {
+      q.question = filter.clean(q.question);
+      q.options = q.options.map((option) => filter.clean(option));
+      return q;
+    }),
+  };
 };
