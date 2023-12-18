@@ -78,3 +78,12 @@ export const cleanQuiz = (data) => {
     }),
   };
 };
+
+// remove profanity from quiz metadata
+export const cleanQuizMeta = (data) => {
+  return {
+    ...data,
+    title: filter.clean(data.title),
+    description: filter.clean(data.description),
+  };
+};

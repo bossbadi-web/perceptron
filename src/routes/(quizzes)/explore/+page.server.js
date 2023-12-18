@@ -1,3 +1,4 @@
+import { cleanQuizMeta } from "$lib/utils";
 import { error } from "@sveltejs/kit";
 
 // get all quizzes
@@ -15,5 +16,5 @@ export const load = async ({ locals }) => {
     });
   }
 
-  return { quizzes };
+  return { quizzes: [...quizzes.map((quiz) => cleanQuizMeta(quiz))] };
 };
