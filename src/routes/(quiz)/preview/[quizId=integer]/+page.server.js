@@ -32,6 +32,6 @@ export const load = async ({ locals, params, url }) => {
   });
 
   return {
-    quiz: { ...cleanQuiz(data), username: dataOwner?.username },
+    quiz: cleanQuiz({ ...data, username: dataOwner?.username }),
   };
 };

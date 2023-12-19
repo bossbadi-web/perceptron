@@ -69,6 +69,7 @@ export const getSafeRedirect = (url, defaultUrl = "/") => {
 export const cleanQuiz = (data) => {
   return {
     ...data,
+    username: filter.clean(data.username),
     title: filter.clean(data.title),
     description: filter.clean(data.description),
     questions: data.data.map((q) => {
