@@ -20,9 +20,6 @@ export const actions = {
       return fail(400, { message: 'Please type "delete my account" to confirm.' });
     }
 
-    // sign out
-    await locals.supabase.auth.signOut();
-
     // delete account
     const { error: err } = await locals.supabase.rpc("delete_account");
 
@@ -36,6 +33,9 @@ export const actions = {
         message: "Server error. Please try again later.",
       });
     }
+
+    // sign out
+    await locals.supabase.auth.signOut();
 
     throw redirect(303, "/?message=Account deleted.");
   },
