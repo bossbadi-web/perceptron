@@ -27,6 +27,10 @@
             <input class="form-control" id="emailInput" type="email" name="email" required />
           </div>
           <div class="mb-3">
+            <label for="usernameInput" class="form-label">Username</label>
+            <input class="form-control" id="usernameInput" type="text" name="username" required />
+          </div>
+          <div class="mb-3">
             <label for="passwordInput" class="form-label">Password</label>
             <input class="form-control" id="passwordInput" type="password" name="password" required />
           </div>
