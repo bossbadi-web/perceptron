@@ -30,24 +30,30 @@
         <i class="fas fa-layer-group" />
         My Library
       </h1>
+      {#if total !== 0}
       <p class="text-center">
         <span class="badge bg-primary">Page: {currentPage}</span>
         <span class="badge bg-primary">Showing: {rangeLeft} - {rangeRight}</span>
         <span class="badge bg-primary">Total: {total}</span>
       </p>
       <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
+      {/if}
     </div>
 
-    <div></div>
+    {#if total === 0}
+      <div class="text-center">
+        <p class="lead">Nothing here yet :)</p>
+      </div>
+    {:else}
+      <Menu {searchStore} {currentPage} {rangeRight} {total} />
 
-    <Menu {searchStore} {currentPage} {rangeRight} {total} />
-
-    <div class="all-cards">
-      {#each $searchStore.filtered as quiz, quizIdx}
-        <div class="quiz-box">
-          <QuizCard {quiz} {quizIdx} />
-        </div>
-      {/each}
-    </div>
+      <div class="all-cards">
+        {#each $searchStore.filtered as quiz, quizIdx}
+          <div class="quiz-box">
+            <QuizCard {quiz} {quizIdx} />
+          </div>
+        {/each}
+      </div>
+    {/if}
   </div>
 </section>

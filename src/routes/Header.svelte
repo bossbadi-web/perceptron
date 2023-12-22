@@ -26,13 +26,13 @@
 
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container container-fluid">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/" data-sveltekit-reload>
       <picture>
         <source srcset="/img/logo-white.svg" media="(prefers-color-scheme: dark)" />
         <img src="/img/logo-black.svg" alt="avatar" height="30" width="30" />
       </picture>
     </a>
-    <a class="navbar-brand" href="/">Perceptron</a>
+    <a class="navbar-brand" href="/" data-sveltekit-reload>Perceptron</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -47,20 +47,20 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link hover-underline" href="/create">
+          <a class="nav-link hover-underline" href="/create" data-sveltekit-reload>
             <i class="fas fa-hammer" />
             Create
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link hover-underline" href="/explore/1">
+          <a class="nav-link hover-underline" href="/explore/1" data-sveltekit-reload>
             <i class="fas fa-search" />
             Explore
           </a>
         </li>
         {#if session}
           <li class="nav-item">
-            <a class="nav-link hover-underline" href="/library/1">
+            <a class="nav-link hover-underline" href="/library/1" data-sveltekit-reload>
               <i class="fas fa-layer-group" />
               My Library
             </a>
@@ -76,6 +76,7 @@
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
+              data-sveltekit-reload
             >
               {session.user.username}
             </a>
@@ -84,7 +85,9 @@
               aria-labelledby="navbarDropdownMenuLink"
             >
               <li class="nav-item">
-                <a class="nav-link hover-underline" href="/profile"><i class="fas fa-user" /> Profile</a>
+                <a class="nav-link hover-underline" href="/profile" data-sveltekit-reload>
+                  <i class="fas fa-user" /> Profile
+                </a>
               </li>
               <li class="nav-item">
                 <form action="/logout" method="POST">
