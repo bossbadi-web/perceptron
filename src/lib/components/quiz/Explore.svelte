@@ -34,8 +34,8 @@
     <p>
       <QuizDescription {quiz} {showVisibility} />
     </p>
-    <a href={`/play/${quiz.id}`} class="btn btn-main" data-sveltekit-preload-data="tap">Play</a>
-    <a href={`/preview/${quiz.id}`} class="btn btn-secondary" data-sveltekit-preload-data="tap">Preview</a>
+    <a href={`/play/${quiz.id}`} class="btn btn-main" data-sveltekit-reload>Play</a>
+    <a href={`/preview/${quiz.id}`} class="btn btn-secondary" data-sveltekit-reload>Preview</a>
     <slot />
   </div>
 </div>

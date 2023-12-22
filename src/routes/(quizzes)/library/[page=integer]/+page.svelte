@@ -4,7 +4,7 @@
   import { onDestroy } from "svelte";
   import { page } from "$app/stores";
   import Menu from "$lib/components/explore/Menu.svelte";
-  import QuizCard from "$lib/components/quiz/Explore.svelte";
+  import QuizCard from "$lib/components/quiz/Library.svelte";
   export let data;
 
   const { rangeLeft, rangeRight, total } = data;

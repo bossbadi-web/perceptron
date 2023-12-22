@@ -6,5 +6,5 @@
 </script>
 
 <Explore {quiz} {quizIdx} showVisibility={true}>
-  <a href={`/edit/${quiz.id}`} class="btn btn-secondary" data-sveltekit-preload-data="tap">Edit</a>
+  <a href={`/edit/${quiz.id}`} class="btn btn-secondary" data-sveltekit-reload>Edit</a>
 </Explore>
