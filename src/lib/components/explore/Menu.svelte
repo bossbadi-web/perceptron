@@ -2,13 +2,14 @@
   import { page } from "$app/stores";
   export let currentPage, rangeRight, total;
 
-  let orderByMessage = $page.url.searchParams.get("order") || "Newest first";
+  const mainPath = $page.url.pathname.slice(0, $page.url.pathname.lastIndexOf("/"));
+  const orderByMessage = $page.url.searchParams.get("order") || "Newest first";
 </script>
 
 <div class="the-filters">
   <div class="page-buttons">
     <a
-      href="/explore/{currentPage - 1}?order={orderByMessage}"
+      href="{mainPath}/{currentPage - 1}?order={orderByMessage}"
       class="btn btn-primary"
       class:disabled={currentPage === 1}
       data-sveltekit-reload
@@ -16,7 +17,7 @@
       <i class="fas fa-arrow-left" />
     </a>
     <a
-      href="/explore/{currentPage + 1}?order={orderByMessage}"
+      href="{mainPath}/{currentPage + 1}?order={orderByMessage}"
       class="btn btn-primary"
       class:disabled={rangeRight === total}
       data-sveltekit-reload
@@ -36,25 +37,25 @@
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
       <li>
-        <a class="dropdown-item" href="/explore/{$page.params.page}?order=A-Z" data-sveltekit-reload>
+        <a class="dropdown-item" href="{mainPath}/{$page.params.page}?order=A-Z" data-sveltekit-reload>
           <i class="fas fa-sort-alpha-down" />
           A-Z
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href="/explore/{$page.params.page}?order=Z-A" data-sveltekit-reload>
+        <a class="dropdown-item" href="{mainPath}/{$page.params.page}?order=Z-A" data-sveltekit-reload>
           <i class="fas fa-sort-alpha-down-alt" />
           Z-A
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href="/explore/{$page.params.page}?order=Oldest first" data-sveltekit-reload>
+        <a class="dropdown-item" href="{mainPath}/{$page.params.page}?order=Oldest first" data-sveltekit-reload>
           <i class="fas fa-person-cane" />
           Oldest first
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href="/explore/{$page.params.page}?order=Newest first" data-sveltekit-reload>
+        <a class="dropdown-item" href="{mainPath}/{$page.params.page}?order=Newest first" data-sveltekit-reload>
           <i class="fas fa-baby" />
           Newest first
         </a>

@@ -2,9 +2,13 @@
   import "$lib/components/explore/styles.css";
   import { createSearchStore, searchHandler } from "$lib/stores/search";
   import { onDestroy } from "svelte";
-  import QuizCard from "$lib/components/quiz/Library.svelte";
-  import SortByOptions from "$lib/components/explore/SortByOptions.svelte";
+  import { page } from "$app/stores";
+  import Menu from "$lib/components/explore/Menu.svelte";
+  import QuizCard from "$lib/components/quiz/Explore.svelte";
   export let data;
+
+  const { rangeLeft, rangeRight, total } = data;
+  const currentPage = parseInt($page.params.page);
 
   const searchQuizzes = data.quizzes.map((quiz) => ({
     ...quiz,
@@ -26,27 +30,19 @@
         <i class="fas fa-layer-group" />
         My Library
       </h1>
-      {#if $searchStore.data.length > 0}
-        <p class="text-center">
-          <span>{$searchStore.filtered.length}</span> of
-          <span>{$searchStore.data.length}</span>
-        </p>
-        <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
-      {/if}
+      <p class="text-center">
+        <span class="badge bg-primary">Page: {currentPage}</span>
+        <span class="badge bg-primary">Showing: {rangeLeft} - {rangeRight}</span>
+        <span class="badge bg-primary">Total: {total}</span>
+      </p>
+      <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
     </div>
 
-    <SortByOptions {searchStore} />
+    <div></div>
+
+    <Menu {searchStore} {currentPage} {rangeRight} {total} />
 
     <div class="all-cards">
-      {#if $searchStore.data.length === 0}
-        <div class="text-center">
-          <h3>Nothing here...yet</h3>
-          <p>
-            <a class="hover-underline" href="/create">Create</a> a Perceptron and it will show up here.
-          </p>
-        </div>
-      {/if}
-
       {#each $searchStore.filtered as quiz, quizIdx}
         <div class="quiz-box">
           <QuizCard {quiz} {quizIdx} />
