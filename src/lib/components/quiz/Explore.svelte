@@ -6,12 +6,9 @@
   import QuizDescription from "./Description.svelte";
 
   export let quiz,
-    quizIdx,
     showVisibility = false;
 
   quiz.created_at = formatDate(quiz.created_at);
-
-  let numCols = 0;
 
   const updateCols = () => {
     if (window.innerWidth < 768) {
@@ -31,7 +28,7 @@
   });
 </script>
 
-<div class="card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay={(quizIdx * 100) % (numCols * 100)}>
+<div class="card">
   <div class="card-body">
     <h1 class="card-title">{quiz.title}</h1>
     <p>

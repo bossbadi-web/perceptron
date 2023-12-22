@@ -53,7 +53,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link hover-underline" href="/explore">
+          <a class="nav-link hover-underline" href="/explore/1">
             <i class="fas fa-search" />
             Explore
           </a>
