@@ -31,12 +31,12 @@
         My Library
       </h1>
       {#if total !== 0}
-      <p class="text-center">
-        <span class="badge bg-primary">Page: {currentPage}</span>
-        <span class="badge bg-primary">Showing: {rangeLeft} - {rangeRight}</span>
-        <span class="badge bg-primary">Total: {total}</span>
-      </p>
-      <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
+        <p class="text-center">
+          <span class="badge bg-primary">Page: {currentPage}</span>
+          <span class="badge bg-primary">Showing: {rangeLeft} - {rangeRight}</span>
+          <span class="badge bg-primary">Total: {total}</span>
+        </p>
+        <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
       {/if}
     </div>
 
@@ -45,12 +45,12 @@
         <p class="lead">Nothing here yet :)</p>
       </div>
     {:else}
-      <Menu {searchStore} {currentPage} {rangeRight} {total} />
+      <Menu {currentPage} {rangeRight} {total} />
 
       <div class="all-cards">
-        {#each $searchStore.filtered as quiz, quizIdx}
+        {#each $searchStore.filtered as quiz}
           <div class="quiz-box">
-            <QuizCard {quiz} {quizIdx} />
+            <QuizCard {quiz} />
           </div>
         {/each}
       </div>

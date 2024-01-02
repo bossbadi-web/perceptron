@@ -40,12 +40,12 @@
 
     <div></div>
 
-    <Menu {searchStore} {currentPage} {rangeRight} {total} />
+    <Menu {currentPage} {rangeRight} {total} />
 
     <div class="all-cards">
-      {#each $searchStore.filtered as quiz, quizIdx}
+      {#each $searchStore.filtered as quiz}
         <div class="quiz-box">
-          <QuizCard {quiz} {quizIdx} />
+          <QuizCard {quiz} />
         </div>
       {/each}
     </div>

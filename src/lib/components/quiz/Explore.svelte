@@ -2,30 +2,12 @@
 
 <script>
   import { formatDate } from "$lib/utils";
-  import { onMount } from "svelte";
   import QuizDescription from "./Description.svelte";
 
   export let quiz,
     showVisibility = false;
 
   quiz.created_at = formatDate(quiz.created_at);
-
-  const updateCols = () => {
-    if (window.innerWidth < 768) {
-      numCols = 1;
-    } else if (window.innerWidth < 1020) {
-      numCols = 2;
-    } else if (window.innerWidth < 1400) {
-      numCols = 3;
-    } else {
-      numCols = 4;
-    }
-  };
-
-  onMount(() => {
-    updateCols();
-    window.addEventListener("resize", updateCols);
-  });
 </script>
 
 <div class="card">
