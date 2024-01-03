@@ -1,15 +1,16 @@
 <script>
+  import { changePage } from "$lib/utils";
   import { page } from "$app/stores";
   export let currentPage, rangeRight, total;
 
-  const mainPath = $page.url.pathname.slice(0, $page.url.pathname.lastIndexOf("/"));
+  const mainURL = $page.url.href;
   const orderByMessage = $page.url.searchParams.get("order") || "Newest first";
 </script>
 
 <div class="the-filters">
   <div class="page-buttons">
     <a
-      href="{mainPath}/{currentPage - 1}?order={orderByMessage}"
+      href={changePage(mainURL, { page: currentPage - 1 })}
       class="btn btn-primary"
       class:disabled={currentPage === 1}
       data-sveltekit-reload
@@ -17,7 +18,7 @@
       <i class="fas fa-arrow-left" />
     </a>
     <a
-      href="{mainPath}/{currentPage + 1}?order={orderByMessage}"
+      href={changePage(mainURL, { page: currentPage + 1 })}
       class="btn btn-primary"
       class:disabled={rangeRight === total}
       data-sveltekit-reload
@@ -37,26 +38,42 @@
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
       <li>
-        <a class="dropdown-item" href="{mainPath}/{$page.params.page}?order=A-Z" data-sveltekit-reload>
-          <i class="fas fa-sort-alpha-down" />
+        <a class="dropdown-item" href={changePage(mainURL, { order: "A-Z" })} data-sveltekit-reload>
+          {#if orderByMessage === "A-Z"}
+            <i class="fas fa-check" />
+          {:else}
+            <i class="fas fa-sort-alpha-down" />
+          {/if}
           A-Z
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href="{mainPath}/{$page.params.page}?order=Z-A" data-sveltekit-reload>
-          <i class="fas fa-sort-alpha-down-alt" />
+        <a class="dropdown-item" href={changePage(mainURL, { order: "Z-A" })} data-sveltekit-reload>
+          {#if orderByMessage === "Z-A"}
+            <i class="fas fa-check" />
+          {:else}
+            <i class="fas fa-sort-alpha-down-alt" />
+          {/if}
           Z-A
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href="{mainPath}/{$page.params.page}?order=Oldest first" data-sveltekit-reload>
-          <i class="fas fa-person-cane" />
+        <a class="dropdown-item" href={changePage(mainURL, { order: "Oldest first" })} data-sveltekit-reload>
+          {#if orderByMessage === "Oldest first"}
+            <i class="fas fa-check" />
+          {:else}
+            <i class="fas fa-person-cane" />
+          {/if}
           Oldest first
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href="{mainPath}/{$page.params.page}?order=Newest first" data-sveltekit-reload>
-          <i class="fas fa-baby" />
+        <a class="dropdown-item" href={changePage(mainURL, { order: "Newest first" })} data-sveltekit-reload>
+          {#if orderByMessage === "Newest first"}
+            <i class="fas fa-check" />
+          {:else}
+            <i class="fas fa-baby" />
+          {/if}
           Newest first
         </a>
       </li>

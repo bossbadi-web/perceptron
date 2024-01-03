@@ -53,7 +53,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link hover-underline" href="/explore/1" data-sveltekit-reload>
+          <a class="nav-link hover-underline" href="/explore" data-sveltekit-reload>
             <i class="fas fa-search" />
             Explore
           </a>
