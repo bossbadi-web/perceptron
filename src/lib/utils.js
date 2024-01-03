@@ -88,3 +88,21 @@ export const cleanQuizMeta = (data) => {
     description: filter.clean(data.description),
   };
 };
+
+// edit url params
+export const changePage = (url, params, isSearch = false) => {
+  const urlObj = new URL(url);
+  const { page, q, order } = params;
+
+  if (page !== undefined) {
+    urlObj.searchParams.set("page", page && !isSearch ? page : 1);
+  }
+
+  urlObj.searchParams.set("q", q);
+
+  if (order) {
+    urlObj.searchParams.set("order", order);
+  }
+
+  return urlObj.toString();
+};
