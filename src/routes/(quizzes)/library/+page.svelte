@@ -13,10 +13,8 @@
   const isSearch = query !== "";
 
   const search = () => {
-    if (query !== "") {
-      const url = changePage(mainURL, { q: query }, true);
-      window.location.href = url;
-    }
+    const url = changePage(mainURL, { q: query }, true);
+    window.location.href = url;
   };
 </script>
 
@@ -36,7 +34,7 @@
         <form>
           <div class="input-group searchbar">
             <input type="text" class="form-control" placeholder="Search" bind:value={query} />
-            <button type="submit" class="btn btn-primary" on:click={search} data-sveltekit-reload>
+            <button type="submit" class="btn btn-primary" on:click={search}>
               <i class="fas fa-search" />
             </button>
             {#if isSearch}
