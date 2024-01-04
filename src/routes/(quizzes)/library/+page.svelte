@@ -27,7 +27,7 @@
         <i class="fas fa-layer-group" />
         My Library
       </h1>
-      {#if total !== 0}
+      {#if total !== 0 || isSearch}
         <p class="text-center">
           <span class="badge bg-primary">Page: {currentPage}</span>
           <span class="badge bg-primary">Showing: {rangeLeft} - {rangeRight}</span>
