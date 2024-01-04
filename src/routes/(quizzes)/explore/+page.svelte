@@ -47,14 +47,20 @@
       </form>
     </div>
 
-    <Menu {currentPage} {rangeRight} {total} />
+    {#if total === 0}
+      <div class="text-center">
+        <p class="lead">Nothing here yet :)</p>
+      </div>
+    {:else}
+      <Menu {currentPage} {rangeRight} {total} />
 
-    <div class="all-cards">
-      {#each quizzes as quiz}
-        <div class="quiz-box">
-          <QuizCard {quiz} />
-        </div>
-      {/each}
-    </div>
+      <div class="all-cards">
+        {#each quizzes as quiz}
+          <div class="quiz-box">
+            <QuizCard {quiz} />
+          </div>
+        {/each}
+      </div>
+    {/if}
   </div>
 </section>
