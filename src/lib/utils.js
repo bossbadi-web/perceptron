@@ -98,7 +98,9 @@ export const changePage = (url, params, isSearch = false) => {
     urlObj.searchParams.set("page", page && !isSearch ? page : 1);
   }
 
-  urlObj.searchParams.set("q", q);
+  if (q !== undefined) {
+    urlObj.searchParams.set("q", q);
+  }
 
   if (order) {
     urlObj.searchParams.set("order", order);
