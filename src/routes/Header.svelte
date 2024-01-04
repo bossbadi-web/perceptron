@@ -60,7 +60,7 @@
         </li>
         {#if session}
           <li class="nav-item">
-            <a class="nav-link hover-underline" href="/library/1" data-sveltekit-reload>
+            <a class="nav-link hover-underline" href="/library" data-sveltekit-reload>
               <i class="fas fa-layer-group" />
               My Library
             </a>

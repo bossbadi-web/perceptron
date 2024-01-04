@@ -1,26 +1,23 @@
 <script>
   import "$lib/components/explore/styles.css";
-  import { createSearchStore, searchHandler } from "$lib/stores/search";
-  import { onDestroy } from "svelte";
+  import { changePage } from "$lib/utils";
   import { page } from "$app/stores";
   import Menu from "$lib/components/explore/Menu.svelte";
   import QuizCard from "$lib/components/quiz/Library.svelte";
   export let data;
 
-  const { rangeLeft, rangeRight, total } = data;
-  const currentPage = parseInt($page.params.page);
+  const { rangeLeft, rangeRight, quizzes, total } = data;
+  const mainURL = $page.url.href;
+  const currentPage = parseInt($page.url.searchParams.get("page")) || 1;
+  let query = $page.url.searchParams.get("q") || "";
+  const isSearch = query !== "";
 
-  const searchQuizzes = data.quizzes.map((quiz) => ({
-    ...quiz,
-    searchTerms: `${quiz.title.toLowerCase()} ${quiz.description.toLowerCase()}`,
-  }));
-
-  const searchStore = createSearchStore(searchQuizzes);
-  const unsubscribe = searchStore.subscribe((model) => searchHandler(model));
-
-  onDestroy(() => {
-    unsubscribe();
-  });
+  const search = () => {
+    if (query !== "") {
+      const url = changePage(mainURL, { q: query }, true);
+      window.location.href = url;
+    }
+  };
 </script>
 
 <section>
@@ -36,7 +33,19 @@
           <span class="badge bg-primary">Showing: {rangeLeft} - {rangeRight}</span>
           <span class="badge bg-primary">Total: {total}</span>
         </p>
-        <input type="text" class="form-control searchbar" placeholder="Search" bind:value={$searchStore.search} />
+        <form>
+          <div class="input-group searchbar">
+            <input type="text" class="form-control" placeholder="Search" bind:value={query} />
+            <button type="submit" class="btn btn-primary" on:click={search} data-sveltekit-reload>
+              <i class="fas fa-search" />
+            </button>
+            {#if isSearch}
+              <a href="/explore" class="btn btn-danger" data-sveltekit-reload>
+                <i class="fas fa-times" />
+              </a>
+            {/if}
+          </div>
+        </form>
       {/if}
     </div>
 
@@ -48,7 +57,7 @@
       <Menu {currentPage} {rangeRight} {total} />
 
       <div class="all-cards">
-        {#each $searchStore.filtered as quiz}
+        {#each quizzes as quiz}
           <div class="quiz-box">
             <QuizCard {quiz} />
           </div>

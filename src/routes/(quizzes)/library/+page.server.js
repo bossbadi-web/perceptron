@@ -2,17 +2,17 @@ import { cleanQuizMeta } from "$lib/utils";
 import { error, redirect } from "@sveltejs/kit";
 
 // get quiz on specific page
-export const load = async ({ locals, params, url }) => {
+export const load = async ({ locals, url }) => {
   const session = await locals.getSession();
 
   if (!session) {
     throw redirect(303, `/login?redirectTo=${url.pathname}`);
   }
 
-  const page = params.page || 1;
   const pageSize = 12;
-
+  const page = parseInt(url.searchParams.get("page")) || 1;
   const order = url.searchParams.get("order");
+  const query = url.searchParams.get("q");
 
   if (order === "A-Z") {
     var orderBy = "title";
@@ -28,21 +28,38 @@ export const load = async ({ locals, params, url }) => {
     var ascending = false;
   }
 
-  const total = await locals.supabase
-    .from("quizzes")
-    .select("id", { count: "exact", head: true })
-    .eq("owner", session.user.id);
-  
+  if (query) {
+    var total = await locals.supabase
+      .from("quizzes")
+      .select("id", { count: "exact", head: true })
+      .eq("owner", session.user.id)
+      .ilike("title", `%${query}%`);
+  } else {
+    var total = await locals.supabase
+      .from("quizzes")
+      .select("id", { count: "exact", head: true })
+      .eq("owner", session.user.id);
+  }
+
   const rangeLeft = (page - 1) * pageSize;
   const rangeRight = page * pageSize - 1 > total.count ? total.count - 1 : page * pageSize - 1;
 
-  // ignore case in title
-  const { data: quizzes } = await locals.supabase
-    .from("quizzes")
-    .select("*")
-    .eq("owner", session.user.id)
-    .order(orderBy, { ascending })
-    .range(rangeLeft, rangeRight);
+  if (query) {
+    var { data: quizzes } = await locals.supabase
+      .from("quizzes")
+      .select("*")
+      .eq("owner", session.user.id)
+      .ilike("title", `%${query}%`)
+      .order(orderBy, { ascending })
+      .range(rangeLeft, rangeRight);
+  } else {
+    var { data: quizzes } = await locals.supabase
+      .from("quizzes")
+      .select("*")
+      .eq("owner", session.user.id)
+      .order(orderBy, { ascending })
+      .range(rangeLeft, rangeRight);
+  }
 
   if (!quizzes) {
     throw error(500, {
