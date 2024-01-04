@@ -11,6 +11,13 @@
   const currentPage = parseInt($page.url.searchParams.get("page")) || 1;
   let query = $page.url.searchParams.get("q") || "";
   const isSearch = query !== "";
+
+  const search = () => {
+    if (query !== "") {
+      const url = changePage(mainURL, { q: query }, true);
+      window.location.href = url;
+    }
+  };
 </script>
 
 <section>
@@ -25,17 +32,19 @@
         <span class="badge bg-primary">Showing: {rangeLeft} - {rangeRight}</span>
         <span class="badge bg-primary">Total: {total}</span>
       </p>
-      <div class="input-group searchbar">
-        <input type="text" class="form-control" placeholder="Search" bind:value={query} />
-        <a href={changePage(mainURL, { q: query }, true)} class="btn btn-main" data-sveltekit-reload>
-          <i class="fas fa-search" />
-        </a>
-        {#if isSearch}
-          <a href="/explore" class="btn btn-danger" data-sveltekit-reload>
-            <i class="fas fa-times" />
-          </a>
-        {/if}
-      </div>
+      <form>
+        <div class="input-group searchbar">
+          <input type="text" class="form-control" placeholder="Search" bind:value={query} />
+          <button type="submit" class="btn btn-primary" on:click={search} data-sveltekit-reload>
+            <i class="fas fa-search" />
+          </button>
+          {#if isSearch}
+            <a href="/explore" class="btn btn-danger" data-sveltekit-reload>
+              <i class="fas fa-times" />
+            </a>
+          {/if}
+        </div>
+      </form>
     </div>
 
     <Menu {currentPage} {rangeRight} {total} />
