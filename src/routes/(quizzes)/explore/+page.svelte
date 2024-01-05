@@ -13,7 +13,7 @@
   const isSearch = query !== "";
 
   const search = () => {
-    const url = changePage(mainURL, { q: query }, true);
+    const url = changePage(mainURL, { page: 1, q: query }, true);
     window.location.href = url;
   };
 </script>
