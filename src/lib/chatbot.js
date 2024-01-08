@@ -61,7 +61,7 @@ const chatbot = async (query) => {
   try {
     const chatCompletion = await openai.chat.completions.create({
       messages: [{ role: "user", content: query }],
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
     });
     return toJSON(chatCompletion.choices[0].message.content);
   } catch (err) {
