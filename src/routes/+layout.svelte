@@ -1,7 +1,8 @@
 <script>
+  import { init } from "$lib/smoothScroll";
   import { invalidate, afterNavigate } from "$app/navigation";
-  import { page } from "$app/stores";
   import { onMount } from "svelte";
+  import { page } from "$app/stores";
   import Footer from "./Footer.svelte";
   import Header from "./Header.svelte";
   export let data;
@@ -9,6 +10,8 @@
   $: ({ supabase, session } = data);
 
   onMount(() => {
+    init(); // smooth scroll
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, _session) => {
