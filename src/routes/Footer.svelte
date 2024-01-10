@@ -1,7 +1,7 @@
 <footer>
   <div class="container footer-container">
     <div>
-      &copy; 2023 by <a class="hover-underline" target="_blank" href="https://twitter.com/shunyutang">Andy Tang</a>
+      &copy; 2024 by <a class="hover-underline" target="_blank" href="https://twitter.com/shunyutang">Andy Tang</a>
     </div>
 
     <div class="links">
