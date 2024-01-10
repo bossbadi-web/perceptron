@@ -11,6 +11,11 @@
   --card-background: rgba(255, 255, 255, 0.5);
   --card-hover: rgba(255, 255, 255, 0.7);
 
+  --scroll-track: #e5e5e5;
+  --scroll-thumb: #c4c4c4;
+  --scroll-thumb-hover: #a3a3a3;
+  --scroll-thumb-active: #848484;
+
   --background: radial-gradient(
       circle at 40% 91%,
       rgba(251, 251, 251, 0.04) 0%,
@@ -51,8 +56,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary: #00718a;
-    --secondary: #00538a;
+    --primary: #00538a;
+    --secondary: #00718a;
     --code: #00bdb3;
 
     --font: white;
@@ -62,6 +67,11 @@
 
     --card-background: rgba(0, 0, 0, 0.5);
     --card-hover: rgba(0, 0, 0, 0.7);
+
+    --scroll-track: #3a3a3a;
+    --scroll-thumb: #5f5f5f;
+    --scroll-thumb-hover: #7f7f7f;
+    --scroll-thumb-active: #9f9f9f;
 
     --background: radial-gradient(circle at center center, transparent, rgb(0, 0, 0)),
       linear-gradient(
