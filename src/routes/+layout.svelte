@@ -1,5 +1,4 @@
 <script>
-  import { init } from "$lib/smoothScroll";
   import { invalidate, afterNavigate } from "$app/navigation";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
@@ -10,8 +9,6 @@
   $: ({ supabase, session } = data);
 
   onMount(() => {
-    init(); // smooth scroll
-
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, _session) => {
