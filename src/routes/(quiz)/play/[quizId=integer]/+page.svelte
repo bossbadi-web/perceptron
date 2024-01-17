@@ -3,6 +3,7 @@
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import { secondsToHmsString } from "$lib/utils";
+  import LikeDislike from "$lib/components/quiz/LikeDislike.svelte";
   import Mcq from "$lib/components/mcq/Play.svelte";
   import McqSummary from "$lib/components/mcq/Summary.svelte";
   import QuizDescription from "$lib/components/quiz/Description.svelte";
@@ -58,6 +59,9 @@
               <h1 class="quiz-title display-4">{quiz.title}</h1>
               <p>
                 <QuizDescription {quiz} showVisibility={true} />
+              </p>
+              <p>
+                <LikeDislike {data} />
               </p>
               <button class="start-btn btn btn-main btn-lg" on:click={nextQuestion}>Start</button>
             </div>

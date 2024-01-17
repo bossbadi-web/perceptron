@@ -92,6 +92,15 @@ section {
   background-color: var(--secondary) !important;
 }
 
+.btn-trans {
+  background-color: transparent !important;
+  color: var(--font-muted) !important;
+  border: none !important;
+}
+.btn-trans:hover {
+  color: var(--font) !important;
+}
+
 .bg-main {
   background-color: var(--primary) !important;
   color: white !important;
