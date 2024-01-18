@@ -1,85 +1,85 @@
 import { cleanQuiz } from "$lib/utils";
 import { error, redirect } from "@sveltejs/kit";
 
-export const actions = {
-  like: async ({ locals, params }) => {
-    const session = await locals.getSession();
+// export const actions = {
+//   like: async ({ locals, params }) => {
+//     const session = await locals.getSession();
 
-    if (!session) {
-      throw error(403, {
-        message: "Unauthorized",
-        hint: "You must be logged in to like a quiz",
-      });
-    }
+//     if (!session) {
+//       throw error(403, {
+//         message: "Unauthorized",
+//         hint: "You must be logged in to like a quiz",
+//       });
+//     }
 
-    const { data } = await locals.supabase.from("quizzes").select("likers, dislikers").eq("id", params.quizId).single();
+//     const { data } = await locals.supabase.from("quizzes").select("likers, dislikers").eq("id", params.quizId).single();
 
-    if (!data) {
-      throw error(500, {
-        message: "No quiz exists on this page",
-        hint: "Try a different ID",
-      });
-    }
+//     if (!data) {
+//       throw error(500, {
+//         message: "No quiz exists on this page",
+//         hint: "Try a different ID",
+//       });
+//     }
 
-    // if user already liked the quiz, remove their id from the likers array
-    const alreadyLiked = data.likers.includes(session.user.id);
+//     // if user already liked the quiz, remove their id from the likers array
+//     const alreadyLiked = data.likers.includes(session.user.id);
 
-    const { error: err } = await locals.supabase
-      .from("quizzes")
-      .update({
-        likers: alreadyLiked ? data.likers.filter((id) => id !== session.user.id) : [...data.likers, session.user.id],
-        dislikers: data.dislikers.filter((id) => id !== session.user.id),
-      })
-      .eq("id", params.quizId);
+//     const { error: err } = await locals.supabase
+//       .from("quizzes")
+//       .update({
+//         likers: alreadyLiked ? data.likers.filter((id) => id !== session.user.id) : [...data.likers, session.user.id],
+//         dislikers: data.dislikers.filter((id) => id !== session.user.id),
+//       })
+//       .eq("id", params.quizId);
 
-    if (err) {
-      throw error(500, {
-        message: "Server error. Please try again later.",
-      });
-    }
+//     if (err) {
+//       throw error(500, {
+//         message: "Server error. Please try again later.",
+//       });
+//     }
 
-    return { status: 200, message: "Liked" };
-  },
-  dislike: async ({ locals, params }) => {
-    const session = await locals.getSession();
+//     return { status: 200, message: "Liked" };
+//   },
+//   dislike: async ({ locals, params }) => {
+//     const session = await locals.getSession();
 
-    if (!session) {
-      throw error(403, {
-        message: "Unauthorized",
-        hint: "You must be logged in to dislike a quiz",
-      });
-    }
+//     if (!session) {
+//       throw error(403, {
+//         message: "Unauthorized",
+//         hint: "You must be logged in to dislike a quiz",
+//       });
+//     }
 
-    const { data } = await locals.supabase.from("quizzes").select("likers, dislikers").eq("id", params.quizId).single();
+//     const { data } = await locals.supabase.from("quizzes").select("likers, dislikers").eq("id", params.quizId).single();
 
-    if (!data) {
-      throw error(500, {
-        message: "No quiz exists on this page",
-        hint: "Try a different ID",
-      });
-    }
+//     if (!data) {
+//       throw error(500, {
+//         message: "No quiz exists on this page",
+//         hint: "Try a different ID",
+//       });
+//     }
 
-    const alreadyDisliked = data.dislikers.includes(session.user.id);
+//     const alreadyDisliked = data.dislikers.includes(session.user.id);
 
-    const { error: err } = await locals.supabase
-      .from("quizzes")
-      .update({
-        dislikers: alreadyDisliked
-          ? data.dislikers.filter((id) => id !== session.user.id)
-          : [...data.dislikers, session.user.id],
-        likers: data.likers.filter((id) => id !== session.user.id),
-      })
-      .eq("id", params.quizId);
+//     const { error: err } = await locals.supabase
+//       .from("quizzes")
+//       .update({
+//         dislikers: alreadyDisliked
+//           ? data.dislikers.filter((id) => id !== session.user.id)
+//           : [...data.dislikers, session.user.id],
+//         likers: data.likers.filter((id) => id !== session.user.id),
+//       })
+//       .eq("id", params.quizId);
 
-    if (err) {
-      throw error(500, {
-        message: "Server error. Please try again later.",
-      });
-    }
+//     if (err) {
+//       throw error(500, {
+//         message: "Server error. Please try again later.",
+//       });
+//     }
 
-    return { status: 200, message: "Disliked" };
-  },
-};
+//     return { status: 200, message: "Disliked" };
+//   },
+// };
 
 // get quiz id from params, url is /play/[quizId]/+page
 export const load = async ({ locals, params, url }) => {

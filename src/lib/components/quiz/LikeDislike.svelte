@@ -1,4 +1,5 @@
 <script>
+  import { page } from "$app/stores";
   export let data;
 
   const { quiz } = data;
@@ -14,7 +15,7 @@
   <button
     class="btn btn-sm btn-trans"
     disabled={session?.user === undefined}
-    formaction="?/like"
+    formaction="/vote?/like"
     data-sveltekit-preload-data="tap"
     title={iLiked ? "Remove like" : "I like this"}
   >
@@ -30,7 +31,7 @@
   <button
     class="btn btn-sm btn-trans"
     disabled={session?.user === undefined}
-    formaction="?/dislike"
+    formaction="/vote?/dislike"
     data-sveltekit-preload-data="tap"
     title={iDisliked ? "Remove dislike" : "I dislike this"}
   >
@@ -43,4 +44,6 @@
       {dislikes}
     {/if}
   </button>
+  <input type="hidden" name="quizId" value={quiz.id} />
+  <input type="hidden" name="referrer" value={$page.url.href} />
 </form>
