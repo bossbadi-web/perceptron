@@ -2,9 +2,11 @@
 
 <script>
   import { formatDate } from "$lib/utils";
+  import LikeDislike from "$lib/components/quiz/LikeDislike.svelte";
   import QuizDescription from "./Description.svelte";
 
   export let quiz,
+    data,
     showVisibility = false;
 
   quiz.created_at = formatDate(quiz.created_at);
@@ -15,6 +17,9 @@
     <h1 class="card-title">{quiz.title}</h1>
     <p>
       <QuizDescription {quiz} {showVisibility} />
+    </p>
+    <p>
+      <LikeDislike {data} />
     </p>
     <a href={`/play/${quiz.id}`} class="btn btn-main" data-sveltekit-reload>Play</a>
     <a href={`/preview/${quiz.id}`} class="btn btn-secondary" data-sveltekit-reload>Preview</a>
