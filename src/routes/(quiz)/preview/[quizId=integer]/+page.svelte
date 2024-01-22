@@ -2,6 +2,7 @@
   import "$lib/components/mcq/styles.css";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
+  import LikeDislike from "$lib/components/quiz/LikeDislike.svelte";
   import Mcq from "$lib/components/mcq/Preview.svelte";
   import QuizDescription from "$lib/components/quiz/Description.svelte";
   export let data;
@@ -36,7 +37,12 @@
 
         <div class="quiz-metadata">
           <h1 class="quiz-title display-4">{quiz.title}</h1>
-          <QuizDescription {quiz} showVisibility={true} />
+          <p>
+            <QuizDescription {quiz} showVisibility={true} />
+          </p>
+          <p>
+            <LikeDislike {data} />
+          </p>
         </div>
 
         {#each quiz?.data as question, questionIdx}
