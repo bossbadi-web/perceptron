@@ -20,7 +20,7 @@
     title={iLiked ? "Remove like" : "I like this"}
   >
     {#if iLiked}
-      <i class="fas fa-thumbs-up"></i>
+      <i class="fas fa-thumbs-up filled"></i>
     {:else}
       <i class="far fa-thumbs-up"></i>
     {/if}
@@ -36,7 +36,7 @@
     title={iDisliked ? "Remove dislike" : "I dislike this"}
   >
     {#if iDisliked}
-      <i class="fas fa-thumbs-down"></i>
+      <i class="fas fa-thumbs-down filled"></i>
     {:else}
       <i class="far fa-thumbs-down"></i>
     {/if}
@@ -47,3 +47,12 @@
   <input type="hidden" name="quizId" value={quiz.id} />
   <input type="hidden" name="referrer" value={$page.url.href} />
 </form>
+
+<style>
+  .filled {
+    color: var(--primary);
+  }
+  .filled:hover {
+    color: var(--secondary);
+  }
+</style>

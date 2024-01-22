@@ -97,8 +97,11 @@ section {
   color: var(--font-muted) !important;
   border: none !important;
 }
-.btn-trans:hover {
-  color: var(--font) !important;
+.btn-trans i {
+  transition: 0.5s;
+}
+.btn-trans i:hover {
+  color: var(--font);
 }
 
 .bg-main {
