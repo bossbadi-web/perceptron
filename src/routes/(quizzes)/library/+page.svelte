@@ -1,7 +1,7 @@
 <script>
   import { changePage } from "$lib/utils";
   import { page } from "$app/stores";
-  import Menu from "$lib/components/explore/Menu.svelte";
+  import Menu from "../Menu.svelte";
   import QuizCard from "$lib/components/quiz/Library.svelte";
   export let data;
 

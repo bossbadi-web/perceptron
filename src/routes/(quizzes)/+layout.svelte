@@ -1,5 +1,5 @@
 <script>
-  import "$lib/components/explore/styles.css";
+  import "./styles.css";
   import { beforeNavigate } from "$app/navigation";
   import { onMount } from "svelte";
 
