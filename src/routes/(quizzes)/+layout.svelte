@@ -1,4 +1,5 @@
 <script>
+  import "$lib/components/explore/styles.css";
   import { beforeNavigate } from "$app/navigation";
   import { onMount } from "svelte";
 
@@ -16,4 +17,8 @@
   });
 </script>
 
-<slot />
+<section>
+  <div class="container">
+    <slot />
+  </div>
+</section>

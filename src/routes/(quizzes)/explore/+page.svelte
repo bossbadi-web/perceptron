@@ -1,5 +1,4 @@
 <script>
-  import "$lib/components/explore/styles.css";
   import { changePage } from "$lib/utils";
   import { page } from "$app/stores";
   import Menu from "$lib/components/explore/Menu.svelte";
@@ -19,47 +18,43 @@
   };
 </script>
 
-<section>
-  <div class="container">
-    <div class="title-part">
-      <h1 class="text-center display-4">
+<div class="title-part">
+  <h1 class="text-center display-4">
+    <i class="fas fa-search" />
+    Explore
+  </h1>
+  <p class="text-center">
+    <span class="badge bg-primary">Page: {currentPage}</span>
+    <span class="badge bg-primary">Showing: {rangeLeft} - {rangeRight}</span>
+    <span class="badge bg-primary">Total: {total}</span>
+  </p>
+  <form>
+    <div class="input-group searchbar">
+      <input type="text" class="form-control" placeholder="Search" bind:value={query} />
+      <button type="submit" class="btn btn-primary" on:click={search}>
         <i class="fas fa-search" />
-        Explore
-      </h1>
-      <p class="text-center">
-        <span class="badge bg-primary">Page: {currentPage}</span>
-        <span class="badge bg-primary">Showing: {rangeLeft} - {rangeRight}</span>
-        <span class="badge bg-primary">Total: {total}</span>
-      </p>
-      <form>
-        <div class="input-group searchbar">
-          <input type="text" class="form-control" placeholder="Search" bind:value={query} />
-          <button type="submit" class="btn btn-primary" on:click={search}>
-            <i class="fas fa-search" />
-          </button>
-          {#if isSearch}
-            <a href="/explore" class="btn btn-danger" data-sveltekit-reload>
-              <i class="fas fa-times" />
-            </a>
-          {/if}
-        </div>
-      </form>
+      </button>
+      {#if isSearch}
+        <a href="/explore" class="btn btn-danger" data-sveltekit-reload>
+          <i class="fas fa-times" />
+        </a>
+      {/if}
     </div>
+  </form>
+</div>
 
-    {#if total === 0}
-      <div class="text-center">
-        <p class="lead">Nothing here yet :)</p>
-      </div>
-    {:else}
-      <Menu {currentPage} {rangeRight} {total} />
-
-      <div class="all-cards">
-        {#each quizzes as quiz}
-          <div class="quiz-box">
-            <QuizCard {quiz} data={{ quiz, session }} />
-          </div>
-        {/each}
-      </div>
-    {/if}
+{#if total === 0}
+  <div class="text-center">
+    <p class="lead">Nothing here yet :)</p>
   </div>
-</section>
+{:else}
+  <Menu {currentPage} {rangeRight} {total} />
+
+  <div class="all-cards">
+    {#each quizzes as quiz}
+      <div class="quiz-box">
+        <QuizCard {quiz} data={{ quiz, session }} />
+      </div>
+    {/each}
+  </div>
+{/if}
