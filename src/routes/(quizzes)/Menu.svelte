@@ -97,6 +97,7 @@
   .the-filters {
     display: flex;
     justify-content: space-between;
+    margin-top: 1rem;
     margin-bottom: 1rem;
   }
 
