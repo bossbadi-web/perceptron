@@ -35,6 +35,21 @@ $$;
 
 ALTER FUNCTION "public"."delete_account"() OWNER TO "postgres";
 
+CREATE OR REPLACE FUNCTION "public"."dislike_quiz"("voter_id" "uuid", "quiz_id" bigint) RETURNS "void"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM public.quizzes WHERE id = quiz_id AND dislikers @> ARRAY[voter_id]) THEN
+        UPDATE public.quizzes SET dislikers = array_remove(dislikers, voter_id) WHERE id = quiz_id;
+    ELSE
+        UPDATE public.quizzes SET dislikers = array_append(dislikers, voter_id) WHERE id = quiz_id;
+        UPDATE public.quizzes SET likers = array_remove(likers, voter_id) WHERE id = quiz_id;
+    END IF;
+END;
+$$;
+
+ALTER FUNCTION "public"."dislike_quiz"("voter_id" "uuid", "quiz_id" bigint) OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."get_raw_user_meta_data"("user_id" "uuid") RETURNS "json"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
@@ -44,6 +59,31 @@ END;
 $$;
 
 ALTER FUNCTION "public"."get_raw_user_meta_data"("user_id" "uuid") OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."like_quiz"("voter_id" "uuid", "quiz_id" bigint) RETURNS "void"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM public.quizzes WHERE id = quiz_id AND likers @> ARRAY[voter_id]) THEN
+        UPDATE public.quizzes SET likers = array_remove(likers, voter_id) WHERE id = quiz_id;
+    ELSE
+        UPDATE public.quizzes SET likers = array_append(likers, voter_id) WHERE id = quiz_id;
+        UPDATE public.quizzes SET dislikers = array_remove(dislikers, voter_id) WHERE id = quiz_id;
+    END IF;
+END;
+$$;
+
+ALTER FUNCTION "public"."like_quiz"("voter_id" "uuid", "quiz_id" bigint) OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."likequiz"("voter_id" "uuid", "quiz_id" bigint) RETURNS "void"
+    LANGUAGE "sql" SECURITY DEFINER
+    AS $$
+	SELECT *
+	FROM public.quizzes
+	WHERE id = quiz_id;
+$$;
+
+ALTER FUNCTION "public"."likequiz"("voter_id" "uuid", "quiz_id" bigint) OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."right_password"("password" character varying) RETURNS boolean
     LANGUAGE "plpgsql" SECURITY DEFINER
@@ -83,7 +123,9 @@ CREATE TABLE IF NOT EXISTS "public"."quizzes" (
     "title" "public"."citext",
     "description" "text",
     "visibility" "text" DEFAULT 'public'::"text" NOT NULL,
-    "bg" "text"
+    "bg" "text",
+    "likers" "uuid"[] DEFAULT '{}'::"uuid"[] NOT NULL,
+    "dislikers" "uuid"[] DEFAULT '{}'::"uuid"[] NOT NULL
 );
 
 ALTER TABLE "public"."quizzes" OWNER TO "postgres";
@@ -237,9 +279,21 @@ GRANT ALL ON FUNCTION "public"."delete_account"() TO "anon";
 GRANT ALL ON FUNCTION "public"."delete_account"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."delete_account"() TO "service_role";
 
+GRANT ALL ON FUNCTION "public"."dislike_quiz"("voter_id" "uuid", "quiz_id" bigint) TO "anon";
+GRANT ALL ON FUNCTION "public"."dislike_quiz"("voter_id" "uuid", "quiz_id" bigint) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."dislike_quiz"("voter_id" "uuid", "quiz_id" bigint) TO "service_role";
+
 GRANT ALL ON FUNCTION "public"."get_raw_user_meta_data"("user_id" "uuid") TO "anon";
 GRANT ALL ON FUNCTION "public"."get_raw_user_meta_data"("user_id" "uuid") TO "authenticated";
 GRANT ALL ON FUNCTION "public"."get_raw_user_meta_data"("user_id" "uuid") TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."like_quiz"("voter_id" "uuid", "quiz_id" bigint) TO "anon";
+GRANT ALL ON FUNCTION "public"."like_quiz"("voter_id" "uuid", "quiz_id" bigint) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."like_quiz"("voter_id" "uuid", "quiz_id" bigint) TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."likequiz"("voter_id" "uuid", "quiz_id" bigint) TO "anon";
+GRANT ALL ON FUNCTION "public"."likequiz"("voter_id" "uuid", "quiz_id" bigint) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."likequiz"("voter_id" "uuid", "quiz_id" bigint) TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."regexp_match"("public"."citext", "public"."citext") TO "postgres";
 GRANT ALL ON FUNCTION "public"."regexp_match"("public"."citext", "public"."citext") TO "anon";
