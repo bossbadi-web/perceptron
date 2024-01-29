@@ -1,8 +1,6 @@
 import { redirect } from "@sveltejs/kit";
-import nodemailer from "nodemailer";
 import { SENDER_EMAIL, SENDER_PASSWORD } from "$env/static/private";
-
-// send email
+import nodemailer from "nodemailer";
 
 export const actions = {
   default: async ({ locals, request }) => {

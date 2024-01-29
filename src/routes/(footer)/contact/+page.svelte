@@ -22,9 +22,9 @@
           <div class="mb-3">
             <label for="subjectInput" class="form-label">Subject</label>
             <select class="form-select" id="subjectInput" name="subject" required>
-              <option value="General">General</option>
-              <option value="Bug">Bug</option>
-              <option value="Feature">Feature</option>
+              <option value="Support">Support</option>
+              <option value="Feedback">Feedback</option>
+              <option value="Bug Report">Bug Report</option>
               <option value="Other">Other</option>
             </select>
           </div>
