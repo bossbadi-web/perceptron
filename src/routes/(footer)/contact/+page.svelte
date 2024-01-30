@@ -8,6 +8,9 @@
     <div class="col-md-8 offset-md-2">
       <div class="row normal-row">
         <h1 class="text-center display-4">Get in touch</h1>
+        <p class="text-center lead">
+          Questions? Comments? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+        </p>
         <form class="mb-3" method="POST" use:enhance>
           {#if form?.message}
             <div
@@ -38,3 +41,21 @@
     </div>
   </div>
 </section>
+
+<style>
+  .display-4 {
+    margin-bottom: 1rem;
+  }
+
+  .lead {
+    margin-bottom: 2rem;
+    padding: 0 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .lead {
+      padding: 0;
+      font-size: 1rem;
+    }
+  }
+</style>
