@@ -1,9 +1,22 @@
+import { RECAPTCHA_SECRET_KEY } from "$env/static/private";
 import { redirect } from "@sveltejs/kit";
 import { SENDER_EMAIL, SENDER_PASSWORD } from "$env/static/private";
 import nodemailer from "nodemailer";
 
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 export const actions = {
-  default: async ({ locals, request }) => {
+  default: async ({ cookies, locals, request }) => {
+    const token = cookies.get("token");
+    const response = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET_KEY}&response=${token}`
+    );
+
+    const data = await response.json();
+    if (!data?.success) {
+      return { status: 400, message: "Captcha failed." };
+    }
+
     const formData = await request.formData();
     const msg = formData.get("msg");
     const subject = formData.get("subject");
