@@ -1,20 +1,13 @@
-import { RECAPTCHA_SECRET_KEY } from "$env/static/private";
 import { redirect } from "@sveltejs/kit";
 import { SENDER_EMAIL, SENDER_PASSWORD } from "$env/static/private";
+import { verifyCapcha } from "$lib/recaptcha";
 import nodemailer from "nodemailer";
-
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 export const actions = {
   default: async ({ cookies, locals, request }) => {
-    const token = cookies.get("token");
-    const response = await fetch(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET_KEY}&response=${token}`
-    );
-
-    const data = await response.json();
-    if (!data?.success) {
-      return { status: 400, message: "Captcha failed." };
+    const { status, message } = await verifyCapcha(cookies);
+    if (status !== 200) {
+      return { status, message };
     }
 
     const formData = await request.formData();
