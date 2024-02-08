@@ -2,6 +2,8 @@
   import { enhance } from "$app/forms";
   import Loading from "./Loading.svelte";
   import MainFields from "$lib/components/form/MainFields.svelte";
+  import { PUBLIC_RECAPTCHA_SITE_KEY } from "$env/static/public";
+
   export let data, form;
 
   const { LIMITS } = data;
@@ -9,12 +11,21 @@
 
   let loading = false;
 
-  const submitHelper = () => {
+  const onSubmit = async () => {
     loading = true;
 
     if (form?.message) {
       form.message = "";
     }
+
+    await new Promise((resolve) => {
+      grecaptcha.ready(() => {
+        grecaptcha.execute(PUBLIC_RECAPTCHA_SITE_KEY, { action: "submit" }).then((t) => {
+          document.cookie = `token=${t}; path=/; max-age=3600`;
+          resolve();
+        });
+      });
+    });
 
     return async ({ update }) => {
       await update();
@@ -25,6 +36,10 @@
     loading = false;
   }
 </script>
+
+<svelte:head>
+  <script src="https://www.google.com/recaptcha/api.js?render={PUBLIC_RECAPTCHA_SITE_KEY}" async defer></script>
+</svelte:head>
 
 <section>
   <div class="container">
@@ -46,7 +61,7 @@
           </div>
         {/if}
 
-        <form method="POST" enctype="multipart/form-data" use:enhance={submitHelper}>
+        <form method="POST" enctype="multipart/form-data" use:enhance={onSubmit}>
           <h1 class="display-4 text-center">
             <i class="fas fa-hammer" />
             New Perceptron

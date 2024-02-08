@@ -1,9 +1,9 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { ocrSpace } from "ocr-space-api-wrapper";
-
 import { getQuestions } from "$lib/chatbot";
 import { LIMITS } from "$lib/consts";
 import { OCR_API_KEY } from "$env/static/private";
+import { ocrSpace } from "ocr-space-api-wrapper";
+import { verifyCapcha } from "$lib/recaptcha";
 
 const createQuiz = async ({ request, locals }) => {
   const formData = await request.formData();
@@ -80,7 +80,12 @@ const createQuiz = async ({ request, locals }) => {
 };
 
 export const actions = {
-  play: async ({ request, locals }) => {
+  play: async ({ cookies, request, locals }) => {
+    const { status, message } = await verifyCapcha(cookies);
+    if (status !== 200) {
+      return { status, message };
+    }
+
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
@@ -95,7 +100,12 @@ export const actions = {
 
     throw redirect(303, `/play/${data[0].id}`);
   },
-  preview: async ({ request, locals }) => {
+  preview: async ({ cookies, request, locals }) => {
+    const { status, message } = await verifyCapcha(cookies);
+    if (status !== 200) {
+      return { status, message };
+    }
+
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
@@ -110,7 +120,12 @@ export const actions = {
 
     throw redirect(303, `/preview/${data[0].id}`);
   },
-  edit: async ({ request, locals }) => {
+  edit: async ({ cookies, request, locals }) => {
+    const { status, message } = await verifyCapcha(cookies);
+    if (status !== 200) {
+      return { status, message };
+    }
+
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
