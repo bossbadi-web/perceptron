@@ -16,10 +16,6 @@
   };
 </script>
 
-<svelte:head>
-  <script src="https://www.google.com/recaptcha/api.js?render={PUBLIC_RECAPTCHA_SITE_KEY}" async defer></script>
-</svelte:head>
-
 <section>
   <div class="container">
     <div class="col-md-8 offset-md-2">

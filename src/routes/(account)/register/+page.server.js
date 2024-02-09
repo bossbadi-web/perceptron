@@ -1,9 +1,14 @@
-// register page server side code
 import { AuthApiError } from "@supabase/supabase-js";
 import { fail, redirect } from "@sveltejs/kit";
+import { verifyCapcha } from "$lib/recaptcha";
 
 export const actions = {
-  default: async ({ locals, request, url }) => {
+  default: async ({ cookies, locals, request, url }) => {
+    const { status, message } = await verifyCapcha(cookies);
+    if (status !== 200) {
+      return { status, message };
+    }
+
     const formData = await request.formData();
 
     // check if passwords match

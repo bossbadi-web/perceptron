@@ -1,7 +1,9 @@
 <script>
+  import { CAPTCHA_ROUTES } from "$lib/consts";
   import { invalidate, afterNavigate } from "$app/navigation";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import { PUBLIC_RECAPTCHA_SITE_KEY } from "$env/static/public";
   import Footer from "./Footer.svelte";
   import Header from "./Header.svelte";
   export let data;
@@ -40,8 +42,21 @@
     } else {
       document.title = "Perceptron";
     }
+
+    if (!CAPTCHA_ROUTES.includes($page.url.pathname)) {
+      const badge = document.querySelector(".grecaptcha-badge");
+      if (badge) {
+        badge.remove();
+      }
+    }
   });
 </script>
+
+<svelte:head>
+  {#if CAPTCHA_ROUTES.includes($page.url.pathname)}
+    <script src="https://www.google.com/recaptcha/api.js?render={PUBLIC_RECAPTCHA_SITE_KEY}" async defer></script>
+  {/if}
+</svelte:head>
 
 <div id="background" />
 

@@ -9,3 +9,5 @@ export const LIMITS = {
   bg: /^https:\/\/images\.unsplash\.com\/photo-/,
   notes: 500,
 };
+
+export const CAPTCHA_ROUTES = ["/login", "/register", "/create", "/contact"];

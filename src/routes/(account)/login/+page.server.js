@@ -1,9 +1,15 @@
 import { AuthApiError } from "@supabase/supabase-js";
 import { fail, redirect } from "@sveltejs/kit";
 import { getSafeRedirect } from "$lib/utils";
+import { verifyCapcha } from "$lib/recaptcha";
 
 export const actions = {
-  default: async ({ request, locals, url }) => {
+  default: async ({ cookies, request, locals, url }) => {
+    const { status, message } = await verifyCapcha(cookies);
+    if (status !== 200) {
+      return { status, message };
+    }
+
     const formData = await request.formData();
     const email = formData.get("email");
     const password = formData.get("password");
