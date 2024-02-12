@@ -3,7 +3,7 @@ import { getQuestions } from "$lib/chatbot";
 import { LIMITS } from "$lib/consts";
 import { OCR_API_KEY } from "$env/static/private";
 import { ocrSpace } from "ocr-space-api-wrapper";
-import { verifyCapcha } from "$lib/recaptcha";
+import { verifyCapcha } from "$lib/recaptchaServer";
 
 const createQuiz = async ({ request, locals }) => {
   const formData = await request.formData();

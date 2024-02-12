@@ -1,18 +1,7 @@
 <script>
   import { enhance } from "$app/forms";
-  import { PUBLIC_RECAPTCHA_SITE_KEY } from "$env/static/public";
+  import { submitCaptcha } from "$lib/recaptchaClient";
   export let form;
-
-  const onSubmit = async () => {
-    await new Promise((resolve) => {
-      grecaptcha.ready(() => {
-        grecaptcha.execute(PUBLIC_RECAPTCHA_SITE_KEY, { action: "submit" }).then((t) => {
-          document.cookie = `token=${t}; path=/; max-age=3600`;
-          resolve();
-        });
-      });
-    });
-  };
 </script>
 
 <section>
@@ -20,7 +9,7 @@
     <div class="col-md-8 offset-md-2">
       <div class="row normal-row">
         <h1 class="text-center display-4">Login</h1>
-        <form class="mb-3" method="POST" use:enhance={onSubmit}>
+        <form class="mb-3" method="POST" use:enhance={submitCaptcha}>
           {#if form?.message}
             <div class="alert alert-danger" role="alert">
               {form?.message}

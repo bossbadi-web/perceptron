@@ -1,8 +1,8 @@
 <script>
   import { enhance } from "$app/forms";
+  import { submitCaptcha } from "$lib/recaptchaClient";
   import Loading from "./Loading.svelte";
   import MainFields from "$lib/components/form/MainFields.svelte";
-  import { PUBLIC_RECAPTCHA_SITE_KEY } from "$env/static/public";
 
   export let data, form;
 
@@ -18,14 +18,7 @@
       form.message = "";
     }
 
-    await new Promise((resolve) => {
-      grecaptcha.ready(() => {
-        grecaptcha.execute(PUBLIC_RECAPTCHA_SITE_KEY, { action: "submit" }).then((t) => {
-          document.cookie = `token=${t}; path=/; max-age=3600`;
-          resolve();
-        });
-      });
-    });
+    await submitCaptcha();
 
     return async ({ update }) => {
       await update();

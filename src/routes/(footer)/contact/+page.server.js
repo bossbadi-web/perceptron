@@ -1,6 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 import { SENDER_EMAIL, SENDER_PASSWORD } from "$env/static/private";
-import { verifyCapcha } from "$lib/recaptcha";
+import { verifyCapcha } from "$lib/recaptchaServer";
 import nodemailer from "nodemailer";
 
 export const actions = {

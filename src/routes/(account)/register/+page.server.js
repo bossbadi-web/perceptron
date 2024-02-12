@@ -1,6 +1,6 @@
 import { AuthApiError } from "@supabase/supabase-js";
 import { fail, redirect } from "@sveltejs/kit";
-import { verifyCapcha } from "$lib/recaptcha";
+import { verifyCapcha } from "$lib/recaptchaServer";
 
 export const actions = {
   default: async ({ cookies, locals, request, url }) => {
