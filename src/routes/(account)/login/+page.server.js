@@ -10,6 +10,22 @@ export const actions = {
       return { status, message };
     }
 
+    // sign in with google
+    const provider = url.searchParams.get("provider");
+    if (provider === "google") {
+      const { data } = await locals.supabase.auth.signInWithOAuth({
+        provider: "google",
+      });
+
+      if (!data) {
+        return fail(500, {
+          message: "Server error. Please try again later.",
+        });
+      }
+
+      throw redirect(303, data.url);
+    }
+
     const formData = await request.formData();
     const email = formData.get("email");
     const password = formData.get("password");
