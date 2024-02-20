@@ -15,6 +15,7 @@ export const actions = {
     if (provider === "google") {
       const { data } = await locals.supabase.auth.signInWithOAuth({
         provider: "google",
+        options: { redirectTo: `${url.origin}${getSafeRedirect(url.searchParams.get("redirectTo"))}` },
       });
 
       if (!data) {
