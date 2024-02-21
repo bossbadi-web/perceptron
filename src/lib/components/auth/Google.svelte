@@ -1,8 +1,11 @@
 <script>
   import "./styles.css";
+  import { page } from "$app/stores";
+
+  const redirectTo = $page.url.searchParams.get("redirectTo") || "/";
 </script>
 
-<button class="gsi-material-button" formaction="?&provider=google">
+<button class="gsi-material-button" formaction="?&provider=google&redirectTo={redirectTo}">
   <div class="gsi-material-button-state"></div>
   <div class="gsi-material-button-content-wrapper">
     <div class="gsi-material-button-icon">
