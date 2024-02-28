@@ -7,9 +7,9 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port 3000",
     "start": "npm run preview",
-    "dump-roles": "cd node_modules/supabase/bin/ && supabase db dump -f supabase/roles.sql --role-only",
-    "dump-schema": "cd node_modules/supabase/bin/ && supabase db dump -f supabase/schema.sql",
-    "dump-data": "cd node_modules/supabase/bin/ && supabase db dump -f supabase/data.sql --use-copy --data-only"
+    "dump-roles": "npm exec supabase db dump -- -f supabase/roles.sql --role-only",
+    "dump-schema": "npm exec supabase db dump -- -f supabase/schema.sql",
+    "dump-data": "npm exec supabase db dump -- -f supabase/data.sql --use-copy --data-only"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.4.10",
