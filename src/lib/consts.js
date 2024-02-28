@@ -3,8 +3,8 @@ export const LIMITS = {
   description: 100,
   file: 1024 * 1024, // 1 MB
   filetypes: ["png", "jpg", "jpeg"],
-  question: 100,
-  option: 200,
+  question: 250,
+  option: 500,
   visibilities: ["public", "unlisted", "private"],
   bg: /^https:\/\/images\.unsplash\.com\/photo-/,
   notes: 500,
