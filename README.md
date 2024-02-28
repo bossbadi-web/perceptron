@@ -65,6 +65,9 @@ To automatically redeploy the app on Fly.io every time you push changes, add the
 1. Install PostgreSQL
 
    ```bash
+   sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+   sudo apt update
    sudo apt install -y postgresql-15
    ```
 
