@@ -26,8 +26,6 @@
 1. Create a Supabase project
 
    - Go to the "SQL Editor" tab
-   - Paste the contents of `supabase/roles.sql` into the editor
-   - Run
    - Paste the contents of `supabase/schema.sql` into the editor
    - Run
 
@@ -64,22 +62,27 @@ To automatically redeploy the app on Fly.io every time you push changes, add the
 
 ## Backup
 
-1. Login to Supabase (only needs to be done once)
+1. Install PostgreSQL
 
    ```bash
-   npm exec supabase login
+   sudo apt install -y postgresql-15
    ```
 
-1. Link your Supabase project (only needs to be done once)
+1. Set environment variables
 
    ```bash
-   npm exec supabase link -- --project-ref YOUR_PROJECT_REFERENCE_ID
+   export PGPASSWORD="YOUR_PASSWORD"
+   export CONNECTION_STRING="YOUR_CONNECTION_STRING"
    ```
 
-1. Run the following commands:
+1. Backup the schema (structure of the database))
 
    ```bash
-   npm run dump-roles
-   npm run dump-schema
-   npm run dump-data
+   pg_dumpall -f backups/schema.sql --schema-only -d $CONNECTION_STRING
+   ```
+
+1. Backup the data (contents of the database)
+
+   ```bash
+   pg_dumpall -f backups/data.sql --data-only -d $CONNECTION_STRING
    ```
