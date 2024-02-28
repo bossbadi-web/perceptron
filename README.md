@@ -74,8 +74,8 @@ To automatically redeploy the app on Fly.io every time you push changes, add the
 1. Set environment variables
 
    ```bash
-   export PGPASSWORD="YOUR_PASSWORD"
-   export CONNECTION_STRING="YOUR_CONNECTION_STRING"
+   export PGPASSWORD="YOUR_DATABASE_PASSWORD"
+   export CONNECTION_STRING="YOUR_DATABASE_CONNECTION_STRING"
    ```
 
 1. Backup the schema (structure of the database))
