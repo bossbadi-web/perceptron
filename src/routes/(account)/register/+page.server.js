@@ -1,5 +1,5 @@
 import { AuthApiError } from "@supabase/supabase-js";
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "sveltekit-flash-message/server";
 import { verifyCapcha } from "$lib/recaptchaServer";
 
 export const actions = {
@@ -17,9 +17,7 @@ export const actions = {
       });
 
       if (!data) {
-        return fail(500, {
-          message: "Server error. Please try again later.",
-        });
+        throw redirect(303, url.pathname, { type: "danger", message: "Failed to sign in with Google." }, cookies);
       }
 
       throw redirect(303, data.url);
@@ -31,7 +29,7 @@ export const actions = {
     const password = formData.get("password");
     const passwordConfirm = formData.get("passwordConfirm");
     if (password !== passwordConfirm) {
-      return fail(400, { message: "Passwords do not match." });
+      throw redirect(303, url.pathname, { type: "danger", message: "Passwords do not match." }, cookies);
     }
 
     // sign up
@@ -50,15 +48,17 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError) {
-        return fail(400, { message: err.message });
+        throw redirect(303, url.pathname, { type: "danger", message: err.message }, cookies);
       }
-      return fail(500, { message: "Server error. Try again later." });
+      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
     }
 
-    return {
-      status: 200,
-      message: "Success! Check your email for the login link.",
-    };
+    throw redirect(
+      303,
+      url.pathname,
+      { type: "success", message: "Success! Check your email for the login link." },
+      cookies
+    );
   },
 };
 
