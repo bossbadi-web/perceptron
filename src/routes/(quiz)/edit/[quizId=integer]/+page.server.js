@@ -1,5 +1,6 @@
-import { error, fail, redirect } from "@sveltejs/kit";
+import { error} from "@sveltejs/kit";
 import { LIMITS } from "$lib/consts";
+import { redirect } from "sveltekit-flash-message/server";
 
 const updateQuiz = async ({ request, locals, params }) => {
   const formData = await request.formData();
@@ -36,44 +37,42 @@ const updateQuiz = async ({ request, locals, params }) => {
   const { error: updateError } = await locals.supabase.from("quizzes").update(newQuiz).eq("id", params.quizId);
 
   if (updateError) {
-    throw error(500, {
-      message: "Internal Server Error",
-      hint: "Try again later",
-    });
+    inputError = "Internal Server Error";
   }
 
   return { inputError };
 };
 
 export const actions = {
-  save: async ({ request, locals, params }) => {
+  save: async ({ cookies, request, locals, params }) => {
     const { inputError } = await updateQuiz({ request, locals, params });
 
-    if (inputError) {
-      return fail(400, { message: inputError });
-    }
-
-    throw redirect(303, `/edit/${params.quizId}`);
+    throw redirect(
+      303,
+      `/edit/${params.quizId}`,
+      { type: inputError ? "danger" : "success", message: inputError || "Quiz saved." },
+      cookies
+    );
   },
-  preview: async ({ request, locals, params }) => {
+  preview: async ({ cookies, request, locals, params }) => {
     const { inputError } = await updateQuiz({ request, locals, params });
 
     if (inputError) {
-      return fail(400, { message: inputError });
+      throw redirect(303, `/edit/${params.quizId}`, { type: "danger", message: inputError }, cookies);
     }
 
     throw redirect(303, `/preview/${params.quizId}`);
   },
-  play: async ({ request, locals, params }) => {
+  play: async ({ cookies, request, locals, params }) => {
     const { inputError } = await updateQuiz({ request, locals, params });
 
     if (inputError) {
-      return fail(400, { message: inputError });
+      throw redirect(303, `/edit/${params.quizId}`, { type: "danger", message: inputError }, cookies);
     }
 
     throw redirect(303, `/play/${params.quizId}`);
   },
-  delete: async ({ locals, params }) => {
+  delete: async ({ cookies, locals, params }) => {
     const { error: deleteError } = await locals.supabase.from("quizzes").delete().eq("id", params.quizId);
 
     if (deleteError) {
@@ -83,7 +82,7 @@ export const actions = {
       });
     }
 
-    throw redirect(303, "/library");
+    throw redirect(303, "/library", { type: "success", message: "Quiz deleted." }, cookies);
   },
 };
 

@@ -1,5 +1,6 @@
 <script>
   import { CAPTCHA_ROUTES } from "$lib/consts";
+  import { getFlash } from "sveltekit-flash-message";
   import { invalidate, afterNavigate } from "$app/navigation";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
@@ -50,6 +51,8 @@
       }
     }
   });
+
+  $: flash = getFlash(page, { clearAfterMs: 5000 });
 </script>
 
 <svelte:head>
@@ -62,6 +65,12 @@
 
 <div class="all-but-footer">
   <Header {data} />
+  {#if $flash}
+    <div class="alert alert-{$flash.type} alert-dismissible fade show text-center" role="alert">
+      {$flash.message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {/if}
   <slot />
 </div>
 <Footer />

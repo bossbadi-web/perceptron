@@ -7,7 +7,7 @@
   import { fade } from "svelte/transition";
   import MainFields from "$lib/components/form/MainFields.svelte";
   import Stats from "$lib/components/quiz/Stats.svelte";
-  export let data, form;
+  export let data;
 
   const { quiz, LIMITS } = data;
   const editQuizStore = createEditQuizStore(quiz?.data);
@@ -24,12 +24,6 @@
     <form method="POST" use:enhance>
       <div class="row normal-row">
         <div class="col-md-10 offset-md-1">
-          {#if form?.message}
-            <div class="alert alert-danger" role="alert">
-              {form?.message}
-            </div>
-          {/if}
-
           <div class="mb-3">
             <h1 class="display-4 text-center">
               <i class="fas fa-edit" />

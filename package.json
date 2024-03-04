@@ -17,6 +17,7 @@
     "@sveltejs/kit": "^1.20.4",
     "supabase": "^1.106.1",
     "svelte": "^4.0.5",
+    "sveltekit-flash-message": "^2.4.2",
     "vite": "^4.5.2"
   },
   "type": "module",
