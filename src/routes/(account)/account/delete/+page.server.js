@@ -1,23 +1,26 @@
-// delete account page
-
 import { AuthApiError } from "@supabase/supabase-js";
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "sveltekit-flash-message/server";
 
 export const actions = {
-  default: async ({ request, locals }) => {
+  default: async ({ cookies, request, locals, url }) => {
     const formData = await request.formData();
 
     // check password
     const password = formData.get("password");
     const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
     if (!passwordCorrect) {
-      return fail(400, { message: "Wrong password." });
+      throw redirect(303, url.pathname, { type: "danger", message: "Wrong password." }, cookies);
     }
 
     // check delete confirmation
     const deleteConfirm = formData.get("deleteConfirm");
     if (deleteConfirm.toLowerCase() !== "delete my account") {
-      return fail(400, { message: 'Please type "delete my account" to confirm.' });
+      throw redirect(
+        303,
+        url.pathname,
+        { type: "danger", message: 'Please type "delete my account" to confirm.' },
+        cookies
+      );
     }
 
     // delete account
@@ -25,19 +28,15 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError) {
-        return fail(400, {
-          message: err.message,
-        });
+        throw redirect(303, url.pathname, { type: "danger", message: err.message }, cookies);
       }
-      return fail(500, {
-        message: "Server error. Please try again later.",
-      });
+      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
     }
 
     // sign out
     await locals.supabase.auth.signOut();
 
-    throw redirect(303, "/?message=Account deleted.");
+    throw redirect(303, "/", { type: "success", message: "Account deleted." }, cookies);
   },
 };
 
