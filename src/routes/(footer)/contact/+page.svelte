@@ -1,7 +1,6 @@
 <script>
   import { enhance } from "$app/forms";
   import { submitCaptcha } from "$lib/recaptchaClient";
-  export let form;
 </script>
 
 <section>
@@ -13,16 +12,6 @@
           Questions? Comments? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
         </p>
         <form class="mb-3" method="POST" use:enhance={submitCaptcha}>
-          {#if form?.message}
-            <div
-              class="alert"
-              role="alert"
-              class:alert-success={form.status === 200}
-              class:alert-danger={form.status !== 200}
-            >
-              {form?.message}
-            </div>
-          {/if}
           <div class="mb-3">
             <label for="subjectInput" class="form-label">Subject</label>
             <select class="form-select" id="subjectInput" name="subject" required>
