@@ -2,7 +2,6 @@
   import { enhance } from "$app/forms";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
-  export let form;
 
   let isFromPasswordReset = false;
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";
@@ -28,17 +27,6 @@
       <div class="row normal-row">
         <h1 class="text-center display-4">Change Password</h1>
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
-          {#if form?.message}
-            <div
-              class="alert"
-              role="alert"
-              class:alert-success={form.status === 200}
-              class:alert-danger={form.status !== 200}
-            >
-              {form?.message}
-            </div>
-          {/if}
-
           {#if !isFromPasswordReset}
             <div class="mb-3">
               <label for="passwordInput" class="form-label">Current Password</label>

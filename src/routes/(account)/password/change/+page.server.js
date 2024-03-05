@@ -1,18 +1,16 @@
-// update password page
-
 import { AuthApiError } from "@supabase/supabase-js";
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "sveltekit-flash-message/server";
 
 export const actions = {
-  default: async ({ request, locals }) => {
+  default: async ({ cookies, request, locals, url }) => {
     const formData = await request.formData();
 
-    // check if password is correct
+    // check password
     if (formData.get("isFromPasswordReset") == 0) {
       const password = formData.get("password");
       const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
       if (!passwordCorrect) {
-        return fail(400, { message: "Wrong password." });
+        throw redirect(303, url.pathname, { type: "danger", message: "Wrong password." }, cookies);
       }
     }
 
@@ -21,7 +19,7 @@ export const actions = {
     const newPasswordConfirm = formData.get("newPasswordConfirm");
 
     if (newPassword !== newPasswordConfirm) {
-      return fail(400, { message: "Passwords do not match." });
+      throw redirect(303, url.pathname, { type: "danger", message: "Passwords do not match." }, cookies);
     }
 
     // update password
@@ -29,16 +27,12 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError) {
-        return fail(400, {
-          message: err.message,
-        });
+        throw redirect(303, url.pathname, { type: "danger", message: err.message }, cookies);
       }
-      return fail(500, {
-        message: "Server error. Please try again later.",
-      });
+      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
     }
 
-    return { status: 200, message: "Password updated." };
+    throw redirect(303, url.pathname, { type: "success", message: "Password updated." }, cookies);
   },
 };
 
