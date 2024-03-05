@@ -1,10 +1,8 @@
-// forgot password page
-
 import { AuthApiError } from "@supabase/supabase-js";
-import { fail } from "@sveltejs/kit";
+import { redirect } from "sveltekit-flash-message/server";
 
 export const actions = {
-  default: async ({ request, locals, url }) => {
+  default: async ({ cookies, request, locals, url }) => {
     const formData = await request.formData();
     const email = formData.get("email");
 
@@ -14,15 +12,11 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError) {
-        return fail(400, {
-          message: err.message,
-        });
+        throw redirect(303, url.pathname, { type: "danger", message: err.message }, cookies);
       }
-      return fail(500, {
-        message: "Server error. Please try again later.",
-      });
+      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
     }
 
-    return { status: 200, message: "Check your email." };
+    throw redirect(303, url.pathname, { type: "success", message: "Check your email." }, cookies);
   },
 };
