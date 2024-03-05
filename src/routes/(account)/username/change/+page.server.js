@@ -1,17 +1,15 @@
-// update username page
-
 import { AuthApiError } from "@supabase/supabase-js";
-import { fail, redirect } from "@sveltejs/kit";
+import { redirect } from "sveltekit-flash-message/server";
 
 export const actions = {
-  default: async ({ request, locals }) => {
+  default: async ({ cookies, request, locals, url }) => {
     const formData = await request.formData();
 
-    // check if password is correct
+    // check password
     const password = formData.get("password");
     const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
     if (!passwordCorrect) {
-      return fail(400, { message: "Wrong password." });
+      throw redirect(303, url.pathname, { type: "danger", message: "Wrong password." }, cookies);
     }
 
     const username = formData.get("username");
@@ -20,16 +18,17 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError) {
-        return fail(400, {
-          message: err.message,
-        });
+        throw redirect(303, url.pathname, { type: "danger", message: err.message }, cookies);
       }
-      return fail(500, {
-        message: "Server error. Please try again later.",
-      });
+      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
     }
 
-    return { status: 200, message: "Username updated. Please sign in again to see your new name." };
+    throw redirect(
+      303,
+      url.pathname,
+      { type: "success", message: "Username updated. Please sign in again to see your new name." },
+      cookies
+    );
   },
 };
 

@@ -1,7 +1,7 @@
 <script>
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
-  export let form, data;
+  export let data;
 
   const { username } = data;
 
@@ -14,16 +14,6 @@
       <div class="row normal-row">
         <h1 class="text-center display-4">Change Username</h1>
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
-          {#if form?.message}
-            <div
-              class="alert"
-              role="alert"
-              class:alert-success={form.status === 200}
-              class:alert-danger={form.status !== 200}
-            >
-              {form?.message}
-            </div>
-          {/if}
           <div class="mb-3">
             <label for="passwordInput" class="form-label">Password<span class="required">*</span></label>
             <input class="form-control" id="passwordInput" type="password" name="password" required />
