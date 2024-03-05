@@ -1,10 +1,11 @@
 <script>
   import { enhance } from "$app/forms";
+  import { getFlash } from "sveltekit-flash-message";
+  import { page } from "$app/stores";
   import { submitCaptcha } from "$lib/recaptchaClient";
   import Loading from "./Loading.svelte";
   import MainFields from "$lib/components/form/MainFields.svelte";
-
-  export let data, form;
+  export let data;
 
   const { LIMITS } = data;
   const acceptedFileTypes = LIMITS.filetypes.map((type) => `.${type}`).join(", ");
@@ -14,10 +15,6 @@
   const onSubmit = async () => {
     loading = true;
 
-    if (form?.message) {
-      form.message = "";
-    }
-
     await submitCaptcha();
 
     return async ({ update }) => {
@@ -25,7 +22,9 @@
     };
   };
 
-  $: if (form?.message) {
+  const flash = getFlash(page);
+
+  $: if ($flash) {
     loading = false;
   }
 </script>
@@ -33,23 +32,15 @@
 <section>
   <div class="container">
     <!-- loading screen -->
-    {#if !form?.message}
-      <div class="row" class:d-none={!loading}>
-        <div class="col-md-10 offset-md-1">
-          <Loading />
-        </div>
+    <div class="row" class:d-none={!loading}>
+      <div class="col-md-10 offset-md-1">
+        <Loading />
       </div>
-    {/if}
+    </div>
 
     <!-- normal screen -->
     <div class="row normal-row" class:d-none={loading}>
       <div class="col-md-10 offset-md-1">
-        {#if form?.message}
-          <div class="alert alert-danger" role="alert">
-            {form?.message}
-          </div>
-        {/if}
-
         <form method="POST" enctype="multipart/form-data" use:enhance={onSubmit}>
           <h1 class="display-4 text-center">
             <i class="fas fa-hammer" />

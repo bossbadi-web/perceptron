@@ -1,8 +1,8 @@
-import { fail, redirect } from "@sveltejs/kit";
 import { getQuestions } from "$lib/chatbot";
 import { LIMITS } from "$lib/consts";
 import { OCR_API_KEY } from "$env/static/private";
 import { ocrSpace } from "ocr-space-api-wrapper";
+import { redirect } from "sveltekit-flash-message/server";
 import { verifyCapcha } from "$lib/recaptchaServer";
 
 const createQuiz = async ({ request, locals }) => {
@@ -80,27 +80,23 @@ const createQuiz = async ({ request, locals }) => {
 };
 
 export const actions = {
-  play: async ({ cookies, request, locals }) => {
+  play: async ({ cookies, request, locals, url }) => {
     const { status, message } = await verifyCapcha(cookies);
     if (status !== 200) {
       return { status, message };
     }
 
     const { data, err, inputError } = await createQuiz({ request, locals });
-
     if (inputError) {
-      return fail(400, { message: inputError });
+      throw redirect(303, url.pathname, { type: "danger", message: inputError }, cookies);
     }
-
     if (!data || err) {
-      return fail(500, {
-        message: "Server error. Please try again later.",
-      });
+      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
     }
 
     throw redirect(303, `/play/${data[0].id}`);
   },
-  preview: async ({ cookies, request, locals }) => {
+  preview: async ({ cookies, request, locals, url }) => {
     const { status, message } = await verifyCapcha(cookies);
     if (status !== 200) {
       return { status, message };
@@ -109,18 +105,15 @@ export const actions = {
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
-      return fail(400, { message: inputError });
+      throw redirect(303, url.pathname, { type: "danger", message: inputError }, cookies);
     }
-
     if (!data || err) {
-      return fail(500, {
-        message: "Server error. Please try again later.",
-      });
+      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
     }
 
     throw redirect(303, `/preview/${data[0].id}`);
   },
-  edit: async ({ cookies, request, locals }) => {
+  edit: async ({ cookies, request, locals, url }) => {
     const { status, message } = await verifyCapcha(cookies);
     if (status !== 200) {
       return { status, message };
@@ -129,13 +122,10 @@ export const actions = {
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
-      return fail(400, { message: inputError });
+      throw redirect(303, url.pathname, { type: "danger", message: inputError }, cookies);
     }
-
     if (!data || err) {
-      return fail(500, {
-        message: "Server error. Please try again later.",
-      });
+      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
     }
 
     throw redirect(303, `/edit/${data[0].id}`);
