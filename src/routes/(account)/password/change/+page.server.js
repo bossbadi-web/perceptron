@@ -3,7 +3,7 @@ import { fail } from "@sveltejs/kit";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 
 export const actions = {
-  default: async ({ cookies, request, locals, url }) => {
+  default: async ({ cookies, request, locals }) => {
     const formData = await request.formData();
 
     // check password
