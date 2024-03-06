@@ -78,7 +78,7 @@ To automatically redeploy the app on Fly.io every time you push changes, add the
    export CONNECTION_STRING="YOUR_DATABASE_CONNECTION_STRING"
    ```
 
-1. Backup the schema (structure of the database))
+1. Backup the schema (structure of the database)
 
    ```bash
    pg_dumpall -f backups/schema.sql --schema-only -d $CONNECTION_STRING
