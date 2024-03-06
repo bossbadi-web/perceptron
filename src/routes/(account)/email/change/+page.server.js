@@ -1,5 +1,6 @@
 import { AuthApiError } from "@supabase/supabase-js";
-import { redirect } from "sveltekit-flash-message/server";
+import { fail } from "@sveltejs/kit";
+import { redirect, setFlash } from "sveltekit-flash-message/server";
 
 export const actions = {
   default: async ({ cookies, request, locals, url }) => {
@@ -9,14 +10,16 @@ export const actions = {
     const password = formData.get("password");
     const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
     if (!passwordCorrect) {
-      throw redirect(303, url.pathname, { type: "danger", message: "Wrong password." }, cookies);
+      setFlash({ type: "danger", message: "Wrong password" }, cookies);
+      return fail(401);
     }
 
     // check if emails match
     const email = formData.get("email");
     const emailConfirm = formData.get("emailConfirm");
     if (email !== emailConfirm) {
-      throw redirect(303, url.pathname, { type: "danger", message: "Emails do not match." }, cookies);
+      setFlash({ type: "danger", message: "Emails do not match." }, cookies);
+      return fail(400);
     }
 
     // update email
@@ -24,17 +27,14 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError) {
-        throw redirect(303, url.pathname, { type: "danger", message: err.message }, cookies);
+        setFlash({ type: "danger", message: err.message }, cookies);
+        return fail(400);
       }
-      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
+      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
+      return fail(500);
     }
 
-    throw redirect(
-      303,
-      url.pathname,
-      { type: "success", message: "Check your new email for a confirmation link." },
-      cookies
-    );
+    setFlash({ type: "success", message: "Check your new email for a confirmation link." }, cookies);
   },
 };
 

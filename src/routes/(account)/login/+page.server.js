@@ -1,6 +1,7 @@
 import { AuthApiError } from "@supabase/supabase-js";
+import { fail } from "@sveltejs/kit";
 import { getSafeRedirect } from "$lib/utils";
-import { redirect } from "sveltekit-flash-message/server";
+import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { verifyCapcha } from "$lib/recaptchaServer";
 
 export const actions = {
@@ -19,7 +20,8 @@ export const actions = {
       });
 
       if (!data) {
-        throw redirect(303, url.pathname, { type: "danger", message: "Failed to sign in with Google." }, cookies);
+        setFlash({ type: "danger", message: "Failed to sign in with Google." }, cookies);
+        return fail(400);
       }
 
       throw redirect(303, data.url);
@@ -33,9 +35,11 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError && err.status === 400) {
-        throw redirect(303, url.pathname, { type: "danger", message: "Invalid email or password." }, cookies);
+        setFlash({ type: "danger", message: "Invalid email or password." }, cookies);
+        fail(400);
       }
-      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
+      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
+      return fail(500);
     }
 
     throw redirect(303, getSafeRedirect(url.searchParams.get("redirectTo")));

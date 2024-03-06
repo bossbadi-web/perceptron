@@ -1,5 +1,6 @@
 import { AuthApiError } from "@supabase/supabase-js";
-import { redirect } from "sveltekit-flash-message/server";
+import { fail } from "@sveltejs/kit";
+import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { verifyCapcha } from "$lib/recaptchaServer";
 
 export const actions = {
@@ -17,7 +18,8 @@ export const actions = {
       });
 
       if (!data) {
-        throw redirect(303, url.pathname, { type: "danger", message: "Failed to sign in with Google." }, cookies);
+        setFlash({ type: "danger", message: "Failed to sign in with Google." }, cookies);
+        return fail(400);
       }
 
       throw redirect(303, data.url);
@@ -29,7 +31,8 @@ export const actions = {
     const password = formData.get("password");
     const passwordConfirm = formData.get("passwordConfirm");
     if (password !== passwordConfirm) {
-      throw redirect(303, url.pathname, { type: "danger", message: "Passwords do not match." }, cookies);
+      setFlash({ type: "danger", message: "Passwords do not match." }, cookies);
+      fail(400);
     }
 
     // sign up
@@ -48,17 +51,14 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError) {
-        throw redirect(303, url.pathname, { type: "danger", message: err.message }, cookies);
+        setFlash({ type: "danger", message: err.message }, cookies);
+        return fail(400);
       }
-      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
+      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
+      return fail(500);
     }
 
-    throw redirect(
-      303,
-      url.pathname,
-      { type: "success", message: "Success! Check your email for the login link." },
-      cookies
-    );
+    setFlash({ type: "success", message: "Success! Check your email for the login link." }, cookies);
   },
 };
 

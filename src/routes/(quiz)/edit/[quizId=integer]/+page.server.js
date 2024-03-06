@@ -1,4 +1,4 @@
-import { error} from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import { LIMITS } from "$lib/consts";
 import { redirect } from "sveltekit-flash-message/server";
 

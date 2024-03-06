@@ -1,5 +1,6 @@
 import { AuthApiError } from "@supabase/supabase-js";
-import { redirect } from "sveltekit-flash-message/server";
+import { fail } from "@sveltejs/kit";
+import { setFlash } from "sveltekit-flash-message/server";
 
 export const actions = {
   default: async ({ cookies, request, locals, url }) => {
@@ -12,11 +13,13 @@ export const actions = {
 
     if (err) {
       if (err instanceof AuthApiError) {
-        throw redirect(303, url.pathname, { type: "danger", message: err.message }, cookies);
+        setFlash({ type: "danger", message: err.message }, cookies);
+        return fail(400);
       }
-      throw redirect(303, url.pathname, { type: "danger", message: "Internal Server Error." }, cookies);
+      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
+      return fail(500);
     }
 
-    throw redirect(303, url.pathname, { type: "success", message: "Check your email." }, cookies);
+    setFlash({ type: "success", message: "Check your email." }, cookies);
   },
 };

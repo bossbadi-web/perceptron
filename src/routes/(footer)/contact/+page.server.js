@@ -1,10 +1,11 @@
-import { redirect } from "sveltekit-flash-message/server";
+import { fail } from "@sveltejs/kit";
+import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { SENDER_EMAIL, SENDER_PASSWORD } from "$env/static/private";
 import { verifyCapcha } from "$lib/recaptchaServer";
 import nodemailer from "nodemailer";
 
 export const actions = {
-  default: async ({ cookies, locals, request, url }) => {
+  default: async ({ cookies, locals, request }) => {
     const { status, message } = await verifyCapcha(cookies);
     if (status !== 200) {
       return { status, message };
@@ -35,11 +36,12 @@ export const actions = {
 
     transporter.sendMail(mailOptions, function (err, _) {
       if (err) {
-        throw redirect(303, url.pathname, { type: "danger", message: "Something went wrong." }, cookies);
+        setFlash({ type: "danger", message: "Something went wrong." }, cookies);
+        fail(500);
       }
     });
 
-    throw redirect(303, url.pathname, { type: "success", message: "Your message has been sent." }, cookies);
+    setFlash({ type: "success", message: "Your message has been sent." }, cookies);
   },
 };
 
