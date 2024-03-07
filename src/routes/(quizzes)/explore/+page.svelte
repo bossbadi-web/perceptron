@@ -57,4 +57,6 @@
       </div>
     {/each}
   </div>
+
+  <Menu {currentPage} {rangeRight} {total} />
 {/if}
