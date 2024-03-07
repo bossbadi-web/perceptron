@@ -1,4 +1,3 @@
-import { AuthApiError } from "@supabase/supabase-js";
 import { fail } from "@sveltejs/kit";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { verifyCapcha } from "$lib/recaptchaServer";
@@ -50,12 +49,14 @@ export const actions = {
     });
 
     if (err) {
-      if (err instanceof AuthApiError) {
-        setFlash({ type: "danger", message: err.message }, cookies);
-        return fail(400);
-      }
-      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
-      return fail(500);
+      setFlash(
+        {
+          type: "danger",
+          message: err.__isAuthError ? err.message : "Internal Server Error.",
+        },
+        cookies
+      );
+      return fail(err.status);
     }
 
     setFlash({ type: "success", message: "Success! Check your email for the login link." }, cookies);

@@ -12,12 +12,14 @@ export const actions = {
     });
 
     if (err) {
-      if (err instanceof AuthApiError) {
-        setFlash({ type: "danger", message: err.message }, cookies);
-        return fail(400);
-      }
-      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
-      return fail(500);
+      setFlash(
+        {
+          type: "danger",
+          message: err.__isAuthError ? err.message : "Internal Server Error.",
+        },
+        cookies
+      );
+      return fail(err.status);
     }
 
     setFlash({ type: "success", message: "Check your email." }, cookies);

@@ -1,4 +1,3 @@
-import { AuthApiError } from "@supabase/supabase-js";
 import { fail } from "@sveltejs/kit";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 
@@ -19,12 +18,14 @@ export const actions = {
     const { error: err } = await locals.supabase.auth.updateUser({ data: { username } });
 
     if (err) {
-      if (err instanceof AuthApiError) {
-        setFlash({ type: "danger", message: err.message }, cookies);
-        return fail(400);
-      }
-      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
-      return fail(500);
+      setFlash(
+        {
+          type: "danger",
+          message: err.__isAuthError ? err.message : "Internal Server Error.",
+        },
+        cookies
+      );
+      return fail(err.status);
     }
 
     setFlash({ type: "success", message: "Username updated. Please sign in again to see your new name." }, cookies);
