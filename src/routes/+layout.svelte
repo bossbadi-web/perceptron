@@ -44,7 +44,7 @@
       document.title = "Perceptron";
     }
 
-    if (!CAPTCHA_ROUTES.includes($page.url.pathname)) {
+    if (!CAPTCHA_ROUTES.includes(pathname)) {
       const badge = document.querySelector(".grecaptcha-badge");
       if (badge) {
         badge.remove();
@@ -52,11 +52,12 @@
     }
   });
 
+  $: pathname = $page.url.pathname.replace(/\/$/, "");
   $: flash = getFlash(page, { clearAfterMs: 5000 });
 </script>
 
 <svelte:head>
-  {#if CAPTCHA_ROUTES.includes($page.url.pathname)}
+  {#if CAPTCHA_ROUTES.includes(pathname)}
     <script src="https://www.google.com/recaptcha/api.js?render={PUBLIC_RECAPTCHA_SITE_KEY}" async defer></script>
   {/if}
 </svelte:head>
