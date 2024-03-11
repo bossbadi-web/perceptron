@@ -1,6 +1,6 @@
 <script>
   import { LIMITS } from "$lib/consts";
-  export let data;
+  export let quiz;
 </script>
 
 <label for="title">
@@ -8,16 +8,12 @@
   <small class="text-muted">(max {LIMITS.title} chars)</small>
 </label>
 
-{#if data?.title}
-  <input
-    class="form-control"
-    type="text"
-    id="title"
-    name="title"
-    maxlength={LIMITS.title}
-    bind:value={data.title}
-    required
-  />
-{:else}
-  <input class="form-control" type="text" id="title" name="title" maxlength={LIMITS.title} required />
-{/if}
+<input
+  class="form-control"
+  type="text"
+  id="title"
+  name="title"
+  maxlength={LIMITS.title}
+  bind:value={$quiz.title}
+  required
+/>

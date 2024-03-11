@@ -2,24 +2,40 @@
 
 <script>
   import "$lib/components/mcq/styles.css";
-  import { createEditQuizStore } from "$lib/stores/editQuiz";
+  import { createEditQuizStore, edited } from "$lib/stores/editQuiz";
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
+  import { beforeNavigate } from "$app/navigation";
   import MainFields from "$lib/components/form/MainFields.svelte";
   import Stats from "$lib/components/quiz/Stats.svelte";
   export let data;
 
   const { quiz, LIMITS } = data;
-  const editQuizStore = createEditQuizStore(quiz?.data);
+  const editQuizStore = createEditQuizStore(quiz);
 
-  $: jsonVersion = JSON.stringify($editQuizStore);
-  $: storeData = {
-    ...quiz,
-    data: $editQuizStore,
-  };
+  $: jsonVersion = JSON.stringify($editQuizStore.data);
+
+  beforeNavigate(async ({ to, cancel }) => {
+    // if to is one of the actions, don't show the warning
+    if (to.url.pathname.startsWith("/edit")) {
+      // update edited store
+      edited.set(false);
+
+      return;
+    }
+
+    if ($edited) {
+      if (confirm("You have unsaved changes. Are you sure you want to leave?")) {
+        edited.set(false);
+        return;
+      }
+      cancel();
+    }
+  });
 </script>
 
 <section in:fade>
+  <!-- {$edited} -->
   <div class="container">
     <form method="POST" use:enhance>
       <div class="row normal-row">
@@ -30,26 +46,26 @@
               Edit Perceptron
             </h1>
             <p class="text-center">
-              <Stats quiz={storeData} />
+              <Stats quiz={$editQuizStore} />
             </p>
           </div>
 
           <br />
 
-          <MainFields data={storeData} />
+          <MainFields quiz={editQuizStore} />
 
           <div class="divider">
             <button on:click|preventDefault={() => editQuizStore.insertQuestion(-1)}>
-              {#if $editQuizStore.length === 0}
+              {#if $editQuizStore.data.length === 0}
                 <div class="add-question-hint">Click this to add a question</div>
               {/if}
               <div>+</div>
             </button>
           </div>
 
-          {#each $editQuizStore as question, questionIdx}
+          {#each $editQuizStore.data as question, questionIdx}
             <div class="question-box">
-              <p class="text-muted">Question {questionIdx + 1} of {$editQuizStore.length}</p>
+              <p class="text-muted">Question {questionIdx + 1} of {$editQuizStore.data.length}</p>
 
               <input
                 class="form-control a-title"

@@ -3,21 +3,21 @@
   import Description from "./Description.svelte";
   import Title from "./Title.svelte";
   import Visibility from "./Visibility.svelte";
-  export let data = null;
+  export let quiz;
 </script>
 
 <div class="mb-4">
-  <Title {data} />
+  <Title {quiz} />
 </div>
 
 <div class="mb-4">
-  <Description {data} />
+  <Description {quiz} />
 </div>
 
 <div class="mb-4">
-  <Visibility {data} />
+  <Visibility {quiz} />
 </div>
 
 <div class="mb-4">
-  <Bg {data} />
+  <Bg {quiz} />
 </div>
