@@ -14,6 +14,7 @@
   $: jsonVersion = JSON.stringify($editQuizStore.data);
 
   onMount(() => {
+    // prevent accidental page close
     window.onbeforeunload = (e) => {
       if ($edited) {
         e.preventDefault();
@@ -23,6 +24,38 @@
 
     document.getElementById("quiz-form").addEventListener("submit", () => {
       edited.set(false);
+    });
+
+    // keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      // Enter: add a new question below
+      // Shift + Enter: add a new question above
+      if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+        e.preventDefault();
+        const activeElement = document.activeElement;
+        if (activeElement.tagName === "INPUT" && activeElement.type === "text") {
+          const questionIdx = activeElement.closest(".question-box").getAttribute("data-question-idx");
+          if (e.shiftKey) {
+            editQuizStore.insertQuestion(parseInt(questionIdx) - 1);
+            setTimeout(() => {
+              const newQuestion = document.getElementById(`question-${parseInt(questionIdx)}`);
+              newQuestion.querySelector(".a-title").focus();
+            }, 0);
+          } else {
+            editQuizStore.insertQuestion(parseInt(questionIdx));
+            setTimeout(() => {
+              const newQuestion = document.getElementById(`question-${parseInt(questionIdx) + 1}`);
+              newQuestion.querySelector(".a-title").focus();
+            }, 0);
+          }
+        }
+      }
+
+      // Ctrl + S: save
+      else if (e.ctrlKey && e.key === "s") {
+        e.preventDefault();
+        document.querySelector("button[formaction='?/save']").click();
+      }
     });
   });
 </script>
@@ -56,7 +89,7 @@
           </div>
 
           {#each $editQuizStore.data as question, questionIdx}
-            <div class="question-box">
+            <div class="question-box" id="question-{questionIdx}" data-question-idx={questionIdx}>
               <p class="text-muted">Question {questionIdx + 1} of {$editQuizStore.data.length}</p>
 
               <input
