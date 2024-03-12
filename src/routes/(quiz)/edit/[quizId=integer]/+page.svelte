@@ -1,11 +1,9 @@
-<!-- this is the quiz editing page -->
-
 <script>
   import "$lib/components/mcq/styles.css";
   import { createEditQuizStore, edited } from "$lib/stores/editQuiz";
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
-  import { beforeNavigate } from "$app/navigation";
+  import { onMount } from "svelte";
   import MainFields from "$lib/components/form/MainFields.svelte";
   import Stats from "$lib/components/quiz/Stats.svelte";
   export let data;
@@ -15,29 +13,23 @@
 
   $: jsonVersion = JSON.stringify($editQuizStore.data);
 
-  beforeNavigate(async ({ to, cancel }) => {
-    // if to is one of the actions, don't show the warning
-    if (to.url.pathname.startsWith("/edit")) {
-      // update edited store
-      edited.set(false);
-
-      return;
-    }
-
-    if ($edited) {
-      if (confirm("You have unsaved changes. Are you sure you want to leave?")) {
-        edited.set(false);
-        return;
+  onMount(() => {
+    window.onbeforeunload = (e) => {
+      if ($edited) {
+        e.preventDefault();
+        e.returnValue = "";
       }
-      cancel();
-    }
+    };
+
+    document.getElementById("quiz-form").addEventListener("submit", () => {
+      edited.set(false);
+    });
   });
 </script>
 
 <section in:fade>
-  <!-- {$edited} -->
   <div class="container">
-    <form method="POST" use:enhance>
+    <form id="quiz-form" method="POST" use:enhance>
       <div class="row normal-row">
         <div class="col-md-10 offset-md-1">
           <div class="mb-3">
