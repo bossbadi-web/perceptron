@@ -56,6 +56,59 @@
         e.preventDefault();
         document.querySelector("button[formaction='?/save']").click();
       }
+
+      // Shift + Tab: focus on previous field
+      else if (e.shiftKey && e.key === "Tab") {
+        const activeElement = document.activeElement;
+        if (activeElement.closest(".question-box")) {
+          e.preventDefault();
+          const questionIdx = activeElement.closest(".question-box").getAttribute("data-question-idx");
+          const fields = activeElement.closest(".question-box").querySelectorAll("input[type='text']");
+          const idx = Array.from(fields).indexOf(activeElement);
+          if (idx > 0) {
+            fields[idx - 1].focus();
+          } else {
+            const prevQuestion = document.getElementById(`question-${parseInt(questionIdx) - 1}`);
+            if (prevQuestion) {
+              const prevFields = prevQuestion.querySelectorAll("input[type='text']");
+              prevFields[prevFields.length - 1].focus();
+            } else {
+              // create a new question
+              editQuizStore.insertQuestion(parseInt(questionIdx) - 1);
+              setTimeout(() => {
+                const newQuestion = document.getElementById(`question-${parseInt(questionIdx)}`);
+                newQuestion.querySelector(".a-title").focus();
+              }, 0);
+            }
+          }
+        }
+      }
+
+      // Tab: focus on next field
+      else if (e.key === "Tab") {
+        const activeElement = document.activeElement;
+        if (activeElement.closest(".question-box")) {
+          e.preventDefault();
+          const questionIdx = activeElement.closest(".question-box").getAttribute("data-question-idx");
+          const fields = activeElement.closest(".question-box").querySelectorAll("input[type='text']");
+          const idx = Array.from(fields).indexOf(activeElement);
+          if (idx < fields.length - 1) {
+            fields[idx + 1].focus();
+          } else {
+            const nextQuestion = document.getElementById(`question-${parseInt(questionIdx) + 1}`);
+            if (nextQuestion) {
+              nextQuestion.querySelector(".a-title").focus();
+            } else {
+              // create a new question
+              editQuizStore.insertQuestion(parseInt(questionIdx));
+              setTimeout(() => {
+                const newQuestion = document.getElementById(`question-${parseInt(questionIdx) + 1}`);
+                newQuestion.querySelector(".a-title").focus();
+              }, 0);
+            }
+          }
+        }
+      }
     });
   });
 </script>
