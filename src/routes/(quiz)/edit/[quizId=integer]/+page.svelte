@@ -102,6 +102,18 @@
         e.preventDefault();
         document.querySelector("button[formaction='?/save']").click();
       }
+
+      // Ctrl + P: play
+      else if (e.ctrlKey && e.key === "p") {
+        e.preventDefault();
+        document.querySelector("button[formaction='?/play']").click();
+      }
+
+      // Ctrl + O: preview
+      else if (e.ctrlKey && e.key === "o") {
+        e.preventDefault();
+        document.querySelector("button[formaction='?/preview']").click();
+      }
     });
   });
 </script>
@@ -207,9 +219,9 @@
 
         <div class="row-of-buttons">
           <input type="hidden" name="questions" bind:value={jsonVersion} />
-          <button class="btn btn-main btn-lg" formaction="?/save">Save</button>
-          <button class="btn btn-main btn-lg" formaction="?/play">Play</button>
-          <button class="btn btn-secondary btn-lg" formaction="?/preview">Preview</button>
+          <button class="btn btn-main btn-lg" formaction="?/save" title="Ctrl + S">Save</button>
+          <button class="btn btn-main btn-lg" formaction="?/play" title="Ctrl + P">Play</button>
+          <button class="btn btn-secondary btn-lg" formaction="?/preview" title="Ctrl + O">Preview</button>
           <button class="btn btn-danger btn-lg" formaction="?/delete" formnovalidate>Delete</button>
         </div>
       </div>
