@@ -116,6 +116,10 @@
       }
     });
   });
+
+  const confirmDelete = () => {
+    confirm("Are you sure?") && document.querySelector("button[formaction='?/delete']").click();
+  };
 </script>
 
 <section in:fade>
@@ -222,7 +226,8 @@
           <button class="btn btn-main btn-lg" formaction="?/save" title="Ctrl + S">Save</button>
           <button class="btn btn-main btn-lg" formaction="?/play" title="Ctrl + P">Play</button>
           <button class="btn btn-secondary btn-lg" formaction="?/preview" title="Ctrl + O">Preview</button>
-          <button class="btn btn-danger btn-lg" formaction="?/delete" formnovalidate>Delete</button>
+          <button class="btn btn-danger btn-lg" formnovalidate on:click|preventDefault={confirmDelete}>Delete</button>
+          <button class="btn btn-danger btn-lg d-none" formaction="?/delete" />
         </div>
       </div>
     </form>
