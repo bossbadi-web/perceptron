@@ -95,24 +95,24 @@
             }
           }
         }
-      }
-
-      // Ctrl + S: save
-      else if (e.ctrlKey && e.key === "s") {
-        e.preventDefault();
-        document.querySelector("button[formaction='?/save']").click();
-      }
-
-      // Ctrl + P: play
-      else if (e.ctrlKey && e.key === "p") {
-        e.preventDefault();
-        document.querySelector("button[formaction='?/play']").click();
-      }
-
-      // Ctrl + O: preview
-      else if (e.ctrlKey && e.key === "o") {
-        e.preventDefault();
-        document.querySelector("button[formaction='?/preview']").click();
+      } else if (e.ctrlKey) {
+        switch (e.key.toLowerCase()) {
+          case "s": // Ctrl + S: save
+            e.preventDefault();
+            document.querySelector("button[formaction='?/save']").click();
+            break;
+          case "p": // Ctrl + P: play
+            e.preventDefault();
+            document.querySelector("button[formaction='?/play']").click();
+            break;
+          case "o": // Ctrl + O: preview
+            e.preventDefault();
+            document.querySelector("button[formaction='?/preview']").click();
+            break;
+          case "e": // Ctrl + E: do nothing
+            e.preventDefault();
+            break;
+        }
       }
     });
   });

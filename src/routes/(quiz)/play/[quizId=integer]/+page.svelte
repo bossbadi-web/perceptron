@@ -14,27 +14,25 @@
   onMount(() => {
     // keyboard shortcuts
     document.addEventListener("keydown", (e) => {
-      // Ctrl + O: preview
-      if (e.ctrlKey && e.key === "o") {
-        e.preventDefault();
-        window.location.href = `/preview/${quiz.id}`;
-      }
-
-      // Ctrl + P: do nothing
-      else if (e.ctrlKey && e.key === "p") {
-        e.preventDefault();
-      }
-
-      // Ctrl + E: edit
-      else if (e.ctrlKey && e.key === "e") {
-        e.preventDefault();
-
-        if (!data.session?.user?.id) {
-          alert("Please login to edit this quiz.");
-        } else if (data.session?.user?.id !== quiz?.owner) {
-          alert("You are not the owner of this quiz.");
-        } else {
-          window.location.href = `/edit/${quiz.id}`;
+      if (e.ctrlKey) {
+        switch (e.key.toLowerCase()) {
+          case "o": // Ctrl + O: preview
+            e.preventDefault();
+            window.location.href = `/preview/${quiz.id}`;
+            break;
+          case "p": // Ctrl + P: do nothing
+            e.preventDefault();
+            break;
+          case "e": // Ctrl + E: edit
+            e.preventDefault();
+            if (!data.session?.user?.id) {
+              alert("Please login to edit this quiz.");
+            } else if (data.session?.user?.id !== quiz?.owner) {
+              alert("You are not the owner of this quiz.");
+            } else {
+              window.location.href = `/edit/${quiz.id}`;
+            }
+            break;
         }
       }
     });
