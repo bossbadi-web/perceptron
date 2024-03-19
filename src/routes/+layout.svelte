@@ -62,10 +62,6 @@
       toast.success($flash.message);
     } else if ($flash.type === "error") {
       toast.error($flash.message);
-    } else if ($flash.type === "info") {
-      toast.info($flash.message);
-    } else if ($flash.type === "warning") {
-      toast.warning($flash.message);
     } else {
       toast($flash.message);
     }
