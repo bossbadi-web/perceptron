@@ -58,12 +58,15 @@
   const flash = getFlash(page);
 
   $: if ($flash) {
-    if ($flash.type === "success") {
-      toast.success($flash.message);
-    } else if ($flash.type === "error") {
-      toast.error($flash.message);
-    } else {
-      toast($flash.message);
+    switch ($flash.type) {
+      case "success":
+        toast.success($flash.message);
+        break;
+      case "error":
+        toast.error($flash.message);
+        break;
+      default:
+        toast($flash.message);
     }
 
     // Clear the flash message to avoid double-toasting.
