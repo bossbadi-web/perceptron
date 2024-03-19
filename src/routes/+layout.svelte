@@ -7,6 +7,7 @@
   import { PUBLIC_RECAPTCHA_SITE_KEY } from "$env/static/public";
   import Footer from "./Footer.svelte";
   import Header from "./Header.svelte";
+  import toast, { Toaster } from "svelte-french-toast";
   export let data;
 
   $: ({ supabase, session } = data);
@@ -53,7 +54,25 @@
   });
 
   $: pathname = $page.url.pathname.replace(/\/$/, "");
-  $: flash = getFlash(page, { clearAfterMs: 5000 });
+
+  const flash = getFlash(page);
+
+  $: if ($flash) {
+    if ($flash.type === "success") {
+      toast.success($flash.message, { duration: 5000 });
+    } else if ($flash.type === "error") {
+      toast.error($flash.message, { duration: 5000 });
+    } else if ($flash.type === "info") {
+      toast.info($flash.message, { duration: 5000 });
+    } else if ($flash.type === "warning") {
+      toast.warning($flash.message, { duration: 5000 });
+    } else {
+      toast($flash.message, { duration: 5000 });
+    }
+
+    // Clear the flash message to avoid double-toasting.
+    $flash = undefined;
+  }
 </script>
 
 <svelte:head>
@@ -66,12 +85,7 @@
 
 <div class="all-but-footer">
   <Header {data} />
-  {#if $flash}
-    <div class="alert alert-{$flash.type} alert-dismissible fade show text-center" role="alert">
-      {$flash.message}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  {/if}
+  <Toaster />
   <slot />
 </div>
 <Footer />

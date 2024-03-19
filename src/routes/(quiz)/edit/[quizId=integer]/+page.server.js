@@ -1,6 +1,6 @@
 import { error } from "@sveltejs/kit";
 import { LIMITS } from "$lib/consts";
-import { redirect } from "sveltekit-flash-message/server";
+import { redirect, setFlash } from "sveltekit-flash-message/server";
 
 const updateQuiz = async ({ request, locals, params }) => {
   const formData = await request.formData();
@@ -46,19 +46,13 @@ const updateQuiz = async ({ request, locals, params }) => {
 export const actions = {
   save: async ({ cookies, request, locals, params }) => {
     const { inputError } = await updateQuiz({ request, locals, params });
-
-    throw redirect(
-      303,
-      `/edit/${params.quizId}`,
-      { type: inputError ? "danger" : "success", message: inputError || "Quiz saved." },
-      cookies
-    );
+    setFlash({ type: inputError ? "error" : "success", message: inputError || "Quiz saved." }, cookies);
   },
   preview: async ({ cookies, request, locals, params }) => {
     const { inputError } = await updateQuiz({ request, locals, params });
 
     if (inputError) {
-      throw redirect(303, `/edit/${params.quizId}`, { type: "danger", message: inputError }, cookies);
+      throw redirect(303, `/edit/${params.quizId}`, { type: "error", message: inputError }, cookies);
     }
 
     throw redirect(303, `/preview/${params.quizId}`);
@@ -67,7 +61,7 @@ export const actions = {
     const { inputError } = await updateQuiz({ request, locals, params });
 
     if (inputError) {
-      throw redirect(303, `/edit/${params.quizId}`, { type: "danger", message: inputError }, cookies);
+      throw redirect(303, `/edit/${params.quizId}`, { type: "error", message: inputError }, cookies);
     }
 
     throw redirect(303, `/play/${params.quizId}`);

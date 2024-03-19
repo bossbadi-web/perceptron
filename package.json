@@ -28,6 +28,7 @@
     "nodemailer": "^6.9.8",
     "ocr-space-api-wrapper": "^2.3.0",
     "openai": "^4.19.1",
-    "recaptcha-v3": "^1.10.0"
+    "recaptcha-v3": "^1.10.0",
+    "svelte-french-toast": "^1.2.0"
   }
 }

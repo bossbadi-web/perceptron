@@ -90,11 +90,11 @@ export const actions = {
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
-      setFlash({ type: "danger", message: inputError }, cookies);
+      setFlash({ type: "error", message: inputError }, cookies);
       return fail(400);
     }
     if (!data || err) {
-      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
+      setFlash({ type: "error", message: "Internal Server Error." }, cookies);
       return fail(500);
     }
 
@@ -109,11 +109,11 @@ export const actions = {
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
-      setFlash({ type: "danger", message: inputError }, cookies);
+      setFlash({ type: "error", message: inputError }, cookies);
       return fail(400);
     }
     if (!data || err) {
-      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
+      setFlash({ type: "error", message: "Internal Server Error." }, cookies);
       return fail(500);
     }
 
@@ -128,11 +128,11 @@ export const actions = {
     const { data, err, inputError } = await createQuiz({ request, locals });
 
     if (inputError) {
-      setFlash({ type: "danger", message: inputError }, cookies);
+      setFlash({ type: "error", message: inputError }, cookies);
       return fail(400);
     }
     if (!data || err) {
-      setFlash({ type: "danger", message: "Internal Server Error." }, cookies);
+      setFlash({ type: "error", message: "Internal Server Error." }, cookies);
       return fail(500);
     }
 

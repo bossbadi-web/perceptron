@@ -19,7 +19,7 @@ export const actions = {
       });
 
       if (!data) {
-        setFlash({ type: "danger", message: "Failed to sign in with Google." }, cookies);
+        setFlash({ type: "error", message: "Failed to sign in with Google." }, cookies);
         return fail(400);
       }
 
@@ -35,7 +35,7 @@ export const actions = {
     if (err) {
       setFlash(
         {
-          type: "danger",
+          type: "error",
           message: err.__isAuthError ? err.message : "Internal Server Error.",
         },
         cookies

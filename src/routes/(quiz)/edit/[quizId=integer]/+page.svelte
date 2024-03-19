@@ -124,7 +124,15 @@
 
 <section in:fade>
   <div class="container">
-    <form id="quiz-form" method="POST" use:enhance>
+    <form
+      id="quiz-form"
+      method="POST"
+      use:enhance={() => {
+        return async ({ update }) => {
+          update({ reset: false });
+        };
+      }}
+    >
       <div class="row normal-row">
         <div class="col-md-10 offset-md-1">
           <div class="mb-3">

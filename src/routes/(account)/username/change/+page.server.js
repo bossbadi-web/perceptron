@@ -9,7 +9,7 @@ export const actions = {
     const password = formData.get("password");
     const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
     if (!passwordCorrect) {
-      setFlash({ type: "danger", message: "Wrong password" }, cookies);
+      setFlash({ type: "error", message: "Wrong password" }, cookies);
       return fail(401);
     }
 
@@ -20,7 +20,7 @@ export const actions = {
     if (err) {
       setFlash(
         {
-          type: "danger",
+          type: "error",
           message: err.__isAuthError ? err.message : "Internal Server Error.",
         },
         cookies

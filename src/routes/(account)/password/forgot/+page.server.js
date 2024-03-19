@@ -14,7 +14,7 @@ export const actions = {
     if (err) {
       setFlash(
         {
-          type: "danger",
+          type: "error",
           message: err.__isAuthError ? err.message : "Internal Server Error.",
         },
         cookies
