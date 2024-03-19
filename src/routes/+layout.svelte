@@ -59,15 +59,15 @@
 
   $: if ($flash) {
     if ($flash.type === "success") {
-      toast.success($flash.message, { duration: 5000 });
+      toast.success($flash.message);
     } else if ($flash.type === "error") {
-      toast.error($flash.message, { duration: 5000 });
+      toast.error($flash.message);
     } else if ($flash.type === "info") {
-      toast.info($flash.message, { duration: 5000 });
+      toast.info($flash.message);
     } else if ($flash.type === "warning") {
-      toast.warning($flash.message, { duration: 5000 });
+      toast.warning($flash.message);
     } else {
-      toast($flash.message, { duration: 5000 });
+      toast($flash.message);
     }
 
     // Clear the flash message to avoid double-toasting.
