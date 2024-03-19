@@ -31,7 +31,7 @@ export const actions = {
     const passwordConfirm = formData.get("passwordConfirm");
     if (password !== passwordConfirm) {
       setFlash({ type: "error", message: "Passwords do not match." }, cookies);
-      fail(400);
+      return fail(400);
     }
 
     // sign up
