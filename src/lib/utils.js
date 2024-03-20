@@ -4,7 +4,7 @@ import filter from "leo-profanity";
 export const completeUser = (user) => {
   return {
     ...user,
-    username: user.user_metadata.username,
+    username: user.user_metadata.username ?? user.user_metadata.name,
   };
 };
 
