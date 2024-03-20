@@ -8,12 +8,16 @@
   <small class="text-muted">(max {LIMITS.description} chars)</small>
 </label>
 
-<input
-  class="form-control"
-  type="text"
-  id="description"
-  name="description"
-  maxlength={LIMITS.description}
-  bind:value={$quiz.description}
-  required
-/>
+{#if quiz !== undefined}
+  <input
+    class="form-control"
+    type="text"
+    id="description"
+    name="description"
+    maxlength={LIMITS.description}
+    bind:value={$quiz.description}
+    required
+  />
+{:else}
+  <input class="form-control" type="text" id="description" name="description" maxlength={LIMITS.description} required />
+{/if}
