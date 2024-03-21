@@ -1,4 +1,9 @@
-:root {
+@import url(themes.css);
+
+:root,
+[data-theme="light"] {
+  --background: var(--background-lt);
+
   --primary: #008a83;
   --secondary: #00718a;
   --code: #00524e;
@@ -15,121 +20,31 @@
   --scroll-thumb: #c4c4c4;
   --scroll-thumb-hover: #a3a3a3;
   --scroll-thumb-active: #848484;
-
-  --background: radial-gradient(
-      circle at 40% 91%,
-      rgba(251, 251, 251, 0.04) 0%,
-      rgba(251, 251, 251, 0.04) 50%,
-      rgba(229, 229, 229, 0.04) 50%,
-      rgba(229, 229, 229, 0.04) 100%
-    ),
-    radial-gradient(
-      circle at 66% 97%,
-      rgba(36, 36, 36, 0.04) 0%,
-      rgba(36, 36, 36, 0.04) 50%,
-      rgba(46, 46, 46, 0.04) 50%,
-      rgba(46, 46, 46, 0.04) 100%
-    ),
-    radial-gradient(
-      circle at 86% 7%,
-      rgba(40, 40, 40, 0.04) 0%,
-      rgba(40, 40, 40, 0.04) 50%,
-      rgba(200, 200, 200, 0.04) 50%,
-      rgba(200, 200, 200, 0.04) 100%
-    ),
-    radial-gradient(
-      circle at 15% 16%,
-      rgba(99, 99, 99, 0.04) 0%,
-      rgba(99, 99, 99, 0.04) 50%,
-      rgba(45, 45, 45, 0.04) 50%,
-      rgba(45, 45, 45, 0.04) 100%
-    ),
-    radial-gradient(
-      circle at 75% 99%,
-      rgba(243, 243, 243, 0.04) 0%,
-      rgba(243, 243, 243, 0.04) 50%,
-      rgba(37, 37, 37, 0.04) 50%,
-      rgba(37, 37, 37, 0.04) 100%
-    ),
-    linear-gradient(90deg, rgb(34, 222, 237), rgb(135, 89, 215));
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary: #00538a;
-    --secondary: #00718a;
-    --code: #00bdb3;
+[data-theme="dark"] {
+  --background: var(--background-dk);
+}
+[data-theme="black"] {
+  --background: var(--background-black);
+}
 
-    --font: white;
-    --font-opp: black;
-    --font-muted: #949494;
-    --font-placeholder: #3a3a3a;
+[data-theme="dark"],
+[data-theme="black"] {
+  --primary: #00538a;
+  --secondary: #00718a;
+  --code: #00bdb3;
 
-    --card-background: rgba(0, 0, 0, 0.5);
-    --card-hover: rgba(0, 0, 0, 0.7);
+  --font: white;
+  --font-opp: black;
+  --font-muted: #949494;
+  --font-placeholder: #3a3a3a;
 
-    --scroll-track: #3a3a3a;
-    --scroll-thumb: #5f5f5f;
-    --scroll-thumb-hover: #7f7f7f;
-    --scroll-thumb-active: #9f9f9f;
+  --card-background: rgba(0, 0, 0, 0.5);
+  --card-hover: rgba(0, 0, 0, 0.7);
 
-    --background: radial-gradient(circle at center center, transparent, rgb(0, 0, 0)),
-      linear-gradient(
-        114deg,
-        rgba(59, 59, 59, 0.05) 0%,
-        rgba(59, 59, 59, 0.05) 50%,
-        rgba(63, 63, 63, 0.05) 50%,
-        rgba(63, 63, 63, 0.05) 100%
-      ),
-      linear-gradient(
-        186deg,
-        rgba(173, 173, 173, 0.05) 0%,
-        rgba(173, 173, 173, 0.05) 50%,
-        rgba(237, 237, 237, 0.05) 50%,
-        rgba(237, 237, 237, 0.05) 100%
-      ),
-      linear-gradient(
-        98deg,
-        rgba(191, 191, 191, 0.05) 0%,
-        rgba(191, 191, 191, 0.05) 50%,
-        rgba(119, 119, 119, 0.05) 50%,
-        rgba(119, 119, 119, 0.05) 100%
-      ),
-      linear-gradient(
-        58deg,
-        rgba(95, 95, 95, 0.05) 0%,
-        rgba(95, 95, 95, 0.05) 50%,
-        rgba(189, 189, 189, 0.05) 50%,
-        rgba(189, 189, 189, 0.05) 100%
-      ),
-      linear-gradient(
-        259deg,
-        rgba(31, 31, 31, 0.05) 0%,
-        rgba(31, 31, 31, 0.05) 50%,
-        rgba(110, 110, 110, 0.05) 50%,
-        rgba(110, 110, 110, 0.05) 100%
-      ),
-      linear-gradient(
-        41deg,
-        rgba(142, 142, 142, 0.05) 0%,
-        rgba(142, 142, 142, 0.05) 50%,
-        rgba(84, 84, 84, 0.05) 50%,
-        rgba(84, 84, 84, 0.05) 100%
-      ),
-      linear-gradient(
-        134deg,
-        rgba(96, 96, 96, 0.05) 0%,
-        rgba(96, 96, 96, 0.05) 50%,
-        rgba(198, 198, 198, 0.05) 50%,
-        rgba(198, 198, 198, 0.05) 100%
-      ),
-      linear-gradient(
-        46deg,
-        rgba(12, 12, 12, 0.05) 0%,
-        rgba(12, 12, 12, 0.05) 50%,
-        rgba(71, 71, 71, 0.05) 50%,
-        rgba(71, 71, 71, 0.05) 100%
-      ),
-      radial-gradient(circle at center center, hsl(227, 81%, 21%), hsl(227, 81%, 21%));
-  }
+  --scroll-track: #3a3a3a;
+  --scroll-thumb: #5f5f5f;
+  --scroll-thumb-hover: #7f7f7f;
+  --scroll-thumb-active: #9f9f9f;
 }
