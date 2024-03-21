@@ -9,10 +9,12 @@
     <div class="col-md-8 offset-md-2">
       <div class="row normal-row">
         <h1 class="text-center display-4">Register</h1>
-        <div class="mb-3 text-center">
-          <Google />
-        </div>
-        <form class="mb-3" method="POST" use:enhance={submitCaptcha}>
+        <form id="google-signin" method="POST" use:enhance={submitCaptcha}>
+          <div class="mb-3 text-center">
+            <Google />
+          </div>
+        </form>
+        <form id="email-signin" class="mb-3" method="POST" use:enhance={submitCaptcha}>
           <div class="mb-3">
             <label for="emailInput" class="form-label">Email</label>
             <input class="form-control" id="emailInput" type="email" name="email" />
