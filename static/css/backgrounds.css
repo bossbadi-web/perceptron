@@ -1,5 +1,5 @@
 :root {
-  --background-lt: radial-gradient(
+  --bg-main: radial-gradient(
       circle at 40% 91%,
       rgba(251, 251, 251, 0.04) 0%,
       rgba(251, 251, 251, 0.04) 50%,
@@ -36,7 +36,7 @@
     ),
     linear-gradient(90deg, rgb(34, 222, 237), rgb(135, 89, 215));
 
-  --background-dk: radial-gradient(circle at center center, transparent, rgb(0, 0, 0)),
+  --bg-dark: radial-gradient(circle at center center, transparent, rgb(0, 0, 0)),
     linear-gradient(
       114deg,
       rgba(59, 59, 59, 0.05) 0%,
@@ -95,5 +95,6 @@
     ),
     radial-gradient(circle at center center, hsl(227, 81%, 21%), hsl(227, 81%, 21%));
 
-  --background-black: #000000;
+  --bg-white: #f0f0f0;
+  --bg-black: #000000;
 }

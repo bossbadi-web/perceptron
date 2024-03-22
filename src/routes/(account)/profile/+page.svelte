@@ -41,9 +41,10 @@
           <label for="theme" class="form-label">Color Theme</label>
           <div class="input-group mb-3">
             <select class="form-select" id="theme" value={theme} on:change={changeTheme}>
-              <option value="light">Light</option>
+              <option value="main">Utopia</option>
+              <option value="white">Snow</option>
               <option value="dark">Dark</option>
-              <option value="black">Black</option>
+              <option value="black">High Contrast</option>
             </select>
           </div>
         </form>

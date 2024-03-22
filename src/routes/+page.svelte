@@ -26,8 +26,8 @@
       <div class="flex-grow-1 main-text">
         <h1 class="display-1 text-center">
           <picture>
-            <source srcset="/img/logo-white.svg" media="(prefers-color-scheme: dark)" />
             <img class="logo img-fluid" src="/img/logo-black.svg" alt="logo" />
+            <img class="logo img-fluid" src="/img/logo-white.svg" alt="logo" />
           </picture>
           <br />
           Perceptron

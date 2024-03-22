@@ -28,8 +28,8 @@
   <div class="container container-fluid">
     <a class="navbar-brand" href="/" data-sveltekit-reload>
       <picture>
-        <source srcset="/img/logo-white.svg" media="(prefers-color-scheme: dark)" />
         <img src="/img/logo-black.svg" alt="avatar" height="30" width="30" />
+        <img src="/img/logo-white.svg" alt="avatar" height="30" width="30" />
       </picture>
     </a>
     <a class="navbar-brand" href="/" data-sveltekit-reload>Perceptron</a>
