@@ -10,7 +10,7 @@
 
   var theme;
   onMount(() => {
-    theme = localStorage.getItem("theme") ?? "light";
+    theme = localStorage.getItem("theme") ?? "main";
   });
 </script>
 
