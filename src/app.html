@@ -16,6 +16,7 @@
 
     <link rel="stylesheet" href="/css/main.css" />
 
+    <!-- custom theme -->
     <script>
       const theme = localStorage.getItem("theme");
       if (theme) {
@@ -38,5 +39,13 @@
     </script>
 
     <script src="/js/navScroll.js"></script>
+
+    <!-- custom font -->
+    <script>
+      const font = localStorage.getItem("font");
+      if (font) {
+        document.body.style.fontFamily = font;
+      }
+    </script>
   </body>
 </html>

@@ -8,9 +8,16 @@
     localStorage.setItem("theme", theme);
   };
 
-  var theme;
+  const changeFont = (event) => {
+    const font = event.target.value;
+    document.body.style.fontFamily = font;
+    localStorage.setItem("font", font);
+  };
+
+  var theme, font;
   onMount(() => {
     theme = localStorage.getItem("theme") ?? "main";
+    font = localStorage.getItem("font") ?? "Playpen Sans";
   });
 </script>
 
@@ -45,6 +52,16 @@
               <option value="white">Snow</option>
               <option value="dark">Dark</option>
               <option value="black">High Contrast</option>
+            </select>
+          </div>
+
+          <label for="font" class="form-label">Font</label>
+          <div class="input-group mb-3">
+            <select class="form-select" id="font" value={font} on:change={changeFont}>
+              <option value="Playpen Sans">Playpen Sans</option>
+              <option value="sans-serif">Sans-serif</option>
+              <option value="serif">Serif</option>
+              <option value="monospace">Monospace</option>
             </select>
           </div>
         </form>
