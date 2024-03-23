@@ -59,9 +59,9 @@
           <div class="input-group mb-3">
             <select class="form-select" id="font" value={font} on:change={changeFont}>
               <option value="Playpen Sans">Playpen Sans</option>
-              <option value="Verdana">Verdana</option>
+              <option value="Verdana" class="no-mobile">Verdana</option>
               <option value="Arial">Arial</option>
-              <option value="Georgia">Georgia</option>
+              <option value="Georgia" class="no-mobile">Georgia</option>
               <option value="Times New Roman">Times New Roman</option>
               <option value="monospace">Monospace</option>
             </select>
@@ -89,6 +89,10 @@
   @media (max-width: 450px) {
     .buttons {
       flex-direction: column;
+    }
+
+    .no-mobile {
+      display: none;
     }
   }
 </style>
