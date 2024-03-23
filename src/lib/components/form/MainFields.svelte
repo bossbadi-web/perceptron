@@ -3,7 +3,7 @@
   import Description from "./Description.svelte";
   import Title from "./Title.svelte";
   import Visibility from "./Visibility.svelte";
-  export let quiz;
+  export let quiz = undefined;
 </script>
 
 <div class="mb-4">
