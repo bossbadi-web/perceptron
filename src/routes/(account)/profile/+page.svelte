@@ -59,8 +59,10 @@
           <div class="input-group mb-3">
             <select class="form-select" id="font" value={font} on:change={changeFont}>
               <option value="Playpen Sans">Playpen Sans</option>
-              <option value="sans-serif">Sans-serif</option>
-              <option value="serif">Serif</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Arial">Arial</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Times New Roman">Times New Roman</option>
               <option value="monospace">Monospace</option>
             </select>
           </div>
