@@ -1,6 +1,7 @@
 <script>
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
+  import Password from "$lib/components/auth/Password.svelte";
   export let data;
 
   const { email } = data;
@@ -15,8 +16,7 @@
         <h1 class="text-center display-4">Change Email</h1>
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
           <div class="mb-3">
-            <label for="passwordInput" class="form-label">Password</label>
-            <input class="form-control" id="passwordInput" type="password" name="password" required />
+            <Password />
           </div>
           <div class="mb-3">
             <label for="emailInput" class="form-label">New Email</label>

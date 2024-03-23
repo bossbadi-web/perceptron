@@ -1,6 +1,7 @@
 <script>
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
+  import Password from "$lib/components/auth/Password.svelte";
 
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";
 </script>
@@ -16,8 +17,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input class="form-control" id="password" type="password" name="password" required />
+            <Password />
           </div>
 
           <div class="mb-3">

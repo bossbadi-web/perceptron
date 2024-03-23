@@ -2,6 +2,7 @@
   import { enhance } from "$app/forms";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import Password from "$lib/components/auth/Password.svelte";
 
   let isFromPasswordReset = false;
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";
@@ -29,24 +30,19 @@
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
           {#if !isFromPasswordReset}
             <div class="mb-3">
-              <label for="passwordInput" class="form-label">Current Password</label>
-              <input class="form-control" id="passwordInput" type="password" name="password" required />
+              <Password labelName="Current Password" />
             </div>
           {/if}
 
           <div class="mb-3">
-            <label for="newPasswordInput" class="form-label">New Password</label>
-            <input class="form-control" id="newPasswordInput" type="password" name="newPassword" required />
+            <Password inputId="newPasswordInput" inputName="newPassword" labelName="New Password" />
           </div>
 
           <div class="mb-3">
-            <label for="newPasswordConfirmInput" class="form-label">Confirm New Password</label>
-            <input
-              class="form-control"
-              id="newPasswordConfirmInput"
-              type="password"
-              name="newPasswordConfirm"
-              required
+            <Password
+              inputId="newPasswordConfirmInput"
+              inputName="newPasswordConfirm"
+              labelName="Confirm New Password"
             />
           </div>
 

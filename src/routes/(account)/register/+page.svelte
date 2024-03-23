@@ -2,6 +2,7 @@
   import { enhance } from "$app/forms";
   import { submitCaptcha } from "$lib/recaptchaClient";
   import Google from "$lib/components/auth/Google.svelte";
+  import Password from "$lib/components/auth/Password.svelte";
 </script>
 
 <section>
@@ -24,12 +25,10 @@
             <input class="form-control" id="usernameInput" type="text" name="username" />
           </div>
           <div class="mb-3">
-            <label for="passwordInput" class="form-label">Password</label>
-            <input class="form-control" id="passwordInput" type="password" name="password" />
+            <Password />
           </div>
           <div class="mb-3">
-            <label for="passwordConfirmInput" class="form-label">Confirm Password</label>
-            <input class="form-control" id="passwordConfirmInput" type="password" name="passwordConfirm" />
+            <Password inputId="passwordConfirmInput" inputName="passwordConfirm" labelName="Confirm Password" />
           </div>
           <button type="submit" class="btn btn-main">Register</button>
         </form>
