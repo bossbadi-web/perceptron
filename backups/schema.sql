@@ -838,6 +838,7 @@ CREATE FUNCTION public.delete_account() RETURNS void
     LANGUAGE sql SECURITY DEFINER
     AS $$
 	delete from public.quizzes where owner = auth.uid();
+	delete from public.profiles where id = auth.uid();
 	delete from auth.users where id = auth.uid();
 $$;
 
@@ -865,19 +866,22 @@ $$;
 ALTER FUNCTION public.dislike_quiz(voter_id uuid, quiz_id bigint) OWNER TO postgres;
 
 --
--- Name: get_raw_user_meta_data(uuid); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: handle_new_user(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_raw_user_meta_data(user_id uuid) RETURNS json
+CREATE FUNCTION public.handle_new_user() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public'
     AS $$
-BEGIN
-  RETURN to_json((SELECT raw_user_meta_data FROM auth.users WHERE id = user_id));
-END;
+begin
+  insert into public.profiles (id, username)
+  values (new.id, coalesce(new.raw_user_meta_data ->> 'name', new.raw_user_meta_data ->> 'username'));
+  return new;
+end;
 $$;
 
 
-ALTER FUNCTION public.get_raw_user_meta_data(user_id uuid) OWNER TO postgres;
+ALTER FUNCTION public.handle_new_user() OWNER TO postgres;
 
 --
 -- Name: like_quiz(uuid, bigint); Type: FUNCTION; Schema: public; Owner: postgres
@@ -898,21 +902,6 @@ $$;
 
 
 ALTER FUNCTION public.like_quiz(voter_id uuid, quiz_id bigint) OWNER TO postgres;
-
---
--- Name: likequiz(uuid, bigint); Type: FUNCTION; Schema: public; Owner: postgres
---
-
-CREATE FUNCTION public.likequiz(voter_id uuid, quiz_id bigint) RETURNS void
-    LANGUAGE sql SECURITY DEFINER
-    AS $$
-	SELECT *
-	FROM public.quizzes
-	WHERE id = quiz_id;
-$$;
-
-
-ALTER FUNCTION public.likequiz(voter_id uuid, quiz_id bigint) OWNER TO postgres;
 
 --
 -- Name: right_password(character varying); Type: FUNCTION; Schema: public; Owner: postgres
@@ -1595,6 +1584,18 @@ COMMENT ON COLUMN auth.users.is_sso_user IS 'Auth: Set this column to true when 
 
 
 --
+-- Name: profiles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.profiles (
+    id uuid NOT NULL,
+    username text
+);
+
+
+ALTER TABLE public.profiles OWNER TO postgres;
+
+--
 -- Name: quizzes; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -1953,6 +1954,14 @@ ALTER TABLE ONLY auth.users
 
 
 --
+-- Name: profiles profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profiles
+    ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: quizzes quizzes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2267,6 +2276,13 @@ CREATE INDEX name_prefix_search ON storage.objects USING btree (name text_patter
 
 
 --
+-- Name: users on_auth_user_created; Type: TRIGGER; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+
+--
 -- Name: objects update_objects_updated_at; Type: TRIGGER; Schema: storage; Owner: supabase_storage_admin
 --
 
@@ -2354,6 +2370,14 @@ ALTER TABLE ONLY auth.sso_domains
 
 
 --
+-- Name: profiles profiles_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profiles
+    ADD CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id);
+
+
+--
 -- Name: quizzes quizzes_owner_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2377,10 +2401,31 @@ CREATE POLICY "Enable insert for authenticated users only" ON public.quizzes FOR
 
 
 --
+-- Name: profiles Enable insert for users based on user_id; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY "Enable insert for users based on user_id" ON public.profiles FOR INSERT TO authenticated WITH CHECK ((auth.uid() = id));
+
+
+--
+-- Name: profiles Enable read access for all users; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY "Enable read access for all users" ON public.profiles FOR SELECT USING (true);
+
+
+--
 -- Name: quizzes Enable read access for all users; Type: POLICY; Schema: public; Owner: postgres
 --
 
 CREATE POLICY "Enable read access for all users" ON public.quizzes FOR SELECT USING (true);
+
+
+--
+-- Name: profiles Enable update for users based on user_id; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY "Enable update for users based on user_id" ON public.profiles FOR UPDATE TO authenticated USING (true) WITH CHECK ((auth.uid() = id));
 
 
 --
@@ -2389,6 +2434,12 @@ CREATE POLICY "Enable read access for all users" ON public.quizzes FOR SELECT US
 
 CREATE POLICY "delete quiz" ON public.quizzes FOR DELETE TO authenticated USING ((auth.uid() = owner));
 
+
+--
+-- Name: profiles; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: quizzes; Type: ROW SECURITY; Schema: public; Owner: postgres
@@ -3373,12 +3424,12 @@ GRANT ALL ON FUNCTION public.dislike_quiz(voter_id uuid, quiz_id bigint) TO serv
 
 
 --
--- Name: FUNCTION get_raw_user_meta_data(user_id uuid); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION handle_new_user(); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.get_raw_user_meta_data(user_id uuid) TO anon;
-GRANT ALL ON FUNCTION public.get_raw_user_meta_data(user_id uuid) TO authenticated;
-GRANT ALL ON FUNCTION public.get_raw_user_meta_data(user_id uuid) TO service_role;
+GRANT ALL ON FUNCTION public.handle_new_user() TO anon;
+GRANT ALL ON FUNCTION public.handle_new_user() TO authenticated;
+GRANT ALL ON FUNCTION public.handle_new_user() TO service_role;
 
 
 --
@@ -3388,15 +3439,6 @@ GRANT ALL ON FUNCTION public.get_raw_user_meta_data(user_id uuid) TO service_rol
 GRANT ALL ON FUNCTION public.like_quiz(voter_id uuid, quiz_id bigint) TO anon;
 GRANT ALL ON FUNCTION public.like_quiz(voter_id uuid, quiz_id bigint) TO authenticated;
 GRANT ALL ON FUNCTION public.like_quiz(voter_id uuid, quiz_id bigint) TO service_role;
-
-
---
--- Name: FUNCTION likequiz(voter_id uuid, quiz_id bigint); Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON FUNCTION public.likequiz(voter_id uuid, quiz_id bigint) TO anon;
-GRANT ALL ON FUNCTION public.likequiz(voter_id uuid, quiz_id bigint) TO authenticated;
-GRANT ALL ON FUNCTION public.likequiz(voter_id uuid, quiz_id bigint) TO service_role;
 
 
 --
@@ -3846,6 +3888,15 @@ GRANT ALL ON TABLE pgsodium.masking_rule TO pgsodium_keyholder;
 --
 
 GRANT ALL ON TABLE pgsodium.mask_columns TO pgsodium_keyholder;
+
+
+--
+-- Name: TABLE profiles; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.profiles TO anon;
+GRANT ALL ON TABLE public.profiles TO authenticated;
+GRANT ALL ON TABLE public.profiles TO service_role;
 
 
 --
