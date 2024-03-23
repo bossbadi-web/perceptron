@@ -34,7 +34,7 @@ export const actions = {
       text: `${msg}\n\n--\nUser ID: ${id}`,
     };
 
-    transporter.sendMail(mailOptions, function (err, _) {
+    transporter.sendMail(mailOptions, (err, _) => {
       if (err) {
         setFlash({ type: "error", message: "Something went wrong." }, cookies);
         return fail(500);

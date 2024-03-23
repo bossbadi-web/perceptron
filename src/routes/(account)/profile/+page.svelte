@@ -2,11 +2,11 @@
   import { onMount } from "svelte";
   export let data;
 
-  function changeTheme(event) {
+  const changeTheme = (event) => {
     const theme = event.target.value;
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-  }
+  };
 
   var theme;
   onMount(() => {

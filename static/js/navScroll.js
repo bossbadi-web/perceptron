@@ -1,7 +1,7 @@
 // change navbar transparency on scroll
 
-$(document).ready(function () {
-  $(window).scroll(function () {
+$(document).ready(() => {
+  $(window).scroll(() => {
     if ($(document).scrollTop() > 1) {
       $(".navbar").addClass("navbar-scrolled");
     } else {
