@@ -17,8 +17,8 @@
         </form>
         <form id="email-signin" class="mb-3" method="POST" use:enhance={submitCaptcha}>
           <div class="mb-3">
-            <label for="emailInput" class="form-label">Email</label>
-            <input class="form-control" id="emailInput" type="email" name="email" />
+            <label for="emailInput" class="form-label">Email<span class="required">*</span></label>
+            <input class="form-control" id="emailInput" type="email" name="email" required />
           </div>
           <div class="mb-3">
             <Password />

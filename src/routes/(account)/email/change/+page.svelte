@@ -19,11 +19,11 @@
             <Password />
           </div>
           <div class="mb-3">
-            <label for="emailInput" class="form-label">New Email</label>
+            <label for="emailInput" class="form-label">New Email<span class="required">*</span></label>
             <input class="form-control" id="emailInput" type="email" name="email" placeholder={email ?? ""} required />
           </div>
           <div class="mb-3">
-            <label for="emailConfirmInput" class="form-label">Confirm New Email</label>
+            <label for="emailConfirmInput" class="form-label">Confirm New Email<span class="required">*</span></label>
             <input class="form-control" id="emailConfirmInput" type="email" name="emailConfirm" required />
           </div>
           <button type="submit" class="btn btn-main">Change Email</button>
