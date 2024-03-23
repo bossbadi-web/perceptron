@@ -54,13 +54,19 @@
   --background: var(--bg-black);
 }
 
-/* change color of site logo */
+/* use black site logo on light theme */
+:root img[src*="white"],
 [data-theme="main"] img[src*="white"],
 [data-theme="white"] img[src*="white"] {
   display: none;
 }
 
+/* use white site logo on dark theme */
 [data-theme="dark"] img[src*="black"],
 [data-theme="black"] img[src*="black"] {
   display: none;
+}
+[data-theme="dark"] img[src*="white"],
+[data-theme="black"] img[src*="white"] {
+  display: inline;
 }
