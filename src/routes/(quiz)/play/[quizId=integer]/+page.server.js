@@ -37,9 +37,7 @@ export const load = async ({ locals, params, url }) => {
     q.answer = q.options.indexOf(correctAnswer);
   });
 
-  const { data: dataOwner } = await locals.supabase.rpc("get_raw_user_meta_data", {
-    user_id: data.owner,
-  });
+  const { data: dataOwner } = await locals.supabase.from("profiles").select("username").eq("id", data.owner).single();
 
   return {
     quiz: cleanQuiz({ ...data, username: dataOwner?.username }),
