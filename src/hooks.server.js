@@ -21,7 +21,7 @@ export const handle = async ({ event, resolve }) => {
     } = await event.locals.supabase.auth.getSession();
 
     if (session?.user) {
-      session.user = completeUser(session.user);
+      session.user = await completeUser(event.locals.supabase, session.user);
     }
     return session;
   };

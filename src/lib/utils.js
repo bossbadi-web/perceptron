@@ -1,11 +1,10 @@
 import filter from "leo-profanity";
 
 // add username to session.user
-export const completeUser = (user) => {
-  return {
-    ...user,
-    username: user.user_metadata.username ?? user.user_metadata.name,
-  };
+export const completeUser = async (supabase, user) => {
+  const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+
+  return (data && { ...user, ...data }) || user;
 };
 
 export const formatDate = (s) => {

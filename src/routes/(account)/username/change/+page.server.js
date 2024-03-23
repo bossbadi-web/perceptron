@@ -14,8 +14,8 @@ export const actions = {
     }
 
     const username = formData.get("username");
-
-    const { error: err } = await locals.supabase.auth.updateUser({ data: { username } });
+    const session = await locals.getSession();
+    const { error: err } = await locals.supabase.from("profiles").update({ username }).eq("id", session.user.id);
 
     if (err) {
       setFlash(
@@ -28,7 +28,7 @@ export const actions = {
       return fail(err.status);
     }
 
-    setFlash({ type: "success", message: "Username updated. Please sign in again to see your new name." }, cookies);
+    setFlash({ type: "success", message: "Username updated." }, cookies);
   },
 };
 
