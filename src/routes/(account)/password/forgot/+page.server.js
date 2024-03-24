@@ -1,4 +1,3 @@
-import { AuthApiError } from "@supabase/supabase-js";
 import { fail } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 
