@@ -1,25 +1,12 @@
 <script>
   import { enhance } from "$app/forms";
-  import { onMount } from "svelte";
   import { page } from "$app/stores";
   import Password from "$lib/components/auth/Password.svelte";
+  export let data;
 
-  let isFromPasswordReset = false;
+  const { isFromPasswordReset } = data;
+
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";
-
-  onMount(() => {
-    const referrer = document.referrer;
-    let error;
-
-    if (referrer && typeof referrer === "string") {
-      const url = new URL(referrer);
-      error = url.searchParams.get("error");
-    }
-
-    if (!error) {
-      isFromPasswordReset = referrer.startsWith(`${window.location.origin}/auth/callback`);
-    }
-  });
 </script>
 
 <section>
@@ -45,8 +32,6 @@
               labelName="Confirm New Password"
             />
           </div>
-
-          <input type="hidden" name="isFromPasswordReset" value={isFromPasswordReset ? 1 : 0} />
 
           <button type="submit" class="btn btn-main">Change Password</button>
         </form>

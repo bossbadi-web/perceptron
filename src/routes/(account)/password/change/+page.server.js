@@ -1,12 +1,14 @@
 import { fail } from "@sveltejs/kit";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
+import NodeCache from "node-cache";
+
+const cache = new NodeCache();
 
 export const actions = {
-  default: async ({ cookies, request, locals }) => {
+  default: async ({ cookies, locals, request }) => {
     const formData = await request.formData();
 
-    // check password
-    if (formData.get("isFromPasswordReset") == 0) {
+    if (!cache.get("isFromPasswordReset")) {
       const password = formData.get("password");
       const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
       if (!passwordCorrect) {
@@ -38,13 +40,30 @@ export const actions = {
       return fail(err.status);
     }
 
-    setFlash({ type: "success", message: "Password updated." }, cookies);
+    throw redirect(303, "/profile", { type: "success", message: "Password updated." }, cookies);
   },
 };
 
 // check if user is logged in
-export const load = async ({ locals, url }) => {
-  if (!(await locals.getSession())) {
+export const load = async ({ locals, request, url }) => {
+  if (!locals.getSession()) {
     throw redirect(303, `/login?redirectTo=${url.pathname}`);
   }
+
+  let error,
+    isFromPasswordReset = false;
+
+  const referer = request.headers.get("referer");
+  if (referer && typeof referer === "string") {
+    const url = new URL(referer);
+    error = url.searchParams.get("error");
+  }
+
+  if (!error) {
+    isFromPasswordReset = referer.startsWith(`${url.origin}/auth/callback`);
+  }
+
+  cache.set("isFromPasswordReset", isFromPasswordReset);
+
+  return { isFromPasswordReset };
 };
