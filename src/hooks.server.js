@@ -1,8 +1,6 @@
-// src/hooks.server.js
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
-import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit";
 import { completeUser } from "$lib/utils";
-import NodeCache from "node-cache";
+import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit";
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
 
 export const handle = async ({ event, resolve }) => {
   event.locals.supabase = createSupabaseServerClient({
@@ -26,8 +24,6 @@ export const handle = async ({ event, resolve }) => {
     }
     return session;
   };
-
-  event.locals.cache = new NodeCache();
 
   return resolve(event, {
     filterSerializedResponseHeaders(name) {
