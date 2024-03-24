@@ -4,8 +4,6 @@ import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit";
 import { completeUser } from "$lib/utils";
 import NodeCache from "node-cache";
 
-const cache = new NodeCache();
-
 export const handle = async ({ event, resolve }) => {
   event.locals.supabase = createSupabaseServerClient({
     supabaseUrl: PUBLIC_SUPABASE_URL,
@@ -29,7 +27,7 @@ export const handle = async ({ event, resolve }) => {
     return session;
   };
 
-  event.locals.cache = cache;
+  event.locals.cache = new NodeCache();
 
   return resolve(event, {
     filterSerializedResponseHeaders(name) {
