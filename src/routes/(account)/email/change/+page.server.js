@@ -35,7 +35,8 @@ export const actions = {
       return fail(err.status);
     }
 
-    setFlash({ type: "success", message: "Check your new email for a confirmation link." }, cookies);
+    await locals.supabase.auth.signOut();
+    throw redirect(303, "/", { type: "success", message: "Check your new email for a confirmation link." }, cookies);
   },
 };
 
