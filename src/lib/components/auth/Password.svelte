@@ -22,7 +22,7 @@
 <label for={inputId} class="form-label">{labelName}<span class="required">*</span></label>
 <div class="input-group">
   <input type="password" class="form-control" id={inputId} name={inputName} required />
-  <button type="button" class="fas fa-eye" on:click={togglePassword}></button>
+  <button type="button" class="fas fa-eye" on:click={togglePassword} tabindex="-1"></button>
 </div>
 
 <style>
