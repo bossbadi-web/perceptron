@@ -28,7 +28,7 @@ export const actions = {
       return fail(err.status);
     }
 
-    setFlash({ type: "success", message: "Username updated." }, cookies);
+    throw redirect(303, "/profile", { type: "success", message: "Username updated." }, cookies);
   },
 };
 
