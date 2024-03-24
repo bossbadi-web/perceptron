@@ -4,7 +4,7 @@
   import Password from "$lib/components/auth/Password.svelte";
   export let data;
 
-  const { isFromPasswordReset } = data;
+  const { isResetLink } = data;
 
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";
 </script>
@@ -15,7 +15,7 @@
       <div class="row normal-row">
         <h1 class="text-center display-4">Change Password</h1>
         <form method="POST" action="?redirectTo={redirectTo}" use:enhance>
-          {#if !isFromPasswordReset}
+          {#if !isResetLink}
             <div class="mb-3">
               <Password labelName="Current Password" />
             </div>
