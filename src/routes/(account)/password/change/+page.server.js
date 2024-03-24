@@ -1,14 +1,13 @@
 import { fail } from "@sveltejs/kit";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
-import NodeCache from "node-cache";
-
-const cache = new NodeCache();
 
 export const actions = {
   default: async ({ cookies, locals, request }) => {
     const formData = await request.formData();
 
-    if (!cache.get("isFromPasswordReset")) {
+    if (locals.cache.get("isFromPasswordReset")) {
+      locals.cache.del("isFromPasswordReset");
+    } else {
       const password = formData.get("password");
       const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
       if (!passwordCorrect) {
@@ -63,7 +62,7 @@ export const load = async ({ locals, request, url }) => {
     isFromPasswordReset = referer.startsWith(`${url.origin}/auth/callback`);
   }
 
-  cache.set("isFromPasswordReset", isFromPasswordReset);
+  locals.cache.set("isFromPasswordReset", isFromPasswordReset);
 
   return { isFromPasswordReset };
 };
