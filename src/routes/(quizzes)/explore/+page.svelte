@@ -2,7 +2,7 @@
   import { changePage } from "$lib/utils";
   import { page } from "$app/stores";
   import Menu from "../Menu.svelte";
-  import QuizCard from "$lib/components/quiz/Explore.svelte";
+  import QuizCard from "$lib/components/quiz/browse/Explore.svelte";
   export let data;
 
   const { rangeLeft, rangeRight, quizzes, session, total } = data;

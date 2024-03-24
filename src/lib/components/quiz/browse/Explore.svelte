@@ -2,7 +2,7 @@
 
 <script>
   import { formatDate } from "$lib/utils";
-  import LikeDislike from "$lib/components/quiz/LikeDislike.svelte";
+  import LikeDislike from "$lib/components/quiz/browse/LikeDislike.svelte";
   import QuizDescription from "./Description.svelte";
 
   export let quiz,

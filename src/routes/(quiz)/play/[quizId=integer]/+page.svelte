@@ -1,12 +1,12 @@
 <script>
-  import "$lib/components/mcq/styles.css";
+  import "$lib/components/quiz/play/styles.css";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import { secondsToHmsString } from "$lib/utils";
-  import LikeDislike from "$lib/components/quiz/LikeDislike.svelte";
-  import Mcq from "$lib/components/mcq/Play.svelte";
-  import McqSummary from "$lib/components/mcq/Summary.svelte";
-  import QuizDescription from "$lib/components/quiz/Description.svelte";
+  import LikeDislike from "$lib/components/quiz/browse/LikeDislike.svelte";
+  import Mcq from "$lib/components/quiz/play/Play.svelte";
+  import McqSummary from "$lib/components/quiz/play/Summary.svelte";
+  import QuizDescription from "$lib/components/quiz/browse/Description.svelte";
   export let data;
 
   const { quiz } = data;

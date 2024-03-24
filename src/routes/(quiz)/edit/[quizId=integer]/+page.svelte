@@ -1,11 +1,11 @@
 <script>
-  import "$lib/components/mcq/styles.css";
+  import "$lib/components/quiz/play/styles.css";
   import { createEditQuizStore, edited } from "$lib/stores/editQuiz";
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
-  import MainFields from "$lib/components/form/MainFields.svelte";
-  import Stats from "$lib/components/quiz/Stats.svelte";
+  import MainFields from "$lib/components/quiz/edit/MainFields.svelte";
+  import Stats from "$lib/components/quiz/browse/Stats.svelte";
   export let data;
 
   const { quiz, LIMITS } = data;

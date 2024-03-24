@@ -1,6 +1,6 @@
 <script>
   import "./styles.css";
-  import "$lib/components/mcq/styles.css";
+  import "$lib/components/quiz/play/styles.css";
   import { LANDING_QUESTIONS } from "$lib/landingQuestions.js";
   import { page } from "$app/stores";
 
