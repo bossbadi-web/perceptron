@@ -68,9 +68,6 @@
       default:
         toast($flash.message);
     }
-
-    // Clear the flash message to avoid double-toasting.
-    $flash = undefined;
   }
 </script>
 
