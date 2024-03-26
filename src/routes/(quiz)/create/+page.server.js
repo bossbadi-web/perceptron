@@ -10,6 +10,13 @@ const createQuiz = async ({ request, locals }) => {
   const formData = await request.formData();
   const { title, description, fileToUpload, visibility, bg, notes } = Object.fromEntries(formData);
 
+  if (!title) {
+    return { inputError: "Title is required." };
+  }
+  if (!description) {
+    return { inputError: "Description is required." };
+  }
+
   // validate input
   if (title.length > LIMITS.title) {
     return { inputError: `Title must be less than ${LIMITS.title} characters.` };

@@ -6,6 +6,13 @@ const updateQuiz = async ({ request, locals, params }) => {
   const formData = await request.formData();
   let { title, description, questions, visibility, bg } = Object.fromEntries(formData);
 
+  if (!title) {
+    return { inputError: "Title is required." };
+  }
+  if (!description) {
+    return { inputError: "Description is required." };
+  }
+
   let inputError = "";
   let newQuiz = { data: JSON.parse(questions) };
 
