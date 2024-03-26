@@ -1,5 +1,6 @@
 <script>
   import { enhance } from "$app/forms";
+  import { LIMITS } from "$lib/consts";
   import { submitCaptcha } from "$lib/recaptchaClient";
   import Google from "$lib/components/auth/Google.svelte";
   import Password from "$lib/components/auth/Password.svelte";
@@ -21,8 +22,18 @@
             <input class="form-control" id="emailInput" type="email" name="email" required />
           </div>
           <div class="mb-3">
-            <label for="usernameInput" class="form-label">Username<span class="required">*</span></label>
-            <input class="form-control" id="usernameInput" type="text" name="username" required />
+            <label for="usernameInput" class="form-label">
+              Username<span class="required">*</span>
+              <small class="text-muted">(max {LIMITS.username} chars)</small>
+            </label>
+            <input
+              class="form-control"
+              id="usernameInput"
+              type="text"
+              name="username"
+              maxlength={LIMITS.username}
+              required
+            />
           </div>
           <div class="mb-3">
             <Password />
