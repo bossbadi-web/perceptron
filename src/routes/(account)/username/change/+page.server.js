@@ -15,6 +15,10 @@ export const actions = {
     }
 
     const username = formData.get("username");
+    if (!username) {
+      setFlash({ type: "error", message: "Username is required." }, cookies);
+      return fail(400);
+    }
     if (username.length > LIMITS.username) {
       setFlash({ type: "error", message: `Username must be less than ${LIMITS.username} characters.` }, cookies);
       return fail(400);
