@@ -4,9 +4,9 @@ import { redirect, setFlash } from "sveltekit-flash-message/server";
 export const actions = {
   default: async ({ cookies, request, locals }) => {
     const formData = await request.formData();
+    const { password, email, emailConfirm } = Object.fromEntries(formData);
 
     // check password
-    const password = formData.get("password");
     const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
     if (!passwordCorrect) {
       setFlash({ type: "error", message: "Wrong password" }, cookies);
@@ -14,18 +14,14 @@ export const actions = {
     }
 
     // check if emails match
-    const email = formData.get("email");
     if (!email) {
       setFlash({ type: "error", message: "Email is required." }, cookies);
       return fail(400);
     }
-
-    const emailConfirm = formData.get("emailConfirm");
     if (!emailConfirm) {
       setFlash({ type: "error", message: "Please confirm the email." }, cookies);
       return fail(400);
     }
-
     if (email !== emailConfirm) {
       setFlash({ type: "error", message: "Emails do not match." }, cookies);
       return fail(400);

@@ -5,16 +5,16 @@ import { redirect, setFlash } from "sveltekit-flash-message/server";
 export const actions = {
   default: async ({ cookies, request, locals }) => {
     const formData = await request.formData();
+    const { password, username } = Object.fromEntries(formData.entries());
 
     // check password
-    const password = formData.get("password");
     const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
     if (!passwordCorrect) {
       setFlash({ type: "error", message: "Wrong password" }, cookies);
       return fail(401);
     }
 
-    const username = formData.get("username");
+    // check username
     if (!username) {
       setFlash({ type: "error", message: "Username is required." }, cookies);
       return fail(400);

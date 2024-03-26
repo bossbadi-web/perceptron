@@ -12,8 +12,16 @@ export const actions = {
     }
 
     const formData = await request.formData();
-    const msg = formData.get("msg");
-    const subject = formData.get("subject");
+    const { subject, msg } = Object.fromEntries(formData);
+
+    if (!subject) {
+      setFlash({ type: "error", message: "A subject is required." }, cookies);
+      return fail(400);
+    }
+    if (!msg) {
+      setFlash({ type: "error", message: "A message is required." }, cookies);
+      return fail(400);
+    }
 
     const session = await locals.getSession();
     const { username, email, id } = session.user;

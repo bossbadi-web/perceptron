@@ -4,7 +4,7 @@ import { setFlash } from "sveltekit-flash-message/server";
 export const actions = {
   default: async ({ cookies, request, locals, url }) => {
     const formData = await request.formData();
-    const email = formData.get("email");
+    const { email } = Object.fromEntries(formData);
 
     const { error: err } = await locals.supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${url.origin}/auth/callback?next=/password/change`,

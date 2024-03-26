@@ -7,11 +7,11 @@ const cache = new NodeCache();
 export const actions = {
   default: async ({ cookies, locals, request }) => {
     const formData = await request.formData();
+    const { password, newPassword, newPasswordConfirm } = Object.fromEntries(formData);
 
     if (cache.get("isResetLink")) {
       cache.del("isResetLink");
     } else {
-      const password = formData.get("password");
       const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
       if (!passwordCorrect) {
         setFlash({ type: "error", message: "Wrong password" }, cookies);
@@ -20,9 +20,14 @@ export const actions = {
     }
 
     // check if new passwords match
-    const newPassword = formData.get("newPassword");
-    const newPasswordConfirm = formData.get("newPasswordConfirm");
-
+    if (!newPassword) {
+      setFlash({ type: "error", message: "New password is required" }, cookies);
+      return fail(400);
+    }
+    if (!newPasswordConfirm) {
+      setFlash({ type: "error", message: "Please confirm the new password" }, cookies);
+      return fail(400);
+    }
     if (newPassword !== newPasswordConfirm) {
       setFlash({ type: "error", message: "Passwords do not match" }, cookies);
       return fail(400);

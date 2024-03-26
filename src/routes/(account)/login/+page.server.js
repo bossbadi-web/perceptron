@@ -27,10 +27,7 @@ export const actions = {
     }
 
     const formData = await request.formData();
-    const email = formData.get("email");
-    const password = formData.get("password");
-
-    const { error: err } = await locals.supabase.auth.signInWithPassword({ email, password });
+    const { error: err } = await locals.supabase.auth.signInWithPassword(Object.fromEntries(formData));
 
     if (err) {
       setFlash(

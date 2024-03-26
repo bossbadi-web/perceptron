@@ -4,9 +4,9 @@ import { redirect, setFlash } from "sveltekit-flash-message/server";
 export const actions = {
   default: async ({ cookies, request, locals }) => {
     const formData = await request.formData();
+    const { password, deleteConfirm } = Object.fromEntries(formData);
 
     // check password
-    const password = formData.get("password");
     const { data: passwordCorrect } = await locals.supabase.rpc("right_password", { password });
     if (!passwordCorrect) {
       setFlash({ type: "error", message: "Wrong password" }, cookies);
@@ -14,7 +14,6 @@ export const actions = {
     }
 
     // check delete confirmation
-    const deleteConfirm = formData.get("deleteConfirm");
     if (deleteConfirm.toLowerCase() !== "delete my account") {
       setFlash({ type: "error", message: 'Please type "delete my account" to confirm.' }, cookies);
       return fail(400);
