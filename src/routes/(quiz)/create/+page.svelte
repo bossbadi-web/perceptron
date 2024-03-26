@@ -1,13 +1,12 @@
 <script>
   import { enhance } from "$app/forms";
   import { getFlash } from "sveltekit-flash-message";
+  import { LIMITS } from "$lib/consts";
   import { page } from "$app/stores";
   import { submitCaptcha } from "$lib/recaptchaClient";
   import Loading from "./Loading.svelte";
   import MainFields from "$lib/components/quiz/edit/MainFields.svelte";
-  export let data;
 
-  const { LIMITS } = data;
   const acceptedFileTypes = LIMITS.filetypes.map((type) => `.${type}`).join(", ");
 
   let loading = false;

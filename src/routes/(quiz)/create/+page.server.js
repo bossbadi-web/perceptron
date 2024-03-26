@@ -144,6 +144,4 @@ export const load = async ({ locals, url }) => {
   if (!(await locals.getSession())) {
     throw redirect(303, `/login?redirectTo=${url.pathname}`);
   }
-
-  return { LIMITS };
 };

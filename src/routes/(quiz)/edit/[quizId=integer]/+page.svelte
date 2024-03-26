@@ -3,12 +3,13 @@
   import { createEditQuizStore, edited } from "$lib/stores/editQuiz";
   import { enhance } from "$app/forms";
   import { fade } from "svelte/transition";
+  import { LIMITS } from "$lib/consts";
   import { onMount } from "svelte";
   import MainFields from "$lib/components/quiz/edit/MainFields.svelte";
   import Stats from "$lib/components/quiz/browse/Stats.svelte";
   export let data;
 
-  const { quiz, LIMITS } = data;
+  const { quiz } = data;
   const editQuizStore = createEditQuizStore(quiz);
 
   $: jsonVersion = JSON.stringify($editQuizStore.data);

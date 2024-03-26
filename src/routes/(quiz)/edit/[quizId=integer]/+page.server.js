@@ -104,5 +104,5 @@ export const load = async ({ locals, params, url }) => {
     });
   }
 
-  return { quiz: data, LIMITS };
+  return { quiz: data };
 };
