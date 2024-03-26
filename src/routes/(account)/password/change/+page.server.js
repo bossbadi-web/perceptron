@@ -21,7 +21,7 @@ export const actions = {
 
     // check if new passwords match
     if (!newPassword) {
-      setFlash({ type: "error", message: "New password is required" }, cookies);
+      setFlash({ type: "error", message: "A new password is required" }, cookies);
       return fail(400);
     }
     if (!newPasswordConfirm) {

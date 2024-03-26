@@ -29,11 +29,11 @@ export const actions = {
     const { email, username, password, passwordConfirm } = Object.fromEntries(formData);
 
     if (!email) {
-      setFlash({ type: "error", message: "Email is required." }, cookies);
+      setFlash({ type: "error", message: "An email is required." }, cookies);
       return fail(400);
     }
     if (!username) {
-      setFlash({ type: "error", message: "Username is required." }, cookies);
+      setFlash({ type: "error", message: "A username is required." }, cookies);
       return fail(400);
     }
     if (username.length > LIMITS.username) {
@@ -41,7 +41,7 @@ export const actions = {
       return fail(400);
     }
     if (!password) {
-      setFlash({ type: "error", message: "Password is required." }, cookies);
+      setFlash({ type: "error", message: "A password is required." }, cookies);
       return fail(400);
     }
     if (!passwordConfirm) {

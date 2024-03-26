@@ -16,7 +16,7 @@ export const actions = {
 
     // check username
     if (!username) {
-      setFlash({ type: "error", message: "Username is required." }, cookies);
+      setFlash({ type: "error", message: "A username is required." }, cookies);
       return fail(400);
     }
     if (username.length > LIMITS.username) {

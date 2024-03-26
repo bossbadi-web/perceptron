@@ -15,7 +15,7 @@ export const actions = {
 
     // check if emails match
     if (!email) {
-      setFlash({ type: "error", message: "Email is required." }, cookies);
+      setFlash({ type: "error", message: "An email is required." }, cookies);
       return fail(400);
     }
     if (!emailConfirm) {
