@@ -7,10 +7,10 @@ const updateQuiz = async ({ request, locals, params }) => {
   let { title, description, questions, visibility, bg } = Object.fromEntries(formData);
 
   if (!title) {
-    return { inputError: "Title is required." };
+    return { inputError: "A title is required." };
   }
   if (!description) {
-    return { inputError: "Description is required." };
+    return { inputError: "A description is required." };
   }
 
   let inputError = "";

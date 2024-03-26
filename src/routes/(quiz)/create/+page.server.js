@@ -11,10 +11,10 @@ const createQuiz = async ({ request, locals }) => {
   const { title, description, fileToUpload, visibility, bg, notes } = Object.fromEntries(formData);
 
   if (!title) {
-    return { inputError: "Title is required." };
+    return { inputError: "A title is required." };
   }
   if (!description) {
-    return { inputError: "Description is required." };
+    return { inputError: "A description is required." };
   }
 
   // validate input
