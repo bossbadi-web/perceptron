@@ -1,4 +1,5 @@
 import { fail } from "@sveltejs/kit";
+import { LIMITS } from "$lib/consts";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 
 export const actions = {
@@ -14,6 +15,11 @@ export const actions = {
     }
 
     const username = formData.get("username");
+    if (username.length > LIMITS.username) {
+      setFlash({ type: "error", message: `Username must be less than ${LIMITS.username} characters.` }, cookies);
+      return fail(400);
+    }
+
     const session = await locals.getSession();
     const { error: err } = await locals.supabase.from("profiles").update({ username }).eq("id", session.user.id);
 

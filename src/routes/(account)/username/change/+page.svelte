@@ -1,5 +1,6 @@
 <script>
   import { enhance } from "$app/forms";
+  import { LIMITS } from "$lib/consts";
   import { page } from "$app/stores";
   import Password from "$lib/components/auth/Password.svelte";
   export let data;
@@ -19,12 +20,16 @@
             <Password />
           </div>
           <div class="mb-3">
-            <label for="usernameInput" class="form-label">New Username<span class="required">*</span></label>
+            <label for="usernameInput" class="form-label">
+              New Username<span class="required">*</span>
+              <small class="text-muted">(max {LIMITS.username} chars)</small>
+            </label>
             <input
               class="form-control"
               id="usernameInput"
               type="text"
               name="username"
+              maxlength={LIMITS.username}
               placeholder={username ?? ""}
               required
             />

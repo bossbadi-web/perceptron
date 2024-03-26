@@ -8,6 +8,7 @@ export const LIMITS = {
   visibilities: ["public", "unlisted", "private"],
   bg: /^https:\/\/images\.unsplash\.com\/photo-/,
   notes: 500,
+  username: 40,
 };
 
 export const CAPTCHA_ROUTES = ["/login", "/register", "/create", "/contact"];
