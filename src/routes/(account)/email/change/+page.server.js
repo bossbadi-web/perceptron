@@ -15,7 +15,17 @@ export const actions = {
 
     // check if emails match
     const email = formData.get("email");
+    if (!email) {
+      setFlash({ type: "error", message: "Email is required." }, cookies);
+      return fail(400);
+    }
+
     const emailConfirm = formData.get("emailConfirm");
+    if (!emailConfirm) {
+      setFlash({ type: "error", message: "Please confirm the email." }, cookies);
+      return fail(400);
+    }
+
     if (email !== emailConfirm) {
       setFlash({ type: "error", message: "Emails do not match." }, cookies);
       return fail(400);
