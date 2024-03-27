@@ -18,6 +18,12 @@ export const load = async ({ fetch, data, depends }) => {
 
   if (session?.user) {
     session.user = await completeUser(supabase, session.user);
+
+    // check if user was signed out from somewhere else
+    const { data: exists } = await supabase.rpc("session_exists", { session_id: session.user.session_id });
+    if (!exists) {
+      await supabase.auth.signOut();
+    }
   }
 
   return { supabase, session };
