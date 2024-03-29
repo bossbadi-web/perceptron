@@ -53,7 +53,7 @@ export const actions = {
 
 // check if user is logged in
 export const load = async ({ locals, request, url }) => {
-  if (!locals.getSession()) {
+  if (!(await locals.getSession())) {
     throw redirect(303, `/login?redirectTo=${url.pathname}`);
   }
 
