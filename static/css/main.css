@@ -149,6 +149,17 @@ section {
 }
 
 @media (max-width: 768px) {
+  section {
+    margin: 0;
+  }
+}
+
+@media (max-width: 575px) {
+  .normal-row {
+    padding: 0;
+    border-radius: 0;
+  }
+
   .row-of-buttons {
     flex-direction: column;
   }
