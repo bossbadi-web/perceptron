@@ -147,3 +147,9 @@ section {
 .hover-underline:hover::after {
   transform: scaleX(1);
 }
+
+@media (max-width: 768px) {
+  .row-of-buttons {
+    flex-direction: column;
+  }
+}
