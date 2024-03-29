@@ -53,7 +53,7 @@
 <section id="cards">
   <div class="container">
     <div class="landing__all-cards">
-      <div class="landing__card" data-aos="fade-in" data-aos-duration="1000">
+      <div class="landing__card">
         <h1 class="landing__card-title">
           <i class="fas fa-hammer" />
           Create
@@ -64,7 +64,7 @@
         </p>
       </div>
 
-      <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="100">
+      <div class="landing__card" >
         <h1 class="landing__card-title">
           <i class="fas fa-gamepad" />
           Play
@@ -75,7 +75,7 @@
         </p>
       </div>
 
-      <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200">
+      <div class="landing__card" >
         <h1 class="landing__card-title">
           <i class="fas fa-cog" />
           Options
@@ -86,7 +86,7 @@
         </p>
       </div>
 
-      <div class="landing__card" data-aos="fade-in" data-aos-duration="1000">
+      <div class="landing__card">
         <h1 class="landing__card-title">
           <i class="fas fa-edit" />
           Editor
@@ -97,7 +97,7 @@
         </p>
       </div>
 
-      <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="100">
+      <div class="landing__card" >
         <h1 class="landing__card-title">
           <i class="fas fa-rocket" />
           No limit
@@ -107,7 +107,7 @@
         </p>
       </div>
 
-      <div class="landing__card" data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200">
+      <div class="landing__card" >
         <h1 class="landing__card-title">
           <i class="fas fa-share" />
           Share
