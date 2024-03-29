@@ -1,0 +1,15 @@
+{
+  "name": "Perceptron",
+  "short_name": "Perceptron",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#00718a",
+  "theme_color": "#008a83",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}
