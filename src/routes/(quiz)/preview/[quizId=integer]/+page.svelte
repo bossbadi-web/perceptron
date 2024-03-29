@@ -4,10 +4,17 @@
   import { onMount } from "svelte";
   import LikeDislike from "$lib/components/quiz/browse/LikeDislike.svelte";
   import Mcq from "$lib/components/quiz/play/Preview.svelte";
+  import McqReveal from "$lib/components/quiz/play/Reveal.svelte";
   import QuizDescription from "$lib/components/quiz/browse/Description.svelte";
   export let data;
 
   const { quiz } = data;
+
+  let reveal = false;
+
+  const toggleReveal = () => {
+    reveal = !reveal;
+  };
 
   onMount(() => {
     // keyboard shortcuts
@@ -25,7 +32,7 @@
             e.preventDefault();
             if (!data.session?.user?.id) {
               alert("Please login to edit this quiz.");
-            } else if (data.session?.user?.id !== quiz?.owner) {
+            } else if (data.session?.user?.id !== quiz.owner) {
               alert("You are not the owner of this quiz.");
             } else {
               window.location.href = `/edit/${quiz.id}`;
@@ -35,7 +42,7 @@
       }
     });
 
-    if (quiz?.bg) {
+    if (quiz.bg) {
       const bg = document.getElementById("background");
       bg.style.backgroundImage = `url(${quiz.bg})`;
 
@@ -55,7 +62,16 @@
         <div class="text-center alert alert-info" role="alert">
           <p>This is a preview. You can't submit your answers here.</p>
           <a href="/play/{quiz.id}" class="btn btn-main" data-sveltekit-preload-data="tap" title="Ctrl + P">Play</a>
-          {#if session?.user?.id === quiz?.owner}
+
+          <button class="btn btn-secondary" on:click={toggleReveal}>
+            {#if reveal}
+              <i class="fa fa-eye-slash"></i> Hide Answers
+            {:else}
+              <i class="fa fa-eye"></i> Reveal Answers
+            {/if}
+          </button>
+
+          {#if session?.user?.id === quiz.owner}
             <a href="/edit/{quiz.id}" class="btn btn-secondary" data-sveltekit-preload-data="tap" title="Ctrl + E">
               Edit
             </a>
@@ -72,9 +88,13 @@
           </p>
         </div>
 
-        {#each quiz?.data as question, questionIdx}
+        {#each quiz.data as question, questionIdx}
           <div class="question-box">
-            <Mcq {question} {questionIdx} length={quiz.data.length} />
+            {#if reveal}
+              <McqReveal {question} {questionIdx} length={quiz.data.length} />
+            {:else}
+              <Mcq {question} {questionIdx} length={quiz.data.length} />
+            {/if}
           </div>
         {/each}
       </div>
