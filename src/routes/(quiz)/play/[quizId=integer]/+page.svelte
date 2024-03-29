@@ -27,7 +27,7 @@
             e.preventDefault();
             if (!data.session?.user?.id) {
               alert("Please login to edit this quiz.");
-            } else if (data.session?.user?.id !== quiz?.owner) {
+            } else if (data.session?.user?.id !== quiz.owner) {
               alert("You are not the owner of this quiz.");
             } else {
               window.location.href = `/edit/${quiz.id}`;
@@ -37,7 +37,7 @@
       }
     });
 
-    if (quiz?.bg) {
+    if (quiz.bg) {
       const bg = document.getElementById("background");
       bg.style.backgroundImage = `url(${quiz.bg})`;
 
