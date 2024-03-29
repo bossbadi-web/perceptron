@@ -37,9 +37,10 @@
 
       <div class="row">
         <p class="text-center">
-          <a class="btn btn-lg btn-main" href="https://github.com/bossbadi-web/perceptron" target="_blank"
-            >Source Code</a
-          >
+          <a class="btn btn-lg btn-main" href="https://github.com/bossbadi-web/perceptron" target="_blank">
+            <i class="fab fa-github"></i>
+            Source Code
+          </a>
         </p>
       </div>
     </div>
