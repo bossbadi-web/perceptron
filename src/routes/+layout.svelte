@@ -60,13 +60,13 @@
   $: if ($flash) {
     switch ($flash.type) {
       case "success":
-        toast.success($flash.message);
+        toast.success($flash.message, { duration: 5000 });
         break;
       case "error":
-        toast.error($flash.message);
+        toast.error($flash.message, { duration: 5000 });
         break;
       default:
-        toast($flash.message);
+        toast($flash.message, { duration: 5000 });
     }
   }
 </script>
