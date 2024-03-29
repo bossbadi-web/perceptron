@@ -8,13 +8,10 @@
 
   $: idx = Math.floor(Math.random() * LANDING_QUESTIONS.length);
 
-  const message = $page.url.searchParams.get("message");
-  const error = $page.url.searchParams.get("error_description");
+  const hash = $page.url.hash;
+  const error = hash ? new URLSearchParams(hash.slice(1)).get("error_description") : null;
 
   onMount(() => {
-    if (message) {
-      toast.success(message, { duration: 5000 });
-    }
     if (error) {
       toast.error(error, { duration: 5000 });
     }
