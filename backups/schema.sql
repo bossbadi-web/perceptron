@@ -935,6 +935,21 @@ $$;
 ALTER FUNCTION public.right_password(password character varying) OWNER TO postgres;
 
 --
+-- Name: session_exists(uuid); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.session_exists(session_id uuid) RETURNS boolean
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+BEGIN
+    RETURN EXISTS(SELECT 1 FROM auth.sessions WHERE id = session_id);
+END;
+$$;
+
+
+ALTER FUNCTION public.session_exists(session_id uuid) OWNER TO postgres;
+
+--
 -- Name: can_insert_object(text, text, uuid, jsonb); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
 --
 
@@ -1377,6 +1392,7 @@ CREATE TABLE auth.saml_providers (
     attribute_mapping jsonb,
     created_at timestamp with time zone,
     updated_at timestamp with time zone,
+    name_id_format text,
     CONSTRAINT "entity_id not empty" CHECK ((char_length(entity_id) > 0)),
     CONSTRAINT "metadata_url not empty" CHECK (((metadata_url = NULL::text) OR (char_length(metadata_url) > 0))),
     CONSTRAINT "metadata_xml not empty" CHECK ((char_length(metadata_xml) > 0))
@@ -1402,7 +1418,6 @@ CREATE TABLE auth.saml_relay_states (
     request_id text NOT NULL,
     for_email text,
     redirect_to text,
-    from_ip_address inet,
     created_at timestamp with time zone,
     updated_at timestamp with time zone,
     flow_state_id uuid,
@@ -1563,6 +1578,7 @@ CREATE TABLE auth.users (
     reauthentication_sent_at timestamp with time zone,
     is_sso_user boolean DEFAULT false NOT NULL,
     deleted_at timestamp with time zone,
+    is_anonymous boolean DEFAULT false NOT NULL,
     CONSTRAINT users_email_change_confirm_status_check CHECK (((email_change_confirm_status >= 0) AND (email_change_confirm_status <= 2)))
 );
 
@@ -1596,16 +1612,23 @@ CREATE TABLE public.profiles (
 ALTER TABLE public.profiles OWNER TO postgres;
 
 --
+-- Name: TABLE profiles; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON TABLE public.profiles IS 'extra user info';
+
+
+--
 -- Name: quizzes; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.quizzes (
     id bigint NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    data jsonb,
+    data jsonb NOT NULL,
     owner uuid NOT NULL,
-    title public.citext,
-    description text,
+    title public.citext NOT NULL,
+    description text NOT NULL,
     visibility text DEFAULT 'public'::text NOT NULL,
     bg text,
     likers uuid[] DEFAULT '{}'::uuid[] NOT NULL,
@@ -1614,13 +1637,6 @@ CREATE TABLE public.quizzes (
 
 
 ALTER TABLE public.quizzes OWNER TO postgres;
-
---
--- Name: TABLE quizzes; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON TABLE public.quizzes IS 'stores quizzes users create';
-
 
 --
 -- Name: COLUMN quizzes.data; Type: COMMENT; Schema: public; Owner: postgres
@@ -1962,6 +1978,14 @@ ALTER TABLE ONLY public.profiles
 
 
 --
+-- Name: quizzes quizzes_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.quizzes
+    ADD CONSTRAINT quizzes_id_key UNIQUE (id);
+
+
+--
 -- Name: quizzes quizzes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2252,6 +2276,13 @@ CREATE INDEX users_instance_id_email_idx ON auth.users USING btree (instance_id,
 --
 
 CREATE INDEX users_instance_id_idx ON auth.users USING btree (instance_id);
+
+
+--
+-- Name: users_is_anonymous_idx; Type: INDEX; Schema: auth; Owner: supabase_auth_admin
+--
+
+CREATE INDEX users_is_anonymous_idx ON auth.users USING btree (is_anonymous);
 
 
 --
@@ -3561,6 +3592,15 @@ GRANT ALL ON FUNCTION public.right_password(password character varying) TO servi
 
 
 --
+-- Name: FUNCTION session_exists(session_id uuid); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.session_exists(session_id uuid) TO anon;
+GRANT ALL ON FUNCTION public.session_exists(session_id uuid) TO authenticated;
+GRANT ALL ON FUNCTION public.session_exists(session_id uuid) TO service_role;
+
+
+--
 -- Name: FUNCTION split_part(public.citext, public.citext, integer); Type: ACL; Schema: public; Owner: supabase_admin
 --
 
@@ -4272,4 +4312,3 @@ ALTER EVENT TRIGGER pgrst_drop_watch OWNER TO supabase_admin;
 --
 -- PostgreSQL database cluster dump complete
 --
-
