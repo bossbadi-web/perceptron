@@ -2,26 +2,27 @@
   import "./styles.css";
   import "$lib/components/quiz/play/styles.css";
   import { LANDING_QUESTIONS } from "$lib/landingQuestions.js";
+  import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import toast from "svelte-french-toast";
 
   $: idx = Math.floor(Math.random() * LANDING_QUESTIONS.length);
 
   const message = $page.url.searchParams.get("message");
   const error = $page.url.searchParams.get("error_description");
+
+  onMount(() => {
+    if (message) {
+      toast.success(message, { duration: 5000 });
+    }
+    if (error) {
+      toast.error(error, { duration: 5000 });
+    }
+  });
 </script>
 
 <section id="hero">
   <div class="container mobile-center">
-    {#if message}
-      <div class="alert alert-info" role="alert">
-        {message}
-      </div>
-    {/if}
-    {#if error}
-      <div class="alert alert-danger" role="alert">
-        {error}
-      </div>
-    {/if}
     <div class="d-flex flex-lg-row flex-column">
       <div class="flex-grow-1 main-text">
         <h1 class="display-1 text-center">
