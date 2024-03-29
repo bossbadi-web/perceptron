@@ -3,7 +3,7 @@
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import LikeDislike from "$lib/components/quiz/browse/LikeDislike.svelte";
-  import Mcq from "$lib/components/quiz/play/Preview.svelte";
+  import McqPreview from "$lib/components/quiz/play/Preview.svelte";
   import McqReveal from "$lib/components/quiz/play/Reveal.svelte";
   import QuizDescription from "$lib/components/quiz/browse/Description.svelte";
   export let data;
@@ -93,7 +93,7 @@
             {#if reveal}
               <McqReveal {question} {questionIdx} length={quiz.data.length} />
             {:else}
-              <Mcq {question} {questionIdx} length={quiz.data.length} />
+              <McqPreview {question} {questionIdx} length={quiz.data.length} />
             {/if}
           </div>
         {/each}

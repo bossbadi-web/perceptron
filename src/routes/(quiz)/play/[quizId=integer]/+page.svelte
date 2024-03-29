@@ -4,7 +4,7 @@
   import { onMount } from "svelte";
   import { secondsToHmsString } from "$lib/utils";
   import LikeDislike from "$lib/components/quiz/browse/LikeDislike.svelte";
-  import Mcq from "$lib/components/quiz/play/Play.svelte";
+  import McqPlay from "$lib/components/quiz/play/Play.svelte";
   import McqSummary from "$lib/components/quiz/play/Summary.svelte";
   import QuizDescription from "$lib/components/quiz/browse/Description.svelte";
   export let data;
@@ -94,7 +94,7 @@
         {:else if currentQuestionIdx < quiz.data.length}
           <!-- if quiz not over -->
           <div class="question-box">
-            <Mcq question={currentQuestion} questionIdx={currentQuestionIdx} {nextQuestion} length={quiz.data.length} />
+            <McqPlay question={currentQuestion} questionIdx={currentQuestionIdx} {nextQuestion} length={quiz.data.length} />
           </div>
         {:else}
           <!-- if quiz over -->
