@@ -1,4 +1,7 @@
 :root {
+  --bg-white: #f0f0f0;
+  --bg-black: #000000;
+
   --bg-main: radial-gradient(
       circle at 40% 91%,
       rgba(251, 251, 251, 0.04) 0%,
@@ -95,6 +98,11 @@
     ),
     radial-gradient(circle at center center, hsl(227, 81%, 21%), hsl(227, 81%, 21%));
 
-  --bg-white: #f0f0f0;
-  --bg-black: #000000;
+  --bg-parchment: linear-gradient(164deg, rgba(49, 49, 49, 0.15) 0%, transparent 44%),
+    linear-gradient(97deg, rgba(49, 49, 49, 0.15) 0%, transparent 40%),
+    linear-gradient(265deg, rgba(49, 49, 49, 0.15) 0%, transparent 30%),
+    linear-gradient(316deg, rgba(49, 49, 49, 0.15) 0%, transparent 78%),
+    repeating-linear-gradient(38deg, rgba(140, 140, 140, 0.1) 0px, transparent 3px),
+    repeating-linear-gradient(100deg, rgba(140, 140, 140, 0.1) 0px, transparent 3px),
+    linear-gradient(90deg, rgb(241, 194, 117), rgb(241, 194, 117));
 }

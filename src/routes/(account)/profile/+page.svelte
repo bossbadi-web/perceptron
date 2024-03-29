@@ -50,6 +50,7 @@
             <select class="form-select" id="theme" value={theme} on:change={changeTheme}>
               <option value="main">Utopia</option>
               <option value="white">Snow</option>
+              <option value="parchment">Parchment</option>
               <option value="dark">Dark</option>
               <option value="black">High Contrast</option>
             </select>

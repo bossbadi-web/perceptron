@@ -53,11 +53,15 @@
 [data-theme="black"] {
   --background: var(--bg-black);
 }
+[data-theme="parchment"] {
+  --background: var(--bg-parchment);
+}
 
 /* use black site logo on light theme */
 :root img[src*="white"],
 [data-theme="main"] img[src*="white"],
-[data-theme="white"] img[src*="white"] {
+[data-theme="white"] img[src*="white"],
+[data-theme="parchment"] img[src*="white"] {
   display: none;
 }
 
