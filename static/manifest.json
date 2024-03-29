@@ -3,7 +3,7 @@
   "short_name": "Perceptron",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#00718a",
+  "background_color": "#008a83",
   "theme_color": "#008a83",
   "icons": [
     {
