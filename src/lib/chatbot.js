@@ -1,13 +1,6 @@
-import OpenAI from "openai";
-import { OPENAI_URL, OPENAI_KEY } from "$env/static/private";
+const API = "https://api.gopubby.com/chatbot?text=";
 
-// create openai client
-const openai = new OpenAI({
-  baseURL: OPENAI_URL,
-  apiKey: OPENAI_KEY,
-});
-
-const MCQ_QUERY_PRE = `create multiple choice questions using this format:
+const MCQ_QUERY_PRE = `Create 20 different multiple choice questions in this format. Do not use markdown or any other formatting. The questions should be separated by two newlines. The options should be separated by newlines. The correct answer should be specified at the end of each question. For example:
 
 1. a question
 0) an option
@@ -59,11 +52,9 @@ const toJSON = (text) => {
 
 const chatbot = async (query) => {
   try {
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: query }],
-      model: "gpt-4",
-    });
-    return toJSON(chatCompletion.choices[0].message.content);
+    const response = await fetch(API + encodeURIComponent(query));
+    const text = await response.text();
+    return toJSON(text);
   } catch (err) {
     return [];
   }

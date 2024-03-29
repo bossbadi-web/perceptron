@@ -55,12 +55,12 @@ const createQuiz = async ({ request, locals }) => {
         inputError: "No text found in the image.",
       };
     }
-    text += ocrText;
+    text += `\n\nNotes on the topic:\n${ocrText}`;
   }
 
   // add notes
   if (notes) {
-    text += `\n\n${notes}`;
+    text += `\n\nAdditional notes on the topic:\n${notes}`;
   }
 
   // generate questions
