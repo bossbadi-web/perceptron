@@ -156,7 +156,8 @@ section {
 
 @media (max-width: 575px) {
   .normal-row {
-    padding: 0;
+    padding-left: 0;
+    padding-right: 0;
     border-radius: 0;
   }
 
