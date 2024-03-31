@@ -32,8 +32,10 @@
 
 1. Add environment variables
 
-   - Rename `.env.example` to `.env`
-   - Follow the instructions in the file
+   ```bash
+   cp .env.example .env
+   # and fill in .env with your environment variables
+   ```
 
 1. Run the application in development mode
 
