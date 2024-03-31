@@ -81,11 +81,36 @@ To automatically redeploy the app on Fly.io every time you push changes, add the
 1. Backup the schema (structure of the database)
 
    ```bash
-   pg_dumpall -f backups/schema.sql --schema-only -d $CONNECTION_STRING
+   pg_dumpall -f backups/schema.sql -d $CONNECTION_STRING --schema-only --no-owner --clean
    ```
 
 1. Backup the data (contents of the database)
 
    ```bash
-   pg_dumpall -f backups/data.sql --data-only -d $CONNECTION_STRING
+   pg_dumpall -f backups/data.sql -d $CONNECTION_STRING --data-only --disable-triggers
    ```
+
+## Restore
+
+You can restore to a hosted Supabase project or a local one.
+
+1. Set environment variables
+
+   ```bash
+   export PGPASSWORD="YOUR_DATABASE_PASSWORD"
+   export CONNECTION_STRING="YOUR_DATABASE_CONNECTION_STRING"
+   ```
+
+1. Restore the schema
+
+   ```bash
+   psql -d $CONNECTION_STRING -f backups/schema.sql
+   ```
+
+1. Restore the data
+
+   ```bash
+   psql -d $CONNECTION_STRING -f backups/data.sql
+   ```
+
+1. If you're restoring to a hosted Supabase project, you may need to manually update some configurations, such as enabling auth providers.
