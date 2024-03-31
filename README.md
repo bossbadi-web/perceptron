@@ -60,8 +60,8 @@ Therefore, I recommend hosting the app on a private server. I'm currently using 
 
 To automatically redeploy the app on Fly.io every time you push changes, add the following action secrets to your repository:
 
-- `ENV_FILE` - Copy and paste the contents of `.env`
-- `FLY_API_TOKEN` - Create a Fly.io access token and add it here
+- `ENV_FILE` = Copy and paste the contents of `.env`
+- `FLY_API_TOKEN` = Create a Fly.io access token and add it here
 
 ## Backup
 
