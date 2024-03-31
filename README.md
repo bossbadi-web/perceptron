@@ -9,6 +9,9 @@
   https://perceptron.gopubby.com
 </p>
 
+> [!TIP]
+> The following commands are designed for a Linux environment. You may need to adjust them for your operating system.
+
 ## Installation
 
 1. Clone the repository
@@ -25,9 +28,7 @@
 
 1. Create a Supabase project
 
-   - Go to the "SQL Editor" tab
-   - Paste the contents of `backups/schema.sql` into the editor
-   - Run
+   - Complete steps 1-3 in the [restoration instructions](#restore)
 
 1. Add environment variables
 
@@ -94,6 +95,15 @@ To automatically redeploy the app on Fly.io every time you push changes, add the
 
 You can restore to a hosted Supabase project or a local one.
 
+1. Install PostgreSQL
+
+   ```bash
+   sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+   sudo apt update
+   sudo apt install -y postgresql-15
+   ```
+
 1. Set environment variables
 
    ```bash
@@ -114,3 +124,23 @@ You can restore to a hosted Supabase project or a local one.
    ```
 
 1. If you're restoring to a hosted Supabase project, you may need to manually update some configurations, such as enabling auth providers.
+
+## Run Supabase Locally
+
+1. Start
+
+   ```bash
+   npm exec supabase start
+   ```
+
+1. Stop
+
+   ```bash
+   npm exec supabase stop
+   ```
+
+1. Reset to a clean state
+
+   ```bash
+   npm exec supabase db reset
+   ```
