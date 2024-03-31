@@ -127,19 +127,25 @@ You can restore to a hosted Supabase project or a local one.
 
 ## Run Supabase Locally
 
-1. Start
+1. Install Docker
+
+   ```bash
+   sudo apt install -y docker.io
+   ```
+
+1. Start Supabase
 
    ```bash
    npm exec supabase start
    ```
 
-1. Stop
+1. Stop Supabase
 
    ```bash
    npm exec supabase stop
    ```
 
-1. Reset to a clean state
+1. Reset Supabase to a clean state
 
    ```bash
    npm exec supabase db reset
