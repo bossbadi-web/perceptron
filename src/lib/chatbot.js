@@ -1,6 +1,8 @@
 const API = "https://api.gopubby.com/chatbot?text=";
 
-const MCQ_QUERY_PRE = `Create 20 different multiple choice questions in this format. Do not use markdown or any other formatting. The questions should be separated by two newlines. The options should be separated by newlines. The correct answer should be specified at the end of each question. For example:
+const get_mcq_query_pre = (
+  count
+) => `Create ${count} different multiple choice questions in this format. Do not use markdown or any other formatting. The questions should be separated by two newlines. The options should be separated by newlines. The correct answer should be specified at the end of each question. For example:
 
 1. a question
 0) an option
@@ -60,6 +62,6 @@ const chatbot = async (query) => {
   }
 };
 
-export const getQuestions = async (text) => {
-  return await chatbot(MCQ_QUERY_PRE + text);
+export const getQuestions = async (text, count) => {
+  return await chatbot(get_mcq_query_pre(count) + text);
 };

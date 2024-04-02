@@ -56,6 +56,22 @@
           </div>
 
           <div class="mb-4">
+            <label for="count">
+              Number of questions
+              <small class="text-muted">({LIMITS.countMin} - {LIMITS.countMax}) </small></label
+            >
+            <input
+              class="form-control"
+              type="number"
+              id="count"
+              name="count"
+              min={LIMITS.countMin}
+              max={LIMITS.countMax}
+              value="10"
+            />
+          </div>
+
+          <div class="mb-4">
             <label for="file">
               Upload an image
               <small class="text-muted">(max {LIMITS.file / 1024 / 1024} MB)</small>

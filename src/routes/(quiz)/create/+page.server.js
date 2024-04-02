@@ -8,13 +8,18 @@ import { verifyCapcha } from "$lib/recaptchaServer";
 
 const createQuiz = async ({ request, locals }) => {
   const formData = await request.formData();
-  const { title, description, fileToUpload, visibility, bg, notes } = Object.fromEntries(formData);
+  const { title, description, fileToUpload, visibility, bg, notes, count } = Object.fromEntries(formData);
 
   if (!title) {
     return { inputError: "A title is required." };
   }
   if (!description) {
     return { inputError: "A description is required." };
+  }
+
+  const countNum = Number(count);
+  if (isNaN(countNum) || countNum < LIMITS.countMin || countNum > LIMITS.countMax) {
+    return { inputError: `Number of questions must be between ${LIMITS.countMin} and ${LIMITS.countMax}.` };
   }
 
   // validate input
@@ -65,7 +70,7 @@ const createQuiz = async ({ request, locals }) => {
 
   // generate questions
   if (text) {
-    questions = await getQuestions(text);
+    questions = await getQuestions(text, count);
   }
 
   // save to db
