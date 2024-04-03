@@ -1,7 +1,5 @@
 import { RECAPTCHA_SECRET_KEY } from "$env/static/private";
 
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 export const verifyCapcha = async (cookies) => {
   const token = cookies.get("token");
 

@@ -1,6 +1,12 @@
 import { completeUser } from "$lib/utils";
 import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit";
+import { dev } from "$app/environment";
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public";
+
+if (dev) {
+  // disable SSL verification in dev mode
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+}
 
 export const handle = async ({ event, resolve }) => {
   event.locals.supabase = createSupabaseServerClient({
