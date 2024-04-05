@@ -1,4 +1,5 @@
 import { error } from "@sveltejs/kit";
+import { getRedirectLoginParams } from "$lib/utils";
 import { LIMITS } from "$lib/consts";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 
@@ -88,11 +89,11 @@ export const actions = {
 };
 
 // get quiz id from params, url is /edit/[quizId]/+page
-export const load = async ({ locals, params, url }) => {
+export const load = async ({ cookies, locals, params, url }) => {
   const session = await locals.getSession();
 
   if (!session) {
-    throw redirect(303, `/login?redirectTo=${url.pathname}`);
+    throw redirect(...getRedirectLoginParams({ cookies, url }));
   }
 
   const { data } = await locals.supabase.from("quizzes").select("*").eq("id", params.quizId).single();

@@ -1,4 +1,5 @@
 import { fail } from "@sveltejs/kit";
+import { getRedirectLoginParams } from "$lib/utils";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import NodeCache from "node-cache";
 
@@ -52,9 +53,9 @@ export const actions = {
 };
 
 // check if user is logged in
-export const load = async ({ locals, request, url }) => {
+export const load = async ({ cookies, locals, request, url }) => {
   if (!(await locals.getSession())) {
-    throw redirect(303, `/login?redirectTo=${url.pathname}`);
+    throw redirect(...getRedirectLoginParams({ cookies, url }));
   }
 
   let isResetLink = false;

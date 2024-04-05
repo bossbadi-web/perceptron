@@ -1,5 +1,6 @@
 import { fail } from "@sveltejs/kit";
 import { getQuestions } from "$lib/chatbot";
+import { getRedirectLoginParams } from "$lib/utils";
 import { LIMITS } from "$lib/consts";
 import { OCR_API_KEY } from "$env/static/private";
 import { ocrSpace } from "ocr-space-api-wrapper";
@@ -152,8 +153,8 @@ export const actions = {
   },
 };
 
-export const load = async ({ locals, url }) => {
+export const load = async ({ cookies, locals, url }) => {
   if (!(await locals.getSession())) {
-    throw redirect(303, `/login?redirectTo=${url.pathname}`);
+    throw redirect(...getRedirectLoginParams({ cookies, url }));
   }
 };

@@ -1,12 +1,14 @@
 import { cleanQuizMeta } from "$lib/utils";
-import { error, redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
+import { getRedirectLoginParams } from "$lib/utils";
+import { redirect } from "sveltekit-flash-message/server";
 
 // get quiz on specific page
-export const load = async ({ locals, url }) => {
+export const load = async ({ cookies, locals, url }) => {
   const session = await locals.getSession();
 
   if (!session) {
-    throw redirect(303, `/login?redirectTo=${url.pathname}`);
+    throw redirect(...getRedirectLoginParams({ cookies, url }));
   }
 
   const pageSize = 12;

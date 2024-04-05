@@ -1,10 +1,11 @@
-import { redirect } from "@sveltejs/kit";
+import { getRedirectLoginParams } from "$lib/utils";
+import { redirect } from "sveltekit-flash-message/server";
 
-export const load = async ({ locals, url }) => {
+export const load = async ({ cookies, locals, url }) => {
   const session = await locals.getSession();
 
   if (!session) {
-    throw redirect(303, `/login?redirectTo=${url.pathname}`);
+    throw redirect(...getRedirectLoginParams({ cookies, url }));
   }
 
   return {

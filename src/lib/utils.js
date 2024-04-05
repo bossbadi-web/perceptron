@@ -1,5 +1,15 @@
 import filter from "leo-profanity";
 
+// protect routes from unauthorized access
+export const getRedirectLoginParams = ({ cookies, url }) => {
+  return [
+    303,
+    `/login?redirectTo=${url.pathname}`,
+    { type: "error", message: "Please log in to access this page." },
+    cookies,
+  ];
+};
+
 // add username to session.user
 export const completeUser = async (supabase, user) => {
   const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();

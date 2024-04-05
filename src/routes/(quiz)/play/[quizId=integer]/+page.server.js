@@ -1,8 +1,10 @@
 import { cleanQuiz } from "$lib/utils";
-import { error, redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
+import { getRedirectLoginParams } from "$lib/utils";
+import { redirect } from "sveltekit-flash-message/server";
 
 // get quiz id from params, url is /play/[quizId]/+page
-export const load = async ({ locals, params, url }) => {
+export const load = async ({ cookies, locals, params, url }) => {
   const { data } = await locals.supabase.from("quizzes").select("*").eq("id", params.quizId).single();
 
   if (!data) {
@@ -16,7 +18,7 @@ export const load = async ({ locals, params, url }) => {
     const session = await locals.getSession();
 
     if (!session) {
-      throw redirect(303, `/login?redirectTo=${url.pathname}`);
+      throw redirect(...getRedirectLoginParams({ cookies, url }));
     }
 
     if (data.owner !== session.user.id) {

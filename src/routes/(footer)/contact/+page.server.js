@@ -1,4 +1,5 @@
 import { fail } from "@sveltejs/kit";
+import { getRedirectLoginParams } from "$lib/utils";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { SENDER_EMAIL, SENDER_PASSWORD } from "$env/static/private";
 import { verifyCapcha } from "$lib/recaptchaServer";
@@ -53,8 +54,8 @@ export const actions = {
   },
 };
 
-export const load = async ({ locals, url }) => {
+export const load = async ({ cookies, locals, url }) => {
   if (!(await locals.getSession())) {
-    throw redirect(303, `/login?redirectTo=${url.pathname}`);
+    throw redirect(...getRedirectLoginParams({ cookies, url }));
   }
 };
