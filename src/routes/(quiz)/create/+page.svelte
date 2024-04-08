@@ -68,6 +68,7 @@
               min={LIMITS.countMin}
               max={LIMITS.countMax}
               value="10"
+              required
             />
           </div>
 
