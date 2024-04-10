@@ -46,10 +46,15 @@
             New Perceptron
           </h1>
 
+          <div class="note">
+            <div class="title">Step 1: The basics</div>
+            <div class="description">Fill out some basic information for your Perceptron.</div>
+          </div>
+
           <MainFields />
 
           <div class="note">
-            <div class="title">Initialize your Perceptron</div>
+            <div class="title">Step 2: Create your questions</div>
             <div class="description">
               Generate questions based on your image and/or notes. Leave these fields blank to start from scratch.
             </div>
@@ -57,7 +62,7 @@
 
           <div class="mb-4">
             <label for="count">
-              Number of questions
+              Number of questions<span class="required">*</span>
               <small class="text-muted">({LIMITS.countMin} - {LIMITS.countMax}) </small></label
             >
             <input
@@ -87,7 +92,6 @@
               Notes
               <small class="text-muted">(max {LIMITS.notes} chars)</small>
             </label>
-            <!-- cannot resize -->
             <textarea
               class="form-control"
               id="notes"
