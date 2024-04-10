@@ -11,6 +11,7 @@ export const LIMITS = {
   username: 40,
   countMin: 5,
   countMax: 20,
+  downloadIgnored: ["id", "created_at", "owner", "likers", "dislikers"],
 };
 
 export const CAPTCHA_ROUTES = ["/login", "/register", "/create", "/contact"];

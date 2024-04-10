@@ -14,6 +14,22 @@
 
   $: jsonVersion = JSON.stringify($editQuizStore.data);
 
+  const download = () => {
+    let toDownload = {};
+    for (const key in $editQuizStore) {
+      if (!LIMITS.downloadIgnored.includes(key)) {
+        toDownload[key] = $editQuizStore[key];
+      }
+    }
+
+    const blob = new Blob([JSON.stringify(toDownload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `perceptron-${$editQuizStore.id}.json`;
+    a.click();
+  };
+
   onMount(() => {
     // prevent accidental page close
     window.onbeforeunload = (e) => {
@@ -143,6 +159,12 @@
             </h1>
             <p class="text-center">
               <Stats quiz={$editQuizStore} />
+            </p>
+            <p class="text-center">
+              <button type="button" class="btn btn-outline-primary" on:click={download}>
+                <i class="fas fa-download" />
+                Download
+              </button>
             </p>
           </div>
 
