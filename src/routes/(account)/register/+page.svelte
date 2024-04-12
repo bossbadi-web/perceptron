@@ -1,7 +1,7 @@
 <script>
   import { enhance } from "$app/forms";
   import { LIMITS } from "$lib/consts";
-  import { submitCaptcha } from "$lib/recaptchaClient";
+  import { loginGoogle, submitCaptcha } from "$lib/recaptchaClient";
   import Google from "$lib/components/auth/Google.svelte";
   import Password from "$lib/components/auth/Password.svelte";
 </script>
@@ -11,7 +11,7 @@
     <div class="col-md-8 offset-md-2">
       <div class="row normal-row">
         <h1 class="text-center display-4">Register</h1>
-        <form id="google-signin" method="POST" use:enhance={submitCaptcha}>
+        <form id="google-signin" method="POST" use:enhance={loginGoogle}>
           <div class="mb-3 text-center">
             <Google />
           </div>
