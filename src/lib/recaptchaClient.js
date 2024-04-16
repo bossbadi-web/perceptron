@@ -15,7 +15,7 @@ export const submitCaptcha = async () => {
 
 export const loginGoogle = async () => {
   return toast.promise(submitCaptcha(), {
-    loading: "Preparing...",
+    loading: "Validating captcha...",
     success: "Redirecting to Google sign-in...",
     error: "That didn't work. Please try again later.",
   });
@@ -23,8 +23,8 @@ export const loginGoogle = async () => {
 
 export const loginDefault = async () => {
   return toast.promise(submitCaptcha(), {
-    loading: "Logging you in...",
-    success: "Success! Redirecting...",
+    loading: "Validating captcha...",
+    success: "Logging you in...",
     error: "That didn't work. Please try again later.",
   });
 };
