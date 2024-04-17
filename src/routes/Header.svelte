@@ -58,7 +58,7 @@
             Explore
           </a>
         </li>
-        {#if session}
+        {#if session?.user}
           <li class="nav-item">
             <a class="nav-link hover-underline" href="/library" data-sveltekit-reload>
               <i class="fas fa-layer-group" />
@@ -68,7 +68,7 @@
         {/if}
       </ul>
       <ul class="navbar-nav ms-auto">
-        {#if session}
+        {#if session?.user}
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
