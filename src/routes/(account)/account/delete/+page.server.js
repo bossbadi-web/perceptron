@@ -34,10 +34,7 @@ export const actions = {
       return fail(err.status);
     }
 
-    // sign out
-    await locals.supabase.auth.signOut();
-
-    throw redirect(303, "/", { type: "success", message: "Account deleted." }, cookies);
+    throw redirect(303, "/?signOut", { type: "success", message: "Account deleted." }, cookies);
   },
 };
 

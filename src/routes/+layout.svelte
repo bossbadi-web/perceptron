@@ -11,6 +11,7 @@
   export let data;
 
   $: ({ supabase, session } = data);
+  $: pathname = $page.url.pathname.replace(/\/$/, "");
 
   onMount(() => {
     const {
@@ -25,6 +26,18 @@
   });
 
   afterNavigate(() => {
+    // if user deleted their account, force sign out
+    if ($page.url.searchParams.has("signOut")) {
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+
+      setTimeout(() => {
+        location.href = "/";
+      }, 5000);
+    }
+
+    // set page title
     const subpages = $page.route.id.split("/");
     let subpage;
 
@@ -45,6 +58,7 @@
       document.title = "Perceptron";
     }
 
+    // remove reCAPTCHA badge on non-CAPTCHA routes
     if (!CAPTCHA_ROUTES.includes(pathname)) {
       const badge = document.querySelector(".grecaptcha-badge");
       if (badge) {
@@ -53,8 +67,7 @@
     }
   });
 
-  $: pathname = $page.url.pathname.replace(/\/$/, "");
-
+  // display flashed messages as toasts
   const flash = getFlash(page);
 
   $: if ($flash) {
