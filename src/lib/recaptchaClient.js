@@ -13,18 +13,22 @@ export const submitCaptcha = async () => {
   });
 };
 
-export const loginGoogle = async () => {
+const captchaToast = (message) => {
   return toast.promise(submitCaptcha(), {
     loading: "Validating captcha...",
-    success: "Redirecting to Google sign-in...",
-    error: "That didn't work. Please try again later.",
+    success: message,
+    error: "Captcha validation failed.",
   });
 };
 
+export const loginGoogle = async () => {
+  return captchaToast("Redirecting to Google sign-in...");
+};
+
 export const loginDefault = async () => {
-  return toast.promise(submitCaptcha(), {
-    loading: "Validating captcha...",
-    success: "Logging you in...",
-    error: "That didn't work. Please try again later.",
-  });
+  return captchaToast("Logging you in...");
+};
+
+export const registerDefault = async () => {
+  return captchaToast("Creating your account...");
 };
