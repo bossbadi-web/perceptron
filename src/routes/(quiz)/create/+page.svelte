@@ -4,7 +4,7 @@
   import { LIMITS } from "$lib/consts";
   import { page } from "$app/stores";
   import { submitCaptcha } from "$lib/recaptchaClient";
-  import Loading from "./Loading.svelte";
+  import Loading from "$lib/components/quiz/create/Loading.svelte";
   import MainFields from "$lib/components/quiz/edit/MainFields.svelte";
 
   const acceptedFileTypes = LIMITS.filetypes.map((type) => `.${type}`).join(", ");
