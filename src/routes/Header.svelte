@@ -26,13 +26,13 @@
 
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container container-fluid">
-    <a class="navbar-brand" href="/" data-sveltekit-reload>
+    <a class="navbar-brand" href="/">
       <picture>
         <img src="/img/logo-black.svg" alt="avatar" height="30" width="30" />
         <img src="/img/logo-white.svg" alt="avatar" height="30" width="30" />
       </picture>
     </a>
-    <a class="navbar-brand" href="/" data-sveltekit-reload>Perceptron</a>
+    <a class="navbar-brand" href="/">Perceptron</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -47,20 +47,26 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link hover-underline" href="/create" data-sveltekit-reload>
+          <a class="nav-link hover-underline" href="/create">
             <i class="fas fa-hammer" />
             Create
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link hover-underline" href="/explore" data-sveltekit-reload>
+          <a class="nav-link hover-underline" href="/upload">
+            <i class="fas fa-upload"></i>
+            Upload
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link hover-underline" href="/explore">
             <i class="fas fa-search" />
             Explore
           </a>
         </li>
         {#if session?.user}
           <li class="nav-item">
-            <a class="nav-link hover-underline" href="/library" data-sveltekit-reload>
+            <a class="nav-link hover-underline" href="/library">
               <i class="fas fa-layer-group" />
               My Library
             </a>
@@ -76,7 +82,6 @@
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-              data-sveltekit-reload
             >
               {session.user.username}
             </a>
@@ -85,7 +90,7 @@
               aria-labelledby="navbarDropdownMenuLink"
             >
               <li class="nav-item">
-                <a class="nav-link hover-underline" href="/profile" data-sveltekit-reload>
+                <a class="nav-link hover-underline" href="/profile">
                   <i class="fas fa-user" /> Profile
                 </a>
               </li>
