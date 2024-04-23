@@ -163,7 +163,7 @@
             <p class="text-center">
               <button type="button" class="btn btn-outline-primary" on:click={download}>
                 <i class="fas fa-download" />
-                Download
+                Export
               </button>
             </p>
           </div>

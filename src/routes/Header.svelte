@@ -53,9 +53,9 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link hover-underline" href="/upload">
+          <a class="nav-link hover-underline" href="/import">
             <i class="fas fa-upload"></i>
-            Upload
+            Import
           </a>
         </li>
         <li class="nav-item">

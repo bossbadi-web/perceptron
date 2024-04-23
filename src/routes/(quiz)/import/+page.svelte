@@ -39,8 +39,8 @@
       <div class="col-md-10 offset-md-1">
         <form method="POST" enctype="multipart/form-data" use:enhance={onSubmit}>
           <h1 class="display-4 text-center">
-            <i class="fas fa-upload"></i>
-            Upload Perceptron
+            <i class="fas fa-upload" />
+            Import Perceptron
           </h1>
 
           <div class="mb-4">
