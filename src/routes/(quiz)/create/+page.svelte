@@ -4,10 +4,16 @@
   import { LIMITS } from "$lib/consts";
   import { page } from "$app/stores";
   import { submitCaptcha } from "$lib/recaptchaClient";
+  import imageCompression from "browser-image-compression";
   import Loading from "$lib/components/quiz/create/Loading.svelte";
   import MainFields from "$lib/components/quiz/edit/MainFields.svelte";
 
-  const acceptedFileTypes = LIMITS.filetypes.map((type) => `.${type}`).join(", ");
+  const ACCEPTED_FILETYPES = LIMITS.filetypes.map((type) => `.${type}`).join(", ");
+  const COMPRESSION_OPTIONS = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
 
   let loading = false;
 
@@ -26,6 +32,43 @@
   $: if ($flash) {
     loading = false;
   }
+
+  const compressImage = async () => {
+    const file = document.getElementById("file").files[0];
+    if (!file) {
+      return;
+    }
+
+    disableButtons();
+
+    try {
+      imageCompression(file, COMPRESSION_OPTIONS).then((output) => {
+        const dataTransfer = new DataTransfer();
+        const compressedFile = new File([output], file.name, {
+          type: file.type,
+          lastModified: Date.now(),
+        });
+        dataTransfer.items.add(compressedFile);
+        document.getElementById("file").files = dataTransfer.files;
+
+        enableButtons();
+      });
+    } catch (error) {
+      enableButtons();
+    }
+  };
+
+  const disableButtons = () => {
+    document.querySelectorAll("button").forEach((button) => {
+      button.disabled = true;
+    });
+  };
+
+  const enableButtons = () => {
+    document.querySelectorAll("button").forEach((button) => {
+      button.disabled = false;
+    });
+  };
 </script>
 
 <section>
@@ -82,9 +125,17 @@
               Upload an image
               <small class="text-muted">(max {LIMITS.file / 1024 / 1024} MB)</small>
               <br />
-              <small class="text-muted">Supported file types: {acceptedFileTypes}</small>
+              <small class="text-muted">Supported file types: {ACCEPTED_FILETYPES}</small>
             </label>
-            <input class="form-control" type="file" id="file" name="fileToUpload" accept={acceptedFileTypes} />
+            <input
+              class="form-control"
+              type="file"
+              id="file"
+              name="fileToUpload"
+              accept={ACCEPTED_FILETYPES}
+              on:change={compressImage}
+              required
+            />
           </div>
 
           <div class="mb-4">

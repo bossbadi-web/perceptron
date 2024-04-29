@@ -24,6 +24,7 @@
   "dependencies": {
     "@supabase/auth-helpers-sveltekit": "^0.10.3",
     "@supabase/supabase-js": "^2.36.0",
+    "browser-image-compression": "^2.0.2",
     "leo-profanity": "^1.7.0",
     "node-cache": "^5.1.2",
     "nodemailer": "^6.9.8",

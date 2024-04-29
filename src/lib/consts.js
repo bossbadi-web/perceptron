@@ -1,7 +1,7 @@
 export const LIMITS = {
   title: 50,
   description: 100,
-  file: 1024 * 1024, // 1 MB
+  file: 5 * 1024 * 1024, // 5 MB
   filetypes: ["png", "jpg", "jpeg"],
   question: 250,
   option: 500,
