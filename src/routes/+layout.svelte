@@ -26,17 +26,6 @@
   });
 
   afterNavigate(() => {
-    // if user deleted their account, force sign out
-    if ($page.url.searchParams.has("signOut")) {
-      document.cookie.split(";").forEach((c) => {
-        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-      });
-
-      setTimeout(() => {
-        location.href = "/";
-      }, 5000);
-    }
-
     // set page title
     const subpages = $page.route.id.split("/");
     let subpage;
@@ -58,12 +47,29 @@
       document.title = "Perceptron";
     }
 
+    // if navbar is open, close it
+    const navbar = document.querySelector(".navbar-collapse");
+    if (navbar && navbar.classList.contains("show")) {
+      navbar.classList.remove("show");
+    }
+
     // remove reCAPTCHA badge on non-CAPTCHA routes
     if (!CAPTCHA_ROUTES.includes(pathname)) {
       const badge = document.querySelector(".grecaptcha-badge");
       if (badge) {
         badge.remove();
       }
+    }
+
+    // if user deleted their account, force sign out
+    if ($page.url.searchParams.has("signOut")) {
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+
+      setTimeout(() => {
+        location.href = "/";
+      }, 5000);
     }
   });
 
