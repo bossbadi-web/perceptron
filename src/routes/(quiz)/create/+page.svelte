@@ -134,7 +134,6 @@
               name="fileToUpload"
               accept={ACCEPTED_FILETYPES}
               on:change={compressImage}
-              required
             />
           </div>
 
