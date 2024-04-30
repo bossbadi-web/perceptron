@@ -1,5 +1,6 @@
 <script>
-  export let quiz;
+  export let quiz,
+    defaultVisibility = "public";
 </script>
 
 <span>Visibility<span class="required">*</span></span>
@@ -19,7 +20,15 @@
         required
       />
     {:else}
-      <input class="form-check-input" type="radio" id={visibility} name="visibility" value={visibility} required />
+      <input
+        class="form-check-input"
+        type="radio"
+        id={visibility}
+        name="visibility"
+        value={visibility}
+        bind:group={defaultVisibility}
+        required
+      />
     {/if}
     <label class="form-check-label" for={visibility}>{visibility}</label>
   </div>
