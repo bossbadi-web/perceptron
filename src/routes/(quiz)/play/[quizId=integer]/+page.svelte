@@ -71,6 +71,39 @@
     currentQuestionIdx++;
     currentQuestion = quiz.data[currentQuestionIdx];
   };
+
+  // save the score
+  const saveScore = async () => {
+    const questionsWrong = [];
+    for (let i = 0; i < quiz.data.length; i++) {
+      if (playerAnswers[i] !== quiz.data[i].answer) {
+        questionsWrong.push(quiz.data[i].question);
+      }
+    }
+
+    // time taken in nearest second
+    const timeTaken = Math.round((Date.now() - startTime) / 1000);
+    const questionCount = quiz.data.length;
+
+    // fetch request to the current page
+    await fetch(window.location.pathname, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        finished_at: new Date().toISOString(),
+        questions_wrong: questionsWrong,
+        time_taken: timeTaken,
+        question_count: questionCount,
+      }),
+    });
+  };
+
+  // save score when quiz is over
+  $: if (currentQuestionIdx >= quiz.data.length) {
+    saveScore();
+  }
 </script>
 
 <section in:fade>
@@ -94,7 +127,12 @@
         {:else if currentQuestionIdx < quiz.data.length}
           <!-- if quiz not over -->
           <div class="question-box">
-            <McqPlay question={currentQuestion} questionIdx={currentQuestionIdx} {nextQuestion} length={quiz.data.length} />
+            <McqPlay
+              question={currentQuestion}
+              questionIdx={currentQuestionIdx}
+              {nextQuestion}
+              length={quiz.data.length}
+            />
           </div>
         {:else}
           <!-- if quiz over -->
