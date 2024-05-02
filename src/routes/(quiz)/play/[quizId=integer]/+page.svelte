@@ -1,5 +1,6 @@
 <script>
   import "$lib/components/quiz/play/styles.css";
+  import { beforeNavigate } from "$app/navigation";
   import { fade } from "svelte/transition";
   import { onMount } from "svelte";
   import { secondsToHmsString } from "$lib/utils";
@@ -7,9 +8,11 @@
   import McqPlay from "$lib/components/quiz/play/Play.svelte";
   import McqSummary from "$lib/components/quiz/play/Summary.svelte";
   import QuizDescription from "$lib/components/quiz/browse/Description.svelte";
+  import toast from "svelte-french-toast";
+
   export let data;
 
-  const { quiz } = data;
+  const { quiz, lastScore } = data;
 
   onMount(() => {
     // keyboard shortcuts
@@ -104,6 +107,20 @@
   $: if (currentQuestionIdx >= quiz.data.length) {
     saveScore();
   }
+
+  // show last score
+  $: if (lastScore) {
+    const ls = lastScore;
+    const num = ls.question_count - ls.questions_wrong.length;
+    const pScore = `Last attempt: ${num}/${ls.question_count} (${((num / ls.question_count) * 100).toFixed(0)}%)`;
+    const pTime = `Time taken: ${secondsToHmsString(ls.time_taken)}`;
+    const pWhen = `Finished at: ${new Date(ls.finished_at).toLocaleString()}`;
+    toast.success(`${pScore}\n${pTime}\n${pWhen}`, { duration: 5000, position: "bottom-left" });
+  }
+
+  beforeNavigate(() => {
+    toast.dismiss();
+  });
 </script>
 
 <section in:fade>

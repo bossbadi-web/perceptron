@@ -39,9 +39,24 @@ export const load = async ({ cookies, locals, params, url }) => {
     q.answer = q.options.indexOf(correctAnswer);
   });
 
+  // get last score
+  const session = await locals.getSession();
+  if (session) {
+    var { data: dataScore } = await locals.supabase
+      .from("scores")
+      .select("question_count, questions_wrong, time_taken, finished_at")
+      .eq("player_id", session.user.id)
+      .eq("quiz_id", params.quizId)
+      .single();
+  } else {
+    var dataScore = null;
+  }
+
+  // get owner username
   const { data: dataOwner } = await locals.supabase.from("profiles").select("username").eq("id", data.owner).single();
 
   return {
     quiz: cleanQuiz({ ...data, username: dataOwner?.username }),
+    lastScore: dataScore,
   };
 };
