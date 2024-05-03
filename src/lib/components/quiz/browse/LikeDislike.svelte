@@ -1,9 +1,9 @@
 <script>
   import { page } from "$app/stores";
-  export let data;
 
-  const { quiz } = data;
+  export let data;
   $: ({ session } = data);
+  const { quiz } = data;
 
   $: iLiked = quiz.likers.includes(session?.user?.id);
   $: iDisliked = quiz.dislikers.includes(session?.user?.id);

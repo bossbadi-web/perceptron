@@ -1,11 +1,13 @@
 <script>
   import { onMount } from "svelte";
+
   export let data;
 
+  var theme, font;
+
   const changeTheme = (event) => {
-    const theme = event.target.value;
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
+    document.documentElement.setAttribute("data-theme", event.target.value);
+    localStorage.setItem("theme", event.target.value);
   };
 
   const changeFont = (event) => {
@@ -14,7 +16,6 @@
     localStorage.setItem("font", font);
   };
 
-  var theme, font;
   onMount(() => {
     theme = localStorage.getItem("theme") ?? "main";
     font = localStorage.getItem("font") ?? "Playpen Sans";

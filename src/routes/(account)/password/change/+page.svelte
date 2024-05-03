@@ -2,8 +2,8 @@
   import { enhance } from "$app/forms";
   import { page } from "$app/stores";
   import Password from "$lib/components/auth/Password.svelte";
-  export let data;
 
+  export let data;
   const { isResetLink } = data;
 
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";

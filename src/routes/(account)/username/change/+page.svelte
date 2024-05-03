@@ -3,8 +3,8 @@
   import { LIMITS } from "$lib/consts";
   import { page } from "$app/stores";
   import Password from "$lib/components/auth/Password.svelte";
-  export let data;
 
+  export let data;
   const { username } = data;
 
   const redirectTo = $page.url.searchParams.get("redirectTo") || "/";

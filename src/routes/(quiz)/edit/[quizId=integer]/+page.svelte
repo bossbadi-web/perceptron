@@ -7,9 +7,10 @@
   import { onMount } from "svelte";
   import MainFields from "$lib/components/quiz/edit/MainFields.svelte";
   import Stats from "$lib/components/quiz/browse/Stats.svelte";
-  export let data;
 
+  export let data;
   const { quiz } = data;
+
   const editQuizStore = createEditQuizStore(quiz);
 
   $: jsonVersion = JSON.stringify($editQuizStore.data);
@@ -28,6 +29,10 @@
     a.href = url;
     a.download = `perceptron-${$editQuizStore.id}.json`;
     a.click();
+  };
+
+  const confirmDelete = () => {
+    confirm("Are you sure?") && document.querySelector("button[formaction='?/delete']").click();
   };
 
   onMount(() => {
@@ -133,10 +138,6 @@
       }
     });
   });
-
-  const confirmDelete = () => {
-    confirm("Are you sure?") && document.querySelector("button[formaction='?/delete']").click();
-  };
 </script>
 
 <section in:fade>

@@ -3,8 +3,8 @@
   import { page } from "$app/stores";
   import Menu from "../Menu.svelte";
   import QuizCard from "$lib/components/quiz/browse/Explore.svelte";
-  export let data;
 
+  export let data;
   const { rangeLeft, rangeRight, quizzes, session, total } = data;
 
   const mainURL = $page.url.href;

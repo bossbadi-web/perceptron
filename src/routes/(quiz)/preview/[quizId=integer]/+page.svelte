@@ -6,8 +6,9 @@
   import McqPreview from "$lib/components/quiz/play/Preview.svelte";
   import McqReveal from "$lib/components/quiz/play/Reveal.svelte";
   import QuizDescription from "$lib/components/quiz/browse/Description.svelte";
-  export let data;
 
+  export let data;
+  $: ({ session } = data);
   const { quiz } = data;
 
   let reveal = false;
@@ -30,9 +31,9 @@
             break;
           case "e": // Ctrl + E: edit
             e.preventDefault();
-            if (!data.session?.user?.id) {
+            if (!session?.user) {
               alert("Please login to edit this quiz.");
-            } else if (data.session?.user?.id !== quiz.owner) {
+            } else if (session.user.id !== quiz.owner) {
               alert("You are not the owner of this quiz.");
             } else {
               window.location.href = `/edit/${quiz.id}`;
@@ -51,8 +52,6 @@
       };
     }
   });
-
-  $: ({ session } = data);
 </script>
 
 <section in:fade>

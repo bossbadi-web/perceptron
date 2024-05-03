@@ -89,8 +89,6 @@
     toast.success(`${pScore}\n${pTime}\n${pWhen}`, { duration: 5000, position: "bottom-left" });
   }
 
-  // EVENTS
-
   onMount(() => {
     // keyboard shortcuts
     document.addEventListener("keydown", (e) => {

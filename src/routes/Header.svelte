@@ -1,16 +1,11 @@
 <script>
   import { onMount } from "svelte";
   import { afterNavigate } from "$app/navigation";
-  export let data;
 
+  export let data;
   $: ({ session } = data);
 
   let path;
-
-  // get path of current page so if user logins in, they are redirected to the page they were on
-  afterNavigate(({ to }) => {
-    path = to.url.pathname;
-  });
 
   onMount(() => {
     const scrollIndicator = document.querySelector(".scroll-progress");
@@ -21,6 +16,11 @@
       scrollIndicator.style.width = scrolled + "%";
     };
     window.addEventListener("scroll", scrollProgress);
+  });
+
+  // get path of current page so if user logins in, they are redirected to the page they were on
+  afterNavigate(({ to }) => {
+    path = to.url.pathname;
   });
 </script>
 

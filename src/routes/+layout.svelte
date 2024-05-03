@@ -8,10 +8,27 @@
   import Footer from "./Footer.svelte";
   import Header from "./Header.svelte";
   import toast, { Toaster } from "svelte-french-toast";
-  export let data;
 
+  export let data;
   $: ({ supabase, session } = data);
+
   $: pathname = $page.url.pathname.replace(/\/$/, "");
+
+  // display flashed messages as toasts
+  const flash = getFlash(page);
+
+  $: if ($flash) {
+    switch ($flash.type) {
+      case "success":
+        toast.success($flash.message, { duration: 5000 });
+        break;
+      case "error":
+        toast.error($flash.message, { duration: 5000 });
+        break;
+      default:
+        toast($flash.message, { duration: 5000 });
+    }
+  }
 
   onMount(() => {
     const {
@@ -72,22 +89,6 @@
       }, 5000);
     }
   });
-
-  // display flashed messages as toasts
-  const flash = getFlash(page);
-
-  $: if ($flash) {
-    switch ($flash.type) {
-      case "success":
-        toast.success($flash.message, { duration: 5000 });
-        break;
-      case "error":
-        toast.error($flash.message, { duration: 5000 });
-        break;
-      default:
-        toast($flash.message, { duration: 5000 });
-    }
-  }
 </script>
 
 <svelte:head>
