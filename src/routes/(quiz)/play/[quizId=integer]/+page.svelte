@@ -12,51 +12,15 @@
 
   export let data;
 
-  const { quiz, lastScore } = data;
-
-  onMount(() => {
-    // keyboard shortcuts
-    document.addEventListener("keydown", (e) => {
-      if (e.ctrlKey) {
-        switch (e.key.toLowerCase()) {
-          case "o": // Ctrl + O: preview
-            e.preventDefault();
-            window.location.href = `/preview/${quiz.id}`;
-            break;
-          case "p": // Ctrl + P: do nothing
-            e.preventDefault();
-            break;
-          case "e": // Ctrl + E: edit
-            e.preventDefault();
-            if (!data.session?.user?.id) {
-              alert("Please login to edit this quiz.");
-            } else if (data.session?.user?.id !== quiz.owner) {
-              alert("You are not the owner of this quiz.");
-            } else {
-              window.location.href = `/edit/${quiz.id}`;
-            }
-            break;
-        }
-      }
-    });
-
-    if (quiz.bg) {
-      const bg = document.getElementById("background");
-      bg.style.backgroundImage = `url(${quiz.bg})`;
-
-      return () => {
-        bg.style.backgroundImage = "";
-      };
-    }
-  });
-
   $: ({ session } = data);
+  const { quiz, lastScore } = data;
 
   let currentQuestionIdx = -1;
   let currentQuestion = null;
   let score = 0;
   let playerAnswers = [];
   let startTime = null;
+  let didWrongsOverride = false; // override original questions with wrongs only
 
   const nextQuestion = ({ wasCorrect, idx }) => {
     if (!startTime) {
@@ -75,7 +39,14 @@
     currentQuestion = quiz.data[currentQuestionIdx];
   };
 
-  // save the score
+  const nextQuestionWrongsOnly = (args) => {
+    if (!didWrongsOverride) {
+      didWrongsOverride = true;
+      quiz.data = quiz.data.filter((q) => lastScore.questions_wrong.includes(q.question));
+    }
+    nextQuestion(args);
+  };
+
   const saveScore = async () => {
     const questionsWrong = [];
     for (let i = 0; i < quiz.data.length; i++) {
@@ -118,6 +89,44 @@
     toast.success(`${pScore}\n${pTime}\n${pWhen}`, { duration: 5000, position: "bottom-left" });
   }
 
+  // EVENTS
+
+  onMount(() => {
+    // keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.ctrlKey) {
+        switch (e.key.toLowerCase()) {
+          case "o": // Ctrl + O: preview
+            e.preventDefault();
+            window.location.href = `/preview/${quiz.id}`;
+            break;
+          case "p": // Ctrl + P: do nothing
+            e.preventDefault();
+            break;
+          case "e": // Ctrl + E: edit
+            e.preventDefault();
+            if (!session?.user) {
+              alert("Please login to edit this quiz.");
+            } else if (session.user.id !== quiz.owner_id) {
+              alert("You are not the owner of this quiz.");
+            } else {
+              window.location.href = `/edit/${quiz.id}`;
+            }
+            break;
+        }
+      }
+    });
+
+    if (quiz.bg) {
+      const bg = document.getElementById("background");
+      bg.style.backgroundImage = `url(${quiz.bg})`;
+
+      return () => {
+        bg.style.backgroundImage = "";
+      };
+    }
+  });
+
   beforeNavigate(() => {
     toast.dismiss();
   });
@@ -138,7 +147,13 @@
               <p>
                 <LikeDislike {data} />
               </p>
+
               <button class="start-btn btn btn-main btn-lg" on:click={nextQuestion}>Start</button>
+              {#if lastScore?.questions_wrong && lastScore.questions_wrong.length}
+                <button class="start-btn btn btn-secondary btn-lg" on:click={nextQuestionWrongsOnly}>
+                  Wrongs Only
+                </button>
+              {/if}
             </div>
           </div>
         {:else if currentQuestionIdx < quiz.data.length}
