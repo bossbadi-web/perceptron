@@ -105,7 +105,7 @@
             e.preventDefault();
             if (!session?.user) {
               alert("Please login to edit this quiz.");
-            } else if (session.user.id !== quiz.owner_id) {
+            } else if (session.user.id !== quiz.owner) {
               alert("You are not the owner of this quiz.");
             } else {
               window.location.href = `/edit/${quiz.id}`;
