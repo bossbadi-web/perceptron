@@ -2,6 +2,7 @@
   import { enhance } from "$app/forms";
   import { getFlash } from "sveltekit-flash-message";
   import { LIMITS } from "$lib/consts";
+  import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { submitCaptcha } from "$lib/recaptchaClient";
   import imageCompression from "browser-image-compression";
@@ -33,13 +34,19 @@
     loading = false;
   }
 
+  // when image is uploaded from disk
   const compressImage = async () => {
     const file = document.getElementById("file").files[0];
+    _compressImage(file);
+  };
+
+  // helper function to compress image
+  const _compressImage = async (file) => {
     if (!file) {
       return;
     }
 
-    disableButtons();
+    _disableButtons();
 
     try {
       imageCompression(file, COMPRESSION_OPTIONS).then((output) => {
@@ -51,24 +58,40 @@
         dataTransfer.items.add(compressedFile);
         document.getElementById("file").files = dataTransfer.files;
 
-        enableButtons();
+        _enableButtons();
       });
     } catch (error) {
-      enableButtons();
+      _enableButtons();
     }
   };
 
-  const disableButtons = () => {
+  const _disableButtons = () => {
     document.querySelectorAll("button").forEach((button) => {
       button.disabled = true;
     });
   };
 
-  const enableButtons = () => {
+  const _enableButtons = () => {
     document.querySelectorAll("button").forEach((button) => {
       button.disabled = false;
     });
   };
+
+  // when image is pasted from clipboard
+  onMount(() => {
+    document.addEventListener("paste", async (event) => {
+      const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+      for (let index in items) {
+        const item = items[index];
+        if (item.kind === "file") {
+          const blob = item.getAsFile();
+          const file = new File([blob], "clipboard.png", { type: "image/png" });
+          _compressImage(file);
+          break;
+        }
+      }
+    });
+  });
 </script>
 
 <section>
@@ -122,7 +145,7 @@
 
           <div class="mb-4">
             <label for="file">
-              Upload an image
+              Upload or paste an image
               <small class="text-muted">(max {LIMITS.file / 1024 / 1024} MB)</small>
               <br />
               <small class="text-muted">Supported file types: {ACCEPTED_FILETYPES}</small>
