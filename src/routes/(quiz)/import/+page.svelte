@@ -50,7 +50,7 @@
               <br />
               <small class="text-muted">Supported file types: .json</small>
             </label>
-            <input class="form-control" type="file" id="file" name="fileToUpload" accept=".json" />
+            <input class="form-control" type="file" id="file" name="fileToUpload" accept=".json" required />
           </div>
 
           <br />
