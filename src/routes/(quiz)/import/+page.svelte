@@ -5,6 +5,7 @@
   import { page } from "$app/stores";
   import { submitCaptcha } from "$lib/recaptchaClient";
   import Loading from "$lib/components/quiz/create/Loading.svelte";
+  import RowOfButtons from "$lib/components/quiz/create/RowOfButtons.svelte";
 
   let loading = false;
 
@@ -55,11 +56,7 @@
 
           <br />
 
-          <span class="row-of-buttons">
-            <button class="btn btn-main btn-lg" formaction="?/play">Create and Play</button>
-            <button class="btn btn-secondary btn-lg" formaction="?/preview">Preview</button>
-            <button class="btn btn-secondary btn-lg" formaction="?/edit">Edit</button>
-          </span>
+          <RowOfButtons />
         </form>
       </div>
     </div>

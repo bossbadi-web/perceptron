@@ -241,7 +241,7 @@
                 on:click|preventDefault={() => editQuizStore.deleteQuestion(questionIdx)}
                 class="btn btn-outline-danger"
               >
-                <i class="fas fa-trash-alt" />
+                <i class="fas fa-trash" />
               </button>
             </div>
 
@@ -255,10 +255,18 @@
 
         <div class="row-of-buttons">
           <input type="hidden" name="questions" bind:value={jsonVersion} />
-          <button class="btn btn-main btn-lg" formaction="?/save" title="Ctrl + S">Save</button>
-          <button class="btn btn-main btn-lg" formaction="?/play" title="Ctrl + P">Play</button>
-          <button class="btn btn-secondary btn-lg" formaction="?/preview" title="Ctrl + O">Preview</button>
-          <button class="btn btn-danger btn-lg" formnovalidate on:click|preventDefault={confirmDelete}>Delete</button>
+          <button class="btn btn-main btn-lg" formaction="?/save" title="Ctrl + S">
+            <i class="fas fa-save" /> Save
+          </button>
+          <button class="btn btn-main btn-lg" formaction="?/play" title="Ctrl + P">
+            <i class="fas fa-play" /> Play
+          </button>
+          <button class="btn btn-secondary btn-lg" formaction="?/preview" title="Ctrl + O">
+            <i class="fas fa-eye" /> Preview
+          </button>
+          <button class="btn btn-danger btn-lg" formnovalidate on:click|preventDefault={confirmDelete}>
+            <i class="fas fa-trash-alt" /> Delete
+          </button>
           <button class="btn btn-danger btn-lg d-none" formaction="?/delete" />
         </div>
       </div>

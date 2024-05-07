@@ -8,6 +8,7 @@
   import imageCompression from "browser-image-compression";
   import Loading from "$lib/components/quiz/create/Loading.svelte";
   import MainFields from "$lib/components/quiz/edit/MainFields.svelte";
+  import RowOfButtons from "$lib/components/quiz/create/RowOfButtons.svelte";
 
   const ACCEPTED_FILETYPES = LIMITS.filetypes.map((type) => `.${type}`).join(", ");
   const COMPRESSION_OPTIONS = {
@@ -178,11 +179,7 @@
 
           <br />
 
-          <span class="row-of-buttons">
-            <button class="btn btn-main btn-lg" formaction="?/play">Create and Play</button>
-            <button class="btn btn-secondary btn-lg" formaction="?/preview">Preview</button>
-            <button class="btn btn-secondary btn-lg" formaction="?/edit">Edit</button>
-          </span>
+          <RowOfButtons />
         </form>
       </div>
     </div>

@@ -21,8 +21,12 @@
     <p>
       <LikeDislike {data} />
     </p>
-    <a href={`/play/${quiz.id}`} class="btn btn-main">Play</a>
-    <a href={`/preview/${quiz.id}`} class="btn btn-secondary">Preview</a>
+    <a href={`/play/${quiz.id}`} class="btn btn-main" title="Play">
+      <i class="fas fa-play" />
+    </a>
+    <a href={`/preview/${quiz.id}`} class="btn btn-secondary" title="Preview">
+      <i class="fas fa-eye" />
+    </a>
     <slot />
   </div>
 </div>

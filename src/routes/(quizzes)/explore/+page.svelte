@@ -2,7 +2,8 @@
   import { changePage } from "$lib/utils";
   import { page } from "$app/stores";
   import Menu from "../Menu.svelte";
-  import QuizCard from "$lib/components/quiz/browse/Explore.svelte";
+  import QuizCardExplore from "$lib/components/quiz/browse/Explore.svelte";
+  import QuizCardLibrary from "$lib/components/quiz/browse/Library.svelte";
 
   export let data;
   const { rangeLeft, rangeRight, quizzes, session, total } = data;
@@ -53,7 +54,11 @@
   <div class="all-cards">
     {#each quizzes as quiz}
       <div class="quiz-box">
-        <QuizCard {quiz} data={{ quiz, session }} />
+        {#if session?.user?.id === quiz.owner}
+          <QuizCardLibrary {quiz} data={{ quiz, session }} />
+        {:else}
+          <QuizCardExplore {quiz} data={{ quiz, session }} />
+        {/if}
       </div>
     {/each}
   </div>

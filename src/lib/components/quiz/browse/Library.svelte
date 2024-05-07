@@ -6,5 +6,7 @@
 </script>
 
 <Explore {quiz} {data} showVisibility={true}>
-  <a href={`/edit/${quiz.id}`} class="btn btn-secondary">Edit</a>
+  <a href={`/edit/${quiz.id}`} class="btn btn-secondary" title="Edit">
+    <i class="fas fa-edit" />
+  </a>
 </Explore>
