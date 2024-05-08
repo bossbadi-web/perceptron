@@ -14,11 +14,17 @@ export const load = async ({ locals, url }) => {
   } else if (order === "Z-A") {
     var orderBy = "title";
     var ascending = false;
-  } else if (order === "Oldest first") {
-    var orderBy = "created_at";
+  } else if (order === "Oldest") {
+    var orderBy = "id";
     var ascending = true;
+  } else if (order === "Recent") {
+    var orderBy = "id";
+    var ascending = false;
+  } else if (order === "Most liked") {
+    var orderBy = "likers";
+    var ascending = false;
   } else {
-    var orderBy = "created_at";
+    var orderBy = "id";
     var ascending = false;
   }
 

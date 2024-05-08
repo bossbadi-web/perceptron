@@ -4,7 +4,7 @@
   export let currentPage, rangeRight, total;
 
   const mainURL = $page.url.href;
-  const orderByMessage = $page.url.searchParams.get("order") || "Newest first";
+  const orderByMessage = $page.url.searchParams.get("order") || "Recent";
 </script>
 
 <div class="the-filters">
@@ -38,6 +38,26 @@
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
       <li>
+        <a class="dropdown-item" href={changePage(mainURL, { order: "Most liked" })} data-sveltekit-reload>
+          {#if orderByMessage === "Most liked"}
+            <i class="fas fa-check" />
+          {:else}
+            <i class="fas fa-heart" />
+          {/if}
+          Most liked
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item" href={changePage(mainURL, { order: "Recent" })} data-sveltekit-reload>
+          {#if orderByMessage === "Recent"}
+            <i class="fas fa-check" />
+          {:else}
+            <i class="fas fa-baby" />
+          {/if}
+          Recent
+        </a>
+      </li>
+      <li>
         <a class="dropdown-item" href={changePage(mainURL, { order: "A-Z" })} data-sveltekit-reload>
           {#if orderByMessage === "A-Z"}
             <i class="fas fa-check" />
@@ -58,23 +78,13 @@
         </a>
       </li>
       <li>
-        <a class="dropdown-item" href={changePage(mainURL, { order: "Oldest first" })} data-sveltekit-reload>
-          {#if orderByMessage === "Oldest first"}
+        <a class="dropdown-item" href={changePage(mainURL, { order: "Oldest" })} data-sveltekit-reload>
+          {#if orderByMessage === "Oldest"}
             <i class="fas fa-check" />
           {:else}
             <i class="fas fa-person-cane" />
           {/if}
-          Oldest first
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" href={changePage(mainURL, { order: "Newest first" })} data-sveltekit-reload>
-          {#if orderByMessage === "Newest first"}
-            <i class="fas fa-check" />
-          {:else}
-            <i class="fas fa-baby" />
-          {/if}
-          Newest first
+          Oldest
         </a>
       </li>
     </ul>
