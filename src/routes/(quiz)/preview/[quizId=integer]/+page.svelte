@@ -60,7 +60,9 @@
       <div class="col-md-10 offset-md-1">
         <div class="text-center alert alert-info" role="alert">
           <p>This is a preview. You can't submit your answers here.</p>
-          <a href="/play/{quiz.id}" class="btn btn-main" data-sveltekit-preload-data="tap" title="Ctrl + P">Play</a>
+          <a href="/play/{quiz.id}" class="btn btn-main" data-sveltekit-preload-data="tap" title="Ctrl + P">
+            <i class="fa fa-play"></i> Play
+          </a>
 
           <button class="btn btn-secondary" on:click={toggleReveal}>
             {#if reveal}
@@ -72,7 +74,7 @@
 
           {#if session?.user?.id === quiz.owner}
             <a href="/edit/{quiz.id}" class="btn btn-secondary" data-sveltekit-preload-data="tap" title="Ctrl + E">
-              Edit
+              <i class="fa fa-edit"></i> Edit
             </a>
           {/if}
         </div>

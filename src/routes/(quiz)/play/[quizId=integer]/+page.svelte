@@ -173,9 +173,13 @@
             <p>
               Time Taken: {secondsToHmsString((Date.now() - startTime) / 1000)}
             </p>
-            <button class="btn btn-main" on:click={() => window.location.reload()}>Play Again</button>
+            <button class="btn btn-main" on:click={() => window.location.reload()} title="Ctrl + R">
+              <i class="fa fa-redo"></i> Retry
+            </button>
             {#if session?.user}
-              <a href="/edit/{quiz.id}" class="btn btn-secondary" data-sveltekit-preload-data="tap">Edit</a>
+              <a href="/edit/{quiz.id}" class="btn btn-secondary" data-sveltekit-preload-data="tap" title="Ctrl + E">
+                <i class="fa fa-edit"></i> Edit
+              </a>
             {/if}
           </div>
 
