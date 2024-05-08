@@ -32,6 +32,7 @@ DROP ROLE service_role;
 DROP ROLE supabase_admin;
 DROP ROLE supabase_auth_admin;
 DROP ROLE supabase_read_only_user;
+DROP ROLE supabase_realtime_admin;
 DROP ROLE supabase_replication_admin;
 DROP ROLE supabase_storage_admin;
 
@@ -66,6 +67,8 @@ CREATE ROLE supabase_auth_admin;
 ALTER ROLE supabase_auth_admin WITH NOSUPERUSER NOINHERIT CREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:PE2whIIgA50z9iDYkwr/fw==$PpBIVRt9iXzb0h+wqCC2UTL6hoaFsayO1jUdJNoVcoY=:OCt8NmTOqvcWKrfka0+W4ob62XbptDQb565r+mjPcgQ=';
 CREATE ROLE supabase_read_only_user;
 ALTER ROLE supabase_read_only_user WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION BYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:LdCIV/DoYQtqB40BPqryqQ==$/TDuo9fdN5EQRswtTQRFRWu4znKLlwhWRUQjEnawp/8=:tArCR9g436/WHx5gNG86sxVwjVXpDufyTTfSNfs2e34=';
+CREATE ROLE supabase_realtime_admin;
+ALTER ROLE supabase_realtime_admin WITH NOSUPERUSER NOINHERIT NOCREATEROLE NOCREATEDB NOLOGIN NOREPLICATION NOBYPASSRLS;
 CREATE ROLE supabase_replication_admin;
 ALTER ROLE supabase_replication_admin WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN REPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:7qykphrjuwovl3B4i6sGGg==$rZowazBaIdoQaOV5uWLcb3cV59Hg7Vh/xb3VtmcRcfs=:vWKk1rJfko3AFinyADz0yr7mxaHn3sYXvN1SEbIvb3M=';
 CREATE ROLE supabase_storage_admin;
@@ -141,6 +144,7 @@ GRANT pgsodium_keymaker TO postgres WITH ADMIN OPTION GRANTED BY supabase_admin;
 GRANT service_role TO authenticator GRANTED BY postgres;
 GRANT service_role TO postgres GRANTED BY supabase_admin;
 GRANT supabase_auth_admin TO postgres GRANTED BY supabase_admin;
+GRANT supabase_realtime_admin TO postgres GRANTED BY supabase_admin;
 GRANT supabase_storage_admin TO postgres GRANTED BY supabase_admin;
 
 
@@ -161,7 +165,7 @@ GRANT supabase_storage_admin TO postgres GRANTED BY supabase_admin;
 --
 
 -- Dumped from database version 15.1 (Ubuntu 15.1-1.pgdg20.04+1)
--- Dumped by pg_dump version 15.6 (Ubuntu 15.6-1.pgdg22.04+1)
+-- Dumped by pg_dump version 15.6 (Ubuntu 15.6-1.pgdg20.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -244,7 +248,7 @@ GRANT CONNECT ON DATABASE template1 TO PUBLIC;
 --
 
 -- Dumped from database version 15.1 (Ubuntu 15.1-1.pgdg20.04+1)
--- Dumped by pg_dump version 15.6 (Ubuntu 15.6-1.pgdg22.04+1)
+-- Dumped by pg_dump version 15.6 (Ubuntu 15.6-1.pgdg20.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -526,6 +530,71 @@ CREATE TYPE auth.factor_status AS ENUM (
 CREATE TYPE auth.factor_type AS ENUM (
     'totp',
     'webauthn'
+);
+
+
+--
+-- Name: action; Type: TYPE; Schema: realtime; Owner: -
+--
+
+CREATE TYPE realtime.action AS ENUM (
+    'INSERT',
+    'UPDATE',
+    'DELETE',
+    'TRUNCATE',
+    'ERROR'
+);
+
+
+--
+-- Name: equality_op; Type: TYPE; Schema: realtime; Owner: -
+--
+
+CREATE TYPE realtime.equality_op AS ENUM (
+    'eq',
+    'neq',
+    'lt',
+    'lte',
+    'gt',
+    'gte',
+    'in'
+);
+
+
+--
+-- Name: user_defined_filter; Type: TYPE; Schema: realtime; Owner: -
+--
+
+CREATE TYPE realtime.user_defined_filter AS (
+	column_name text,
+	op realtime.equality_op,
+	value text
+);
+
+
+--
+-- Name: wal_column; Type: TYPE; Schema: realtime; Owner: -
+--
+
+CREATE TYPE realtime.wal_column AS (
+	name text,
+	type_name text,
+	type_oid oid,
+	value jsonb,
+	is_pkey boolean,
+	is_selectable boolean
+);
+
+
+--
+-- Name: wal_rls; Type: TYPE; Schema: realtime; Owner: -
+--
+
+CREATE TYPE realtime.wal_rls AS (
+	wal jsonb,
+	is_rls_enabled boolean,
+	subscription_ids uuid[],
+	errors text[]
 );
 
 
@@ -1019,6 +1088,628 @@ $$;
 
 
 --
+-- Name: apply_rls(jsonb, integer); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer DEFAULT (1024 * 1024)) RETURNS SETOF realtime.wal_rls
+    LANGUAGE plpgsql
+    AS $$
+    declare
+        -- Regclass of the table e.g. public.notes
+        entity_ regclass = (quote_ident(wal ->> 'schema') || '.' || quote_ident(wal ->> 'table'))::regclass;
+
+        -- I, U, D, T: insert, update ...
+        action realtime.action = (
+            case wal ->> 'action'
+                when 'I' then 'INSERT'
+                when 'U' then 'UPDATE'
+                when 'D' then 'DELETE'
+                else 'ERROR'
+            end
+        );
+
+        -- Is row level security enabled for the table
+        is_rls_enabled bool = relrowsecurity from pg_class where oid = entity_;
+
+        subscriptions realtime.subscription[] = array_agg(subs)
+            from
+                realtime.subscription subs
+            where
+                subs.entity = entity_;
+
+        -- Subscription vars
+        roles regrole[] = array_agg(distinct us.claims_role)
+            from
+                unnest(subscriptions) us;
+
+        working_role regrole;
+        claimed_role regrole;
+        claims jsonb;
+
+        subscription_id uuid;
+        subscription_has_access bool;
+        visible_to_subscription_ids uuid[] = '{}';
+
+        -- structured info for wal's columns
+        columns realtime.wal_column[];
+        -- previous identity values for update/delete
+        old_columns realtime.wal_column[];
+
+        error_record_exceeds_max_size boolean = octet_length(wal::text) > max_record_bytes;
+
+        -- Primary jsonb output for record
+        output jsonb;
+
+    begin
+        perform set_config('role', null, true);
+
+        columns =
+            array_agg(
+                (
+                    x->>'name',
+                    x->>'type',
+                    x->>'typeoid',
+                    realtime.cast(
+                        (x->'value') #>> '{}',
+                        coalesce(
+                            (x->>'typeoid')::regtype, -- null when wal2json version <= 2.4
+                            (x->>'type')::regtype
+                        )
+                    ),
+                    (pks ->> 'name') is not null,
+                    true
+                )::realtime.wal_column
+            )
+            from
+                jsonb_array_elements(wal -> 'columns') x
+                left join jsonb_array_elements(wal -> 'pk') pks
+                    on (x ->> 'name') = (pks ->> 'name');
+
+        old_columns =
+            array_agg(
+                (
+                    x->>'name',
+                    x->>'type',
+                    x->>'typeoid',
+                    realtime.cast(
+                        (x->'value') #>> '{}',
+                        coalesce(
+                            (x->>'typeoid')::regtype, -- null when wal2json version <= 2.4
+                            (x->>'type')::regtype
+                        )
+                    ),
+                    (pks ->> 'name') is not null,
+                    true
+                )::realtime.wal_column
+            )
+            from
+                jsonb_array_elements(wal -> 'identity') x
+                left join jsonb_array_elements(wal -> 'pk') pks
+                    on (x ->> 'name') = (pks ->> 'name');
+
+        for working_role in select * from unnest(roles) loop
+
+            -- Update `is_selectable` for columns and old_columns
+            columns =
+                array_agg(
+                    (
+                        c.name,
+                        c.type_name,
+                        c.type_oid,
+                        c.value,
+                        c.is_pkey,
+                        pg_catalog.has_column_privilege(working_role, entity_, c.name, 'SELECT')
+                    )::realtime.wal_column
+                )
+                from
+                    unnest(columns) c;
+
+            old_columns =
+                    array_agg(
+                        (
+                            c.name,
+                            c.type_name,
+                            c.type_oid,
+                            c.value,
+                            c.is_pkey,
+                            pg_catalog.has_column_privilege(working_role, entity_, c.name, 'SELECT')
+                        )::realtime.wal_column
+                    )
+                    from
+                        unnest(old_columns) c;
+
+            if action <> 'DELETE' and count(1) = 0 from unnest(columns) c where c.is_pkey then
+                return next (
+                    jsonb_build_object(
+                        'schema', wal ->> 'schema',
+                        'table', wal ->> 'table',
+                        'type', action
+                    ),
+                    is_rls_enabled,
+                    -- subscriptions is already filtered by entity
+                    (select array_agg(s.subscription_id) from unnest(subscriptions) as s where claims_role = working_role),
+                    array['Error 400: Bad Request, no primary key']
+                )::realtime.wal_rls;
+
+            -- The claims role does not have SELECT permission to the primary key of entity
+            elsif action <> 'DELETE' and sum(c.is_selectable::int) <> count(1) from unnest(columns) c where c.is_pkey then
+                return next (
+                    jsonb_build_object(
+                        'schema', wal ->> 'schema',
+                        'table', wal ->> 'table',
+                        'type', action
+                    ),
+                    is_rls_enabled,
+                    (select array_agg(s.subscription_id) from unnest(subscriptions) as s where claims_role = working_role),
+                    array['Error 401: Unauthorized']
+                )::realtime.wal_rls;
+
+            else
+                output = jsonb_build_object(
+                    'schema', wal ->> 'schema',
+                    'table', wal ->> 'table',
+                    'type', action,
+                    'commit_timestamp', to_char(
+                        ((wal ->> 'timestamp')::timestamptz at time zone 'utc'),
+                        'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'
+                    ),
+                    'columns', (
+                        select
+                            jsonb_agg(
+                                jsonb_build_object(
+                                    'name', pa.attname,
+                                    'type', pt.typname
+                                )
+                                order by pa.attnum asc
+                            )
+                        from
+                            pg_attribute pa
+                            join pg_type pt
+                                on pa.atttypid = pt.oid
+                        where
+                            attrelid = entity_
+                            and attnum > 0
+                            and pg_catalog.has_column_privilege(working_role, entity_, pa.attname, 'SELECT')
+                    )
+                )
+                -- Add "record" key for insert and update
+                || case
+                    when action in ('INSERT', 'UPDATE') then
+                        jsonb_build_object(
+                            'record',
+                            (
+                                select
+                                    jsonb_object_agg(
+                                        -- if unchanged toast, get column name and value from old record
+                                        coalesce((c).name, (oc).name),
+                                        case
+                                            when (c).name is null then (oc).value
+                                            else (c).value
+                                        end
+                                    )
+                                from
+                                    unnest(columns) c
+                                    full outer join unnest(old_columns) oc
+                                        on (c).name = (oc).name
+                                where
+                                    coalesce((c).is_selectable, (oc).is_selectable)
+                                    and ( not error_record_exceeds_max_size or (octet_length((c).value::text) <= 64))
+                            )
+                        )
+                    else '{}'::jsonb
+                end
+                -- Add "old_record" key for update and delete
+                || case
+                    when action = 'UPDATE' then
+                        jsonb_build_object(
+                                'old_record',
+                                (
+                                    select jsonb_object_agg((c).name, (c).value)
+                                    from unnest(old_columns) c
+                                    where
+                                        (c).is_selectable
+                                        and ( not error_record_exceeds_max_size or (octet_length((c).value::text) <= 64))
+                                )
+                            )
+                    when action = 'DELETE' then
+                        jsonb_build_object(
+                            'old_record',
+                            (
+                                select jsonb_object_agg((c).name, (c).value)
+                                from unnest(old_columns) c
+                                where
+                                    (c).is_selectable
+                                    and ( not error_record_exceeds_max_size or (octet_length((c).value::text) <= 64))
+                                    and ( not is_rls_enabled or (c).is_pkey ) -- if RLS enabled, we can't secure deletes so filter to pkey
+                            )
+                        )
+                    else '{}'::jsonb
+                end;
+
+                -- Create the prepared statement
+                if is_rls_enabled and action <> 'DELETE' then
+                    if (select 1 from pg_prepared_statements where name = 'walrus_rls_stmt' limit 1) > 0 then
+                        deallocate walrus_rls_stmt;
+                    end if;
+                    execute realtime.build_prepared_statement_sql('walrus_rls_stmt', entity_, columns);
+                end if;
+
+                visible_to_subscription_ids = '{}';
+
+                for subscription_id, claims in (
+                        select
+                            subs.subscription_id,
+                            subs.claims
+                        from
+                            unnest(subscriptions) subs
+                        where
+                            subs.entity = entity_
+                            and subs.claims_role = working_role
+                            and (
+                                realtime.is_visible_through_filters(columns, subs.filters)
+                                or action = 'DELETE'
+                            )
+                ) loop
+
+                    if not is_rls_enabled or action = 'DELETE' then
+                        visible_to_subscription_ids = visible_to_subscription_ids || subscription_id;
+                    else
+                        -- Check if RLS allows the role to see the record
+                        perform
+                            set_config('role', working_role::text, true),
+                            set_config('request.jwt.claims', claims::text, true);
+
+                        execute 'execute walrus_rls_stmt' into subscription_has_access;
+
+                        if subscription_has_access then
+                            visible_to_subscription_ids = visible_to_subscription_ids || subscription_id;
+                        end if;
+                    end if;
+                end loop;
+
+                perform set_config('role', null, true);
+
+                return next (
+                    output,
+                    is_rls_enabled,
+                    visible_to_subscription_ids,
+                    case
+                        when error_record_exceeds_max_size then array['Error 413: Payload Too Large']
+                        else '{}'
+                    end
+                )::realtime.wal_rls;
+
+            end if;
+        end loop;
+
+        perform set_config('role', null, true);
+    end;
+    $$;
+
+
+--
+-- Name: build_prepared_statement_sql(text, regclass, realtime.wal_column[]); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) RETURNS text
+    LANGUAGE sql
+    AS $$
+      /*
+      Builds a sql string that, if executed, creates a prepared statement to
+      tests retrive a row from *entity* by its primary key columns.
+      Example
+          select realtime.build_prepared_statement_sql('public.notes', '{"id"}'::text[], '{"bigint"}'::text[])
+      */
+          select
+      'prepare ' || prepared_statement_name || ' as
+          select
+              exists(
+                  select
+                      1
+                  from
+                      ' || entity || '
+                  where
+                      ' || string_agg(quote_ident(pkc.name) || '=' || quote_nullable(pkc.value #>> '{}') , ' and ') || '
+              )'
+          from
+              unnest(columns) pkc
+          where
+              pkc.is_pkey
+          group by
+              entity
+      $$;
+
+
+--
+-- Name: cast(text, regtype); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime."cast"(val text, type_ regtype) RETURNS jsonb
+    LANGUAGE plpgsql IMMUTABLE
+    AS $$
+    declare
+      res jsonb;
+    begin
+      execute format('select to_jsonb(%L::'|| type_::text || ')', val)  into res;
+      return res;
+    end
+    $$;
+
+
+--
+-- Name: channel_name(); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime.channel_name() RETURNS text
+    LANGUAGE sql STABLE
+    AS $$
+select nullif(current_setting('realtime.channel_name', true), '')::text;
+$$;
+
+
+--
+-- Name: check_equality_op(realtime.equality_op, regtype, text, text); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) RETURNS boolean
+    LANGUAGE plpgsql IMMUTABLE
+    AS $$
+      /*
+      Casts *val_1* and *val_2* as type *type_* and check the *op* condition for truthiness
+      */
+      declare
+          op_symbol text = (
+              case
+                  when op = 'eq' then '='
+                  when op = 'neq' then '!='
+                  when op = 'lt' then '<'
+                  when op = 'lte' then '<='
+                  when op = 'gt' then '>'
+                  when op = 'gte' then '>='
+                  when op = 'in' then '= any'
+                  else 'UNKNOWN OP'
+              end
+          );
+          res boolean;
+      begin
+          execute format(
+              'select %L::'|| type_::text || ' ' || op_symbol
+              || ' ( %L::'
+              || (
+                  case
+                      when op = 'in' then type_::text || '[]'
+                      else type_::text end
+              )
+              || ')', val_1, val_2) into res;
+          return res;
+      end;
+      $$;
+
+
+--
+-- Name: is_visible_through_filters(realtime.wal_column[], realtime.user_defined_filter[]); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) RETURNS boolean
+    LANGUAGE sql IMMUTABLE
+    AS $_$
+    /*
+    Should the record be visible (true) or filtered out (false) after *filters* are applied
+    */
+        select
+            -- Default to allowed when no filters present
+            $2 is null -- no filters. this should not happen because subscriptions has a default
+            or array_length($2, 1) is null -- array length of an empty array is null
+            or bool_and(
+                coalesce(
+                    realtime.check_equality_op(
+                        op:=f.op,
+                        type_:=coalesce(
+                            col.type_oid::regtype, -- null when wal2json version <= 2.4
+                            col.type_name::regtype
+                        ),
+                        -- cast jsonb to text
+                        val_1:=col.value #>> '{}',
+                        val_2:=f.value
+                    ),
+                    false -- if null, filter does not match
+                )
+            )
+        from
+            unnest(filters) f
+            join unnest(columns) col
+                on f.column_name = col.name;
+    $_$;
+
+
+--
+-- Name: list_changes(name, name, integer, integer); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) RETURNS SETOF realtime.wal_rls
+    LANGUAGE sql
+    SET log_min_messages TO 'fatal'
+    AS $$
+      with pub as (
+        select
+          concat_ws(
+            ',',
+            case when bool_or(pubinsert) then 'insert' else null end,
+            case when bool_or(pubupdate) then 'update' else null end,
+            case when bool_or(pubdelete) then 'delete' else null end
+          ) as w2j_actions,
+          coalesce(
+            string_agg(
+              realtime.quote_wal2json(format('%I.%I', schemaname, tablename)::regclass),
+              ','
+            ) filter (where ppt.tablename is not null and ppt.tablename not like '% %'),
+            ''
+          ) w2j_add_tables
+        from
+          pg_publication pp
+          left join pg_publication_tables ppt
+            on pp.pubname = ppt.pubname
+        where
+          pp.pubname = publication
+        group by
+          pp.pubname
+        limit 1
+      ),
+      w2j as (
+        select
+          x.*, pub.w2j_add_tables
+        from
+          pub,
+          pg_logical_slot_get_changes(
+            slot_name, null, max_changes,
+            'include-pk', 'true',
+            'include-transaction', 'false',
+            'include-timestamp', 'true',
+            'include-type-oids', 'true',
+            'format-version', '2',
+            'actions', pub.w2j_actions,
+            'add-tables', pub.w2j_add_tables
+          ) x
+      )
+      select
+        xyz.wal,
+        xyz.is_rls_enabled,
+        xyz.subscription_ids,
+        xyz.errors
+      from
+        w2j,
+        realtime.apply_rls(
+          wal := w2j.data::jsonb,
+          max_record_bytes := max_record_bytes
+        ) xyz(wal, is_rls_enabled, subscription_ids, errors)
+      where
+        w2j.w2j_add_tables <> ''
+        and xyz.subscription_ids[1] is not null
+    $$;
+
+
+--
+-- Name: quote_wal2json(regclass); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime.quote_wal2json(entity regclass) RETURNS text
+    LANGUAGE sql IMMUTABLE STRICT
+    AS $$
+      select
+        (
+          select string_agg('' || ch,'')
+          from unnest(string_to_array(nsp.nspname::text, null)) with ordinality x(ch, idx)
+          where
+            not (x.idx = 1 and x.ch = '"')
+            and not (
+              x.idx = array_length(string_to_array(nsp.nspname::text, null), 1)
+              and x.ch = '"'
+            )
+        )
+        || '.'
+        || (
+          select string_agg('' || ch,'')
+          from unnest(string_to_array(pc.relname::text, null)) with ordinality x(ch, idx)
+          where
+            not (x.idx = 1 and x.ch = '"')
+            and not (
+              x.idx = array_length(string_to_array(nsp.nspname::text, null), 1)
+              and x.ch = '"'
+            )
+          )
+      from
+        pg_class pc
+        join pg_namespace nsp
+          on pc.relnamespace = nsp.oid
+      where
+        pc.oid = entity
+    $$;
+
+
+--
+-- Name: subscription_check_filters(); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime.subscription_check_filters() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+    /*
+    Validates that the user defined filters for a subscription:
+    - refer to valid columns that the claimed role may access
+    - values are coercable to the correct column type
+    */
+    declare
+        col_names text[] = coalesce(
+                array_agg(c.column_name order by c.ordinal_position),
+                '{}'::text[]
+            )
+            from
+                information_schema.columns c
+            where
+                format('%I.%I', c.table_schema, c.table_name)::regclass = new.entity
+                and pg_catalog.has_column_privilege(
+                    (new.claims ->> 'role'),
+                    format('%I.%I', c.table_schema, c.table_name)::regclass,
+                    c.column_name,
+                    'SELECT'
+                );
+        filter realtime.user_defined_filter;
+        col_type regtype;
+
+        in_val jsonb;
+    begin
+        for filter in select * from unnest(new.filters) loop
+            -- Filtered column is valid
+            if not filter.column_name = any(col_names) then
+                raise exception 'invalid column for filter %', filter.column_name;
+            end if;
+
+            -- Type is sanitized and safe for string interpolation
+            col_type = (
+                select atttypid::regtype
+                from pg_catalog.pg_attribute
+                where attrelid = new.entity
+                      and attname = filter.column_name
+            );
+            if col_type is null then
+                raise exception 'failed to lookup type for column %', filter.column_name;
+            end if;
+
+            -- Set maximum number of entries for in filter
+            if filter.op = 'in'::realtime.equality_op then
+                in_val = realtime.cast(filter.value, (col_type::text || '[]')::regtype);
+                if coalesce(jsonb_array_length(in_val), 0) > 100 then
+                    raise exception 'too many values for `in` filter. Maximum 100';
+                end if;
+            else
+                -- raises an exception if value is not coercable to type
+                perform realtime.cast(filter.value, col_type);
+            end if;
+
+        end loop;
+
+        -- Apply consistent order to filters so the unique constraint on
+        -- (subscription_id, entity, filters) can't be tricked by a different filter order
+        new.filters = coalesce(
+            array_agg(f order by f.column_name, f.op, f.value),
+            '{}'
+        ) from unnest(new.filters) f;
+
+        return new;
+    end;
+    $$;
+
+
+--
+-- Name: to_regrole(text); Type: FUNCTION; Schema: realtime; Owner: -
+--
+
+CREATE FUNCTION realtime.to_regrole(role_name text) RETURNS regrole
+    LANGUAGE sql IMMUTABLE
+    AS $$ select role_name::regrole $$;
+
+
+--
 -- Name: can_insert_object(text, text, uuid, jsonb); Type: FUNCTION; Schema: storage; Owner: -
 --
 
@@ -1103,6 +1794,96 @@ $$;
 
 
 --
+-- Name: list_multipart_uploads_with_delimiter(text, text, text, integer, text, text); Type: FUNCTION; Schema: storage; Owner: -
+--
+
+CREATE FUNCTION storage.list_multipart_uploads_with_delimiter(bucket_id text, prefix_param text, delimiter_param text, max_keys integer DEFAULT 100, next_key_token text DEFAULT ''::text, next_upload_token text DEFAULT ''::text) RETURNS TABLE(key text, id text, created_at timestamp with time zone)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+    RETURN QUERY EXECUTE
+        'SELECT DISTINCT ON(key COLLATE "C") * from (
+            SELECT
+                CASE
+                    WHEN position($2 IN substring(key from length($1) + 1)) > 0 THEN
+                        substring(key from 1 for length($1) + position($2 IN substring(key from length($1) + 1)))
+                    ELSE
+                        key
+                END AS key, id, created_at
+            FROM
+                storage.s3_multipart_uploads
+            WHERE
+                bucket_id = $5 AND
+                key ILIKE $1 || ''%'' AND
+                CASE
+                    WHEN $4 != '''' AND $6 = '''' THEN
+                        CASE
+                            WHEN position($2 IN substring(key from length($1) + 1)) > 0 THEN
+                                substring(key from 1 for length($1) + position($2 IN substring(key from length($1) + 1))) COLLATE "C" > $4
+                            ELSE
+                                key COLLATE "C" > $4
+                            END
+                    ELSE
+                        true
+                END AND
+                CASE
+                    WHEN $6 != '''' THEN
+                        id COLLATE "C" > $6
+                    ELSE
+                        true
+                    END
+            ORDER BY
+                key COLLATE "C" ASC, created_at ASC) as e order by key COLLATE "C" LIMIT $3'
+        USING prefix_param, delimiter_param, max_keys, next_key_token, bucket_id, next_upload_token;
+END;
+$_$;
+
+
+--
+-- Name: list_objects_with_delimiter(text, text, text, integer, text, text); Type: FUNCTION; Schema: storage; Owner: -
+--
+
+CREATE FUNCTION storage.list_objects_with_delimiter(bucket_id text, prefix_param text, delimiter_param text, max_keys integer DEFAULT 100, start_after text DEFAULT ''::text, next_token text DEFAULT ''::text) RETURNS TABLE(name text, id uuid, metadata jsonb, updated_at timestamp with time zone)
+    LANGUAGE plpgsql
+    AS $_$
+BEGIN
+    RETURN QUERY EXECUTE
+        'SELECT DISTINCT ON(name COLLATE "C") * from (
+            SELECT
+                CASE
+                    WHEN position($2 IN substring(name from length($1) + 1)) > 0 THEN
+                        substring(name from 1 for length($1) + position($2 IN substring(name from length($1) + 1)))
+                    ELSE
+                        name
+                END AS name, id, metadata, updated_at
+            FROM
+                storage.objects
+            WHERE
+                bucket_id = $5 AND
+                name ILIKE $1 || ''%'' AND
+                CASE
+                    WHEN $6 != '''' THEN
+                    name COLLATE "C" > $6
+                ELSE true END
+                AND CASE
+                    WHEN $4 != '''' THEN
+                        CASE
+                            WHEN position($2 IN substring(name from length($1) + 1)) > 0 THEN
+                                substring(name from 1 for length($1) + position($2 IN substring(name from length($1) + 1))) COLLATE "C" > $4
+                            ELSE
+                                name COLLATE "C" > $4
+                            END
+                    ELSE
+                        true
+                END
+            ORDER BY
+                name COLLATE "C" ASC) as e order by name COLLATE "C" LIMIT $3'
+        USING prefix_param, delimiter_param, max_keys, next_token, bucket_id, start_after;
+END;
+$_$;
+
+
+--
 -- Name: search(text, text, integer, integer, integer, text, text, text); Type: FUNCTION; Schema: storage; Owner: -
 --
 
@@ -1143,7 +1924,7 @@ begin
        from storage.objects
          where objects.name ilike $2 || $3 || ''%''
            and bucket_id = $4
-           and array_length(regexp_split_to_array(objects.name, ''/''), 1) <> $1
+           and array_length(objects.path_tokens, 1) <> $1
        group by folder
        order by folder ' || v_sort_order || '
      )
@@ -1163,7 +1944,7 @@ begin
      from storage.objects
      where objects.name ilike $2 || $3 || ''%''
        and bucket_id = $4
-       and array_length(regexp_split_to_array(objects.name, ''/''), 1) = $1
+       and array_length(objects.path_tokens, 1) = $1
      order by ' || v_order_by || ')
      limit $5
      offset $6' using levels, prefix, search, bucketname, limits, offsets;
@@ -1246,7 +2027,8 @@ CREATE TABLE auth.flow_state (
     provider_refresh_token text,
     created_at timestamp with time zone,
     updated_at timestamp with time zone,
-    authentication_method text NOT NULL
+    authentication_method text NOT NULL,
+    auth_code_issued_at timestamp with time zone
 );
 
 
@@ -1712,6 +2494,159 @@ ALTER TABLE public.quizzes ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY 
 
 
 --
+-- Name: scores; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.scores (
+    player_id uuid NOT NULL,
+    quiz_id bigint NOT NULL,
+    finished_at timestamp with time zone DEFAULT now() NOT NULL,
+    questions_wrong jsonb,
+    time_taken bigint NOT NULL,
+    question_count bigint NOT NULL
+);
+
+
+--
+-- Name: TABLE scores; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.scores IS 'last score of some quiz for some user';
+
+
+--
+-- Name: broadcasts; Type: TABLE; Schema: realtime; Owner: -
+--
+
+CREATE TABLE realtime.broadcasts (
+    id bigint NOT NULL,
+    channel_id bigint NOT NULL,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
+
+--
+-- Name: broadcasts_id_seq; Type: SEQUENCE; Schema: realtime; Owner: -
+--
+
+CREATE SEQUENCE realtime.broadcasts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: broadcasts_id_seq; Type: SEQUENCE OWNED BY; Schema: realtime; Owner: -
+--
+
+ALTER SEQUENCE realtime.broadcasts_id_seq OWNED BY realtime.broadcasts.id;
+
+
+--
+-- Name: channels; Type: TABLE; Schema: realtime; Owner: -
+--
+
+CREATE TABLE realtime.channels (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
+
+--
+-- Name: channels_id_seq; Type: SEQUENCE; Schema: realtime; Owner: -
+--
+
+CREATE SEQUENCE realtime.channels_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: channels_id_seq; Type: SEQUENCE OWNED BY; Schema: realtime; Owner: -
+--
+
+ALTER SEQUENCE realtime.channels_id_seq OWNED BY realtime.channels.id;
+
+
+--
+-- Name: presences; Type: TABLE; Schema: realtime; Owner: -
+--
+
+CREATE TABLE realtime.presences (
+    id bigint NOT NULL,
+    channel_id bigint NOT NULL,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
+
+--
+-- Name: presences_id_seq; Type: SEQUENCE; Schema: realtime; Owner: -
+--
+
+CREATE SEQUENCE realtime.presences_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: presences_id_seq; Type: SEQUENCE OWNED BY; Schema: realtime; Owner: -
+--
+
+ALTER SEQUENCE realtime.presences_id_seq OWNED BY realtime.presences.id;
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: realtime; Owner: -
+--
+
+CREATE TABLE realtime.schema_migrations (
+    version bigint NOT NULL,
+    inserted_at timestamp(0) without time zone
+);
+
+
+--
+-- Name: subscription; Type: TABLE; Schema: realtime; Owner: -
+--
+
+CREATE TABLE realtime.subscription (
+    id bigint NOT NULL,
+    subscription_id uuid NOT NULL,
+    entity regclass NOT NULL,
+    filters realtime.user_defined_filter[] DEFAULT '{}'::realtime.user_defined_filter[] NOT NULL,
+    claims jsonb NOT NULL,
+    claims_role regrole GENERATED ALWAYS AS (realtime.to_regrole((claims ->> 'role'::text))) STORED NOT NULL,
+    created_at timestamp without time zone DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+
+--
+-- Name: subscription_id_seq; Type: SEQUENCE; Schema: realtime; Owner: -
+--
+
+ALTER TABLE realtime.subscription ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME realtime.subscription_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: buckets; Type: TABLE; Schema: storage; Owner: -
 --
 
@@ -1775,6 +2710,40 @@ COMMENT ON COLUMN storage.objects.owner IS 'Field is deprecated, use owner_id in
 
 
 --
+-- Name: s3_multipart_uploads; Type: TABLE; Schema: storage; Owner: -
+--
+
+CREATE TABLE storage.s3_multipart_uploads (
+    id text NOT NULL,
+    in_progress_size bigint DEFAULT 0 NOT NULL,
+    upload_signature text NOT NULL,
+    bucket_id text NOT NULL,
+    key text NOT NULL COLLATE pg_catalog."C",
+    version text NOT NULL,
+    owner_id text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
+-- Name: s3_multipart_uploads_parts; Type: TABLE; Schema: storage; Owner: -
+--
+
+CREATE TABLE storage.s3_multipart_uploads_parts (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    upload_id text NOT NULL,
+    size bigint DEFAULT 0 NOT NULL,
+    part_number integer NOT NULL,
+    bucket_id text NOT NULL,
+    key text NOT NULL COLLATE pg_catalog."C",
+    etag text NOT NULL,
+    owner_id text,
+    version text NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: supabase_migrations; Owner: -
 --
 
@@ -1814,6 +2783,27 @@ CREATE VIEW vault.decrypted_secrets AS
 --
 
 ALTER TABLE ONLY auth.refresh_tokens ALTER COLUMN id SET DEFAULT nextval('auth.refresh_tokens_id_seq'::regclass);
+
+
+--
+-- Name: broadcasts id; Type: DEFAULT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.broadcasts ALTER COLUMN id SET DEFAULT nextval('realtime.broadcasts_id_seq'::regclass);
+
+
+--
+-- Name: channels id; Type: DEFAULT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.channels ALTER COLUMN id SET DEFAULT nextval('realtime.channels_id_seq'::regclass);
+
+
+--
+-- Name: presences id; Type: DEFAULT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.presences ALTER COLUMN id SET DEFAULT nextval('realtime.presences_id_seq'::regclass);
 
 
 --
@@ -2001,6 +2991,54 @@ ALTER TABLE ONLY public.quizzes
 
 
 --
+-- Name: scores scores_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scores
+    ADD CONSTRAINT scores_pkey PRIMARY KEY (player_id, quiz_id);
+
+
+--
+-- Name: broadcasts broadcasts_pkey; Type: CONSTRAINT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.broadcasts
+    ADD CONSTRAINT broadcasts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: channels channels_pkey; Type: CONSTRAINT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.channels
+    ADD CONSTRAINT channels_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: subscription pk_subscription; Type: CONSTRAINT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.subscription
+    ADD CONSTRAINT pk_subscription PRIMARY KEY (id);
+
+
+--
+-- Name: presences presences_pkey; Type: CONSTRAINT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.presences
+    ADD CONSTRAINT presences_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
 -- Name: buckets buckets_pkey; Type: CONSTRAINT; Schema: storage; Owner: -
 --
 
@@ -2030,6 +3068,22 @@ ALTER TABLE ONLY storage.migrations
 
 ALTER TABLE ONLY storage.objects
     ADD CONSTRAINT objects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: s3_multipart_uploads_parts s3_multipart_uploads_parts_pkey; Type: CONSTRAINT; Schema: storage; Owner: -
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads_parts
+    ADD CONSTRAINT s3_multipart_uploads_parts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: s3_multipart_uploads s3_multipart_uploads_pkey; Type: CONSTRAINT; Schema: storage; Owner: -
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads
+    ADD CONSTRAINT s3_multipart_uploads_pkey PRIMARY KEY (id);
 
 
 --
@@ -2293,6 +3347,41 @@ CREATE INDEX users_is_anonymous_idx ON auth.users USING btree (is_anonymous);
 
 
 --
+-- Name: broadcasts_channel_id_index; Type: INDEX; Schema: realtime; Owner: -
+--
+
+CREATE UNIQUE INDEX broadcasts_channel_id_index ON realtime.broadcasts USING btree (channel_id);
+
+
+--
+-- Name: channels_name_index; Type: INDEX; Schema: realtime; Owner: -
+--
+
+CREATE UNIQUE INDEX channels_name_index ON realtime.channels USING btree (name);
+
+
+--
+-- Name: ix_realtime_subscription_entity; Type: INDEX; Schema: realtime; Owner: -
+--
+
+CREATE INDEX ix_realtime_subscription_entity ON realtime.subscription USING hash (entity);
+
+
+--
+-- Name: presences_channel_id_index; Type: INDEX; Schema: realtime; Owner: -
+--
+
+CREATE UNIQUE INDEX presences_channel_id_index ON realtime.presences USING btree (channel_id);
+
+
+--
+-- Name: subscription_subscription_id_entity_filters_key; Type: INDEX; Schema: realtime; Owner: -
+--
+
+CREATE UNIQUE INDEX subscription_subscription_id_entity_filters_key ON realtime.subscription USING btree (subscription_id, entity, filters);
+
+
+--
 -- Name: bname; Type: INDEX; Schema: storage; Owner: -
 --
 
@@ -2307,6 +3396,20 @@ CREATE UNIQUE INDEX bucketid_objname ON storage.objects USING btree (bucket_id, 
 
 
 --
+-- Name: idx_multipart_uploads_list; Type: INDEX; Schema: storage; Owner: -
+--
+
+CREATE INDEX idx_multipart_uploads_list ON storage.s3_multipart_uploads USING btree (bucket_id, key, created_at);
+
+
+--
+-- Name: idx_objects_bucket_id_name; Type: INDEX; Schema: storage; Owner: -
+--
+
+CREATE INDEX idx_objects_bucket_id_name ON storage.objects USING btree (bucket_id, name COLLATE "C");
+
+
+--
 -- Name: name_prefix_search; Type: INDEX; Schema: storage; Owner: -
 --
 
@@ -2318,6 +3421,13 @@ CREATE INDEX name_prefix_search ON storage.objects USING btree (name text_patter
 --
 
 CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+
+--
+-- Name: subscription tr_check_filters; Type: TRIGGER; Schema: realtime; Owner: -
+--
+
+CREATE TRIGGER tr_check_filters BEFORE INSERT OR UPDATE ON realtime.subscription FOR EACH ROW EXECUTE FUNCTION realtime.subscription_check_filters();
 
 
 --
@@ -2424,6 +3534,22 @@ ALTER TABLE ONLY public.quizzes
 
 
 --
+-- Name: broadcasts broadcasts_channel_id_fkey; Type: FK CONSTRAINT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.broadcasts
+    ADD CONSTRAINT broadcasts_channel_id_fkey FOREIGN KEY (channel_id) REFERENCES realtime.channels(id) ON DELETE CASCADE;
+
+
+--
+-- Name: presences presences_channel_id_fkey; Type: FK CONSTRAINT; Schema: realtime; Owner: -
+--
+
+ALTER TABLE ONLY realtime.presences
+    ADD CONSTRAINT presences_channel_id_fkey FOREIGN KEY (channel_id) REFERENCES realtime.channels(id) ON DELETE CASCADE;
+
+
+--
 -- Name: objects objects_bucketId_fkey; Type: FK CONSTRAINT; Schema: storage; Owner: -
 --
 
@@ -2432,10 +3558,41 @@ ALTER TABLE ONLY storage.objects
 
 
 --
+-- Name: s3_multipart_uploads s3_multipart_uploads_bucket_id_fkey; Type: FK CONSTRAINT; Schema: storage; Owner: -
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads
+    ADD CONSTRAINT s3_multipart_uploads_bucket_id_fkey FOREIGN KEY (bucket_id) REFERENCES storage.buckets(id);
+
+
+--
+-- Name: s3_multipart_uploads_parts s3_multipart_uploads_parts_bucket_id_fkey; Type: FK CONSTRAINT; Schema: storage; Owner: -
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads_parts
+    ADD CONSTRAINT s3_multipart_uploads_parts_bucket_id_fkey FOREIGN KEY (bucket_id) REFERENCES storage.buckets(id);
+
+
+--
+-- Name: s3_multipart_uploads_parts s3_multipart_uploads_parts_upload_id_fkey; Type: FK CONSTRAINT; Schema: storage; Owner: -
+--
+
+ALTER TABLE ONLY storage.s3_multipart_uploads_parts
+    ADD CONSTRAINT s3_multipart_uploads_parts_upload_id_fkey FOREIGN KEY (upload_id) REFERENCES storage.s3_multipart_uploads(id) ON DELETE CASCADE;
+
+
+--
 -- Name: quizzes Enable insert for authenticated users only; Type: POLICY; Schema: public; Owner: -
 --
 
 CREATE POLICY "Enable insert for authenticated users only" ON public.quizzes FOR INSERT TO authenticated WITH CHECK (true);
+
+
+--
+-- Name: scores Enable insert for users based on player_id; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY "Enable insert for users based on player_id" ON public.scores FOR INSERT WITH CHECK ((( SELECT auth.uid() AS uid) = player_id));
 
 
 --
@@ -2457,6 +3614,20 @@ CREATE POLICY "Enable read access for all users" ON public.profiles FOR SELECT U
 --
 
 CREATE POLICY "Enable read access for all users" ON public.quizzes FOR SELECT USING (true);
+
+
+--
+-- Name: scores Enable read access for all users; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY "Enable read access for all users" ON public.scores FOR SELECT USING (true);
+
+
+--
+-- Name: scores Enable update for users based on player_id; Type: POLICY; Schema: public; Owner: -
+--
+
+CREATE POLICY "Enable update for users based on player_id" ON public.scores FOR UPDATE USING ((( SELECT auth.uid() AS uid) = player_id));
 
 
 --
@@ -2486,11 +3657,35 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.quizzes ENABLE ROW LEVEL SECURITY;
 
 --
+-- Name: scores; Type: ROW SECURITY; Schema: public; Owner: -
+--
+
+ALTER TABLE public.scores ENABLE ROW LEVEL SECURITY;
+
+--
 -- Name: quizzes update quiz questions; Type: POLICY; Schema: public; Owner: -
 --
 
 CREATE POLICY "update quiz questions" ON public.quizzes FOR UPDATE TO authenticated USING (true) WITH CHECK ((auth.uid() = owner));
 
+
+--
+-- Name: broadcasts; Type: ROW SECURITY; Schema: realtime; Owner: -
+--
+
+ALTER TABLE realtime.broadcasts ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: channels; Type: ROW SECURITY; Schema: realtime; Owner: -
+--
+
+ALTER TABLE realtime.channels ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: presences; Type: ROW SECURITY; Schema: realtime; Owner: -
+--
+
+ALTER TABLE realtime.presences ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: buckets; Type: ROW SECURITY; Schema: storage; Owner: -
@@ -2509,6 +3704,18 @@ ALTER TABLE storage.migrations ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: s3_multipart_uploads; Type: ROW SECURITY; Schema: storage; Owner: -
+--
+
+ALTER TABLE storage.s3_multipart_uploads ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: s3_multipart_uploads_parts; Type: ROW SECURITY; Schema: storage; Owner: -
+--
+
+ALTER TABLE storage.s3_multipart_uploads_parts ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: supabase_realtime; Type: PUBLICATION; Schema: -; Owner: -
@@ -2571,6 +3778,10 @@ GRANT USAGE ON SCHEMA public TO service_role;
 --
 
 GRANT USAGE ON SCHEMA realtime TO postgres;
+GRANT USAGE ON SCHEMA realtime TO anon;
+GRANT USAGE ON SCHEMA realtime TO authenticated;
+GRANT USAGE ON SCHEMA realtime TO service_role;
+GRANT ALL ON SCHEMA realtime TO supabase_realtime_admin;
 
 
 --
@@ -3723,6 +4934,122 @@ GRANT ALL ON FUNCTION public.translate(public.citext, public.citext, text) TO se
 
 
 --
+-- Name: FUNCTION apply_rls(wal jsonb, max_record_bytes integer); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO postgres;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO anon;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO authenticated;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO service_role;
+GRANT ALL ON FUNCTION realtime.apply_rls(wal jsonb, max_record_bytes integer) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO postgres;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO anon;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO authenticated;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO service_role;
+GRANT ALL ON FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[]) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION "cast"(val text, type_ regtype); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO postgres;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO anon;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO authenticated;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO service_role;
+GRANT ALL ON FUNCTION realtime."cast"(val text, type_ regtype) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION channel_name(); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime.channel_name() TO postgres;
+GRANT ALL ON FUNCTION realtime.channel_name() TO dashboard_user;
+
+
+--
+-- Name: FUNCTION check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO postgres;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO anon;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO authenticated;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO service_role;
+GRANT ALL ON FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO postgres;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO anon;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO authenticated;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO service_role;
+GRANT ALL ON FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[]) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO postgres;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO anon;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO authenticated;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO service_role;
+GRANT ALL ON FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION quote_wal2json(entity regclass); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO postgres;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO anon;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO authenticated;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO service_role;
+GRANT ALL ON FUNCTION realtime.quote_wal2json(entity regclass) TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION subscription_check_filters(); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO postgres;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO anon;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO authenticated;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO service_role;
+GRANT ALL ON FUNCTION realtime.subscription_check_filters() TO supabase_realtime_admin;
+
+
+--
+-- Name: FUNCTION to_regrole(role_name text); Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO postgres;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO dashboard_user;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO anon;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO authenticated;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO service_role;
+GRANT ALL ON FUNCTION realtime.to_regrole(role_name text) TO supabase_realtime_admin;
+
+
+--
 -- Name: FUNCTION extension(name text); Type: ACL; Schema: storage; Owner: -
 --
 
@@ -3970,6 +5297,117 @@ GRANT ALL ON SEQUENCE public.quizzes_id_seq TO service_role;
 
 
 --
+-- Name: TABLE scores; Type: ACL; Schema: public; Owner: -
+--
+
+GRANT ALL ON TABLE public.scores TO anon;
+GRANT ALL ON TABLE public.scores TO authenticated;
+GRANT ALL ON TABLE public.scores TO service_role;
+
+
+--
+-- Name: TABLE broadcasts; Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON TABLE realtime.broadcasts TO postgres;
+GRANT ALL ON TABLE realtime.broadcasts TO dashboard_user;
+GRANT SELECT,INSERT,UPDATE ON TABLE realtime.broadcasts TO anon;
+GRANT SELECT,INSERT,UPDATE ON TABLE realtime.broadcasts TO authenticated;
+GRANT SELECT,INSERT,UPDATE ON TABLE realtime.broadcasts TO service_role;
+
+
+--
+-- Name: SEQUENCE broadcasts_id_seq; Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON SEQUENCE realtime.broadcasts_id_seq TO postgres;
+GRANT ALL ON SEQUENCE realtime.broadcasts_id_seq TO dashboard_user;
+GRANT USAGE ON SEQUENCE realtime.broadcasts_id_seq TO anon;
+GRANT USAGE ON SEQUENCE realtime.broadcasts_id_seq TO authenticated;
+GRANT USAGE ON SEQUENCE realtime.broadcasts_id_seq TO service_role;
+
+
+--
+-- Name: TABLE channels; Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON TABLE realtime.channels TO postgres;
+GRANT ALL ON TABLE realtime.channels TO dashboard_user;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE realtime.channels TO anon;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE realtime.channels TO authenticated;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE realtime.channels TO service_role;
+
+
+--
+-- Name: SEQUENCE channels_id_seq; Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON SEQUENCE realtime.channels_id_seq TO postgres;
+GRANT ALL ON SEQUENCE realtime.channels_id_seq TO dashboard_user;
+GRANT USAGE ON SEQUENCE realtime.channels_id_seq TO anon;
+GRANT USAGE ON SEQUENCE realtime.channels_id_seq TO authenticated;
+GRANT USAGE ON SEQUENCE realtime.channels_id_seq TO service_role;
+
+
+--
+-- Name: TABLE presences; Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON TABLE realtime.presences TO postgres;
+GRANT ALL ON TABLE realtime.presences TO dashboard_user;
+GRANT SELECT,INSERT,UPDATE ON TABLE realtime.presences TO anon;
+GRANT SELECT,INSERT,UPDATE ON TABLE realtime.presences TO authenticated;
+GRANT SELECT,INSERT,UPDATE ON TABLE realtime.presences TO service_role;
+
+
+--
+-- Name: SEQUENCE presences_id_seq; Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON SEQUENCE realtime.presences_id_seq TO postgres;
+GRANT ALL ON SEQUENCE realtime.presences_id_seq TO dashboard_user;
+GRANT USAGE ON SEQUENCE realtime.presences_id_seq TO anon;
+GRANT USAGE ON SEQUENCE realtime.presences_id_seq TO authenticated;
+GRANT USAGE ON SEQUENCE realtime.presences_id_seq TO service_role;
+
+
+--
+-- Name: TABLE schema_migrations; Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON TABLE realtime.schema_migrations TO postgres;
+GRANT ALL ON TABLE realtime.schema_migrations TO dashboard_user;
+GRANT SELECT ON TABLE realtime.schema_migrations TO anon;
+GRANT SELECT ON TABLE realtime.schema_migrations TO authenticated;
+GRANT SELECT ON TABLE realtime.schema_migrations TO service_role;
+GRANT ALL ON TABLE realtime.schema_migrations TO supabase_realtime_admin;
+
+
+--
+-- Name: TABLE subscription; Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON TABLE realtime.subscription TO postgres;
+GRANT ALL ON TABLE realtime.subscription TO dashboard_user;
+GRANT SELECT ON TABLE realtime.subscription TO anon;
+GRANT SELECT ON TABLE realtime.subscription TO authenticated;
+GRANT SELECT ON TABLE realtime.subscription TO service_role;
+GRANT ALL ON TABLE realtime.subscription TO supabase_realtime_admin;
+
+
+--
+-- Name: SEQUENCE subscription_id_seq; Type: ACL; Schema: realtime; Owner: -
+--
+
+GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO postgres;
+GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO dashboard_user;
+GRANT USAGE ON SEQUENCE realtime.subscription_id_seq TO anon;
+GRANT USAGE ON SEQUENCE realtime.subscription_id_seq TO authenticated;
+GRANT USAGE ON SEQUENCE realtime.subscription_id_seq TO service_role;
+GRANT ALL ON SEQUENCE realtime.subscription_id_seq TO supabase_realtime_admin;
+
+
+--
 -- Name: TABLE buckets; Type: ACL; Schema: storage; Owner: -
 --
 
@@ -3997,6 +5435,24 @@ GRANT ALL ON TABLE storage.objects TO anon;
 GRANT ALL ON TABLE storage.objects TO authenticated;
 GRANT ALL ON TABLE storage.objects TO service_role;
 GRANT ALL ON TABLE storage.objects TO postgres;
+
+
+--
+-- Name: TABLE s3_multipart_uploads; Type: ACL; Schema: storage; Owner: -
+--
+
+GRANT ALL ON TABLE storage.s3_multipart_uploads TO service_role;
+GRANT SELECT ON TABLE storage.s3_multipart_uploads TO authenticated;
+GRANT SELECT ON TABLE storage.s3_multipart_uploads TO anon;
+
+
+--
+-- Name: TABLE s3_multipart_uploads_parts; Type: ACL; Schema: storage; Owner: -
+--
+
+GRANT ALL ON TABLE storage.s3_multipart_uploads_parts TO service_role;
+GRANT SELECT ON TABLE storage.s3_multipart_uploads_parts TO authenticated;
+GRANT SELECT ON TABLE storage.s3_multipart_uploads_parts TO anon;
 
 
 --
