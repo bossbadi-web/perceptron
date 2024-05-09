@@ -39,6 +39,19 @@
       }
     });
 
+    // pull customizations from database
+    const theme = session?.user?.theme;
+    if (theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    }
+
+    const font = session?.user?.font;
+    if (font) {
+      document.body.style.fontFamily = font;
+      localStorage.setItem("font", font);
+    }
+
     return () => subscription.unsubscribe();
   });
 

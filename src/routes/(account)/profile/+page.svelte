@@ -1,25 +1,30 @@
 <script>
-  import { onMount } from "svelte";
-
   export let data;
-
-  var theme, font;
+  const { username, email, id, theme, font } = data;
 
   const changeTheme = (event) => {
-    document.documentElement.setAttribute("data-theme", event.target.value);
-    localStorage.setItem("theme", event.target.value);
+    const _theme = event.target.value;
+    document.documentElement.setAttribute("data-theme", _theme);
+    localStorage.setItem("theme", _theme);
+    saveToDB({ theme: _theme });
   };
 
   const changeFont = (event) => {
-    const font = event.target.value;
-    document.body.style.fontFamily = font;
-    localStorage.setItem("font", font);
+    const _font = event.target.value;
+    document.body.style.fontFamily = _font;
+    localStorage.setItem("font", _font);
+    saveToDB({ font: _font });
   };
 
-  onMount(() => {
-    theme = localStorage.getItem("theme") ?? "main";
-    font = localStorage.getItem("font") ?? "Playpen Sans";
-  });
+  const saveToDB = async (args) => {
+    await fetch(window.location.pathname, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(args),
+    });
+  };
 </script>
 
 <section>
@@ -31,19 +36,19 @@
 
           <label for="username" class="form-label">Username</label>
           <div class="input-group mb-3">
-            <input type="text" class="form-control text-muted" id="username" value={data.username} readonly />
+            <input type="text" class="form-control text-muted" id="username" value={username} readonly />
             <a class="btn btn-main" href="/username/change"><i class="fas fa-edit"></i></a>
           </div>
 
           <label for="email" class="form-label">Email</label>
           <div class="input-group mb-3">
-            <input type="text" class="form-control text-muted" id="email" value={data.email} readonly />
+            <input type="text" class="form-control text-muted" id="email" value={email} readonly />
             <a class="btn btn-main" href="/email/change"><i class="fas fa-edit"></i></a>
           </div>
 
           <label for="id" class="form-label">ID</label>
           <div class="input-group mb-3">
-            <input type="text" class="form-control text-muted" id="id" value={data.id} readonly />
+            <input type="text" class="form-control text-muted" id="id" value={id} readonly />
           </div>
 
           <label for="theme" class="form-label">Color Theme</label>

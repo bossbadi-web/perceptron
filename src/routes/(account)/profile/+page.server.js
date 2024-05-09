@@ -12,5 +12,7 @@ export const load = async ({ cookies, locals, url }) => {
     username: session.user.username,
     email: session.user.email,
     id: session.user.id,
+    theme: session.user.theme,
+    font: session.user.font,
   };
 };

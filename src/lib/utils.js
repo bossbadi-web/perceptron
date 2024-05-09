@@ -10,7 +10,7 @@ export const getRedirectLoginParams = ({ cookies, url }) => {
   ];
 };
 
-// add username to session.user
+// add attributes from profiles table to session.user
 export const completeUser = async (supabase, user) => {
   const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();
 
