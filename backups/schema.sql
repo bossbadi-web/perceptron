@@ -2408,7 +2408,9 @@ COMMENT ON COLUMN auth.users.is_sso_user IS 'Auth: Set this column to true when 
 
 CREATE TABLE public.profiles (
     id uuid NOT NULL,
-    username text
+    username text,
+    theme text,
+    font text
 );
 
 
@@ -2417,6 +2419,13 @@ CREATE TABLE public.profiles (
 --
 
 COMMENT ON TABLE public.profiles IS 'extra user info';
+
+
+--
+-- Name: COLUMN profiles.theme; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.theme IS 'color theme';
 
 
 --
