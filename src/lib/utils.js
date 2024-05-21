@@ -68,10 +68,16 @@ export const wordCount = (s) => {
 };
 
 export const getSafeRedirect = (url, defaultUrl = "/") => {
+  let result = defaultUrl;
+
   if (url && url.startsWith("/")) {
-    return url;
+    result = url;
   }
-  return defaultUrl;
+
+  let tempURL = new URL(result, "http://localhost");
+  tempURL.searchParams.set("reload", "true");
+
+  return tempURL.pathname + tempURL.search;
 };
 
 // remove profanity from quiz

@@ -101,6 +101,13 @@
         location.href = "/";
       }, 5000);
     }
+
+    // if reload is specified, reload the page
+    if ($page.url.searchParams.has("reload")) {
+      const url = new URL(location.href);
+      url.searchParams.delete("reload");
+      location.href = url;
+    }
   });
 </script>
 
