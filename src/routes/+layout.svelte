@@ -5,12 +5,13 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { PUBLIC_RECAPTCHA_SITE_KEY } from "$env/static/public";
+  import { removeQueryParam } from "$lib/utils";
   import Footer from "./Footer.svelte";
   import Header from "./Header.svelte";
   import toast, { Toaster } from "svelte-french-toast";
 
   export let data;
-  $: ({ supabase, session } = data);
+  $: ({ supabase, session, signedOut } = data);
 
   $: pathname = $page.url.pathname.replace(/\/$/, "");
 
@@ -91,22 +92,30 @@
       }
     }
 
-    // if user deleted their account, force sign out
-    if ($page.url.searchParams.has("signOut")) {
+    // force sign out in special cases
+    if ($page.url.searchParams.has("signOut") || signedOut) {
       document.cookie.split(";").forEach((c) => {
         document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
       });
 
-      setTimeout(() => {
-        location.href = "/";
-      }, 5000);
+      if (signedOut) {
+        toast("You were signed out from another device.", {
+          icon: "😔",
+          duration: 5000,
+        });
+      }
+
+      setTimeout(
+        () => {
+          location.href = removeQueryParam(location.href, "signOut");
+        },
+        signedOut ? 5000 : 0
+      );
     }
 
     // if reload is specified, reload the page
     if ($page.url.searchParams.has("reload")) {
-      const url = new URL(location.href);
-      url.searchParams.delete("reload");
-      location.href = url;
+      location.href = removeQueryParam(location.href, "reload");
     }
   });
 </script>

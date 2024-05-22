@@ -67,6 +67,7 @@ export const wordCount = (s) => {
   return s.split(" ").length;
 };
 
+// make sure url is relative
 export const getSafeRedirect = (url, defaultUrl = "/") => {
   let result = defaultUrl;
 
@@ -74,8 +75,25 @@ export const getSafeRedirect = (url, defaultUrl = "/") => {
     result = url;
   }
 
-  let tempURL = new URL(result, "http://localhost");
-  tempURL.searchParams.set("reload", "true");
+  return addQueryParams(result, { reload: true });
+};
+
+// add query param to a relative url
+export const addQueryParams = (url = "/", params) => {
+  let tempURL = new URL(url, "http://localhost");
+
+  for (const key in params) {
+    tempURL.searchParams.set(key, params[key]);
+  }
+
+  return tempURL.pathname + tempURL.search;
+};
+
+// remove query param from a relative url
+export const removeQueryParam = (url = "/", param) => {
+  let tempURL = new URL(url, "http://localhost");
+
+  tempURL.searchParams.delete(param);
 
   return tempURL.pathname + tempURL.search;
 };
