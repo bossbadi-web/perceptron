@@ -58,7 +58,7 @@
 
   afterNavigate(() => {
     // set page title
-    const subpages = $page.route.id.split("/");
+    const subpages = $page.route.id ? $page.route.id.split("/") : [];
     let subpage;
 
     for (let i = 0; i < subpages.length; i++) {
