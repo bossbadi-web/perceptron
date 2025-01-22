@@ -51,7 +51,7 @@ export const load = async ({ locals, url }) => {
   }
 
   const rangeLeft = (page - 1) * pageSize;
-  const rangeRight = page * pageSize - 1 > total.count ? total.count - 1 : page * pageSize - 1;
+  const rangeRight = Math.min(page * pageSize - 1 > total.count ? total.count - 1 : page * pageSize - 1, total.count - 1);
 
   if (query) {
     var { data: quizzes } = await locals.supabase
