@@ -12,7 +12,7 @@ export const load = async ({ cookies, locals, url }) => {
   }
 
   const pageSize = 12;
-  const page = parseInt(url.searchParams.get("page")) || 1;
+  let page = parseInt(url.searchParams.get("page")) || 1;
   const order = url.searchParams.get("order");
   const query = url.searchParams.get("q");
 
@@ -41,6 +41,15 @@ export const load = async ({ cookies, locals, url }) => {
       .from("quizzes")
       .select("id", { count: "exact", head: true })
       .eq("owner", session.user.id);
+  }
+
+  // if page is less than 1, make it 1
+  // if page is more than total pages, make it total pages
+  const totalPages = Math.ceil(total.count / pageSize);
+  if (page < 1) {
+    page = 1;
+  } else if (page > totalPages) {
+    page = totalPages;
   }
 
   const rangeLeft = (page - 1) * pageSize;
@@ -75,5 +84,6 @@ export const load = async ({ cookies, locals, url }) => {
     rangeLeft: rangeLeft + 1,
     rangeRight: rangeRight + 1,
     total: total.count,
+    currentPage: page,
   };
 };

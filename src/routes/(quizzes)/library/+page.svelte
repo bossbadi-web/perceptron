@@ -5,10 +5,9 @@
   import QuizCard from "$lib/components/quiz/browse/Library.svelte";
 
   export let data;
-  const { rangeLeft, rangeRight, quizzes, session, total } = data;
+  const { rangeLeft, rangeRight, quizzes, session, total, currentPage } = data;
 
   const mainURL = $page.url.href;
-  const currentPage = parseInt($page.url.searchParams.get("page")) || 1;
   let query = $page.url.searchParams.get("q") || "";
   const isSearch = query !== "";
 

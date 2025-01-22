@@ -4,7 +4,7 @@ import { error } from "@sveltejs/kit";
 // get quiz on specific page
 export const load = async ({ locals, url }) => {
   const pageSize = 12;
-  const page = parseInt(url.searchParams.get("page")) || 1;
+  let page = parseInt(url.searchParams.get("page")) || 1;
   const order = url.searchParams.get("order");
   const query = url.searchParams.get("q");
 
@@ -41,6 +41,15 @@ export const load = async ({ locals, url }) => {
       .eq("visibility", "public");
   }
 
+  // if page is less than 1, make it 1
+  // if page is more than total pages, make it total pages
+  const totalPages = Math.ceil(total.count / pageSize);
+  if (page < 1) {
+    page = 1;
+  } else if (page > totalPages) {
+    page = totalPages;
+  }
+
   const rangeLeft = (page - 1) * pageSize;
   const rangeRight = page * pageSize - 1 > total.count ? total.count - 1 : page * pageSize - 1;
 
@@ -73,5 +82,6 @@ export const load = async ({ locals, url }) => {
     rangeLeft: rangeLeft + 1,
     rangeRight: rangeRight + 1,
     total: total.count,
+    currentPage: page,
   };
 };
